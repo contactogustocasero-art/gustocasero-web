@@ -1,0 +1,1101 @@
+<!doctype html><html lang="es"><head><meta charset=utf-8><title>Gusto Casero · Carta y pedidos</title><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta name="format-detection" content="telephone=no">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@200;300;400;500;600&display=swap">
+<style>
+/* Layout: carta de pastelería según el manual de marca — portada con pattern y logo en etiqueta, índice fijo, cada categoría abre con su ilustración lineal a la izquierda y la carta a la derecha; pie con logo. Tema único claro, fiel a la paleta del manual. */
+
+:root{
+  --blanco:#FFFFFF;
+  --crema:#F8EFE4;
+  --canela:#B48069;
+  --rosado:#B98F80;
+  --salvia:#839683;
+  --tinta:#7A5243;
+  --tinta-suave:#8B6553;
+  --linea:#E9DACB;
+  --display:"Urbanist","Segoe UI",system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--blanco);color:var(--tinta);font-family:var(--display);font-weight:400;font-size:16px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:20;background:var(--blanco)}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;font-weight:500;color:var(--canela)}
+svg{display:block}
+
+/* ── Portada ── */
+.portada{position:relative;background:var(--crema);overflow:hidden}
+.portada::before{content:"";position:absolute;inset:0;background:url("recursos/pattern.svg") calc(50% - 150px) var(--py,0px)/600px 330px repeat;opacity:.55}
+.portada .wrap{position:relative;display:flex;justify-content:center;padding-block:clamp(72px,12vw,140px)}
+.etiqueta{display:flex;flex-direction:column;align-items:center;gap:20px}
+.etiqueta .logo{width:clamp(200px,34vw,290px);color:var(--canela)}
+.etiqueta .eyebrow{letter-spacing:.36em;margin-right:-.36em;text-align:center;line-height:1.9;max-width:22em}
+@media (min-width:640px){.etiqueta .eyebrow{max-width:none;white-space:nowrap}}
+
+/* ── Presentación ── */
+.intro{padding-block:clamp(56px,8vw,96px) clamp(48px,7vw,80px);text-align:center}
+.intro p{max-width:30ch;margin:0 auto;font-size:clamp(1.45rem,2.8vw,1.9rem);font-weight:300;line-height:1.35;color:var(--canela);text-wrap:balance}
+
+.tel{font-variant-numeric:tabular-nums;user-select:all}
+
+.como{margin-top:clamp(40px,6vw,64px);background:var(--crema);display:grid;grid-template-columns:minmax(200px,1fr) 2fr;gap:32px 56px;align-items:start;padding:clamp(28px,4vw,44px) clamp(20px,4vw,52px)}
+.como-tit{display:flex;flex-direction:column;gap:8px}
+.como h2{margin:0;font-weight:300;font-size:clamp(1.6rem,2.6vw,2rem);line-height:1.1;color:var(--canela);text-wrap:balance}
+.pasos{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;counter-reset:paso}
+.paso{display:flex;flex-direction:column;gap:4px}
+.paso::before{counter-increment:paso;content:counter(paso);font-weight:200;font-size:2.2rem;line-height:1;color:var(--canela)}
+.paso div{display:flex;flex-direction:column;gap:2px}
+.paso h3{margin:4px 0 0;font-weight:500;font-size:1rem}
+.paso p{margin:0;color:var(--tinta-suave);font-size:.9rem}
+
+/* ── Índice fijo ── */
+nav.indice{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--blanco);border-bottom:1px solid var(--linea);margin-top:clamp(40px,6vw,64px)}
+nav.indice .wrap{display:flex;align-items:center;gap:28px}
+nav.indice .mini{width:118px;flex:none;color:var(--canela)}
+nav.indice ul{list-style:none;margin:0;padding:0;display:flex;gap:26px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+nav.indice ul::-webkit-scrollbar{display:none}
+nav.indice a{display:block;padding:18px 0 15px;text-decoration:none;color:var(--tinta-suave);font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;white-space:nowrap;border-bottom:2px solid transparent}
+nav.indice a:hover,nav.indice a.activa{color:var(--canela);border-bottom-color:var(--canela)}
+nav.indice a:focus-visible{outline:2px solid var(--canela);outline-offset:2px}
+
+/* ── Categorías ── */
+section.cat{display:grid;grid-template-columns:minmax(220px,320px) 1fr;gap:clamp(32px,6vw,88px);padding-block:clamp(56px,8vw,96px);border-bottom:1px solid var(--linea);scroll-margin-top:60px}
+.cat-aside{position:sticky;top:96px;align-self:start;display:flex;flex-direction:column;gap:14px}
+.cat-aside .ilus{width:150px;height:auto;color:var(--canela)}
+.cat-aside h2{margin:8px 0 0;font-weight:200;font-size:clamp(2.8rem,5.5vw,4rem);line-height:1.05;color:var(--canela);letter-spacing:-.01em;text-wrap:balance}
+.cat-aside p{margin:0;color:var(--tinta-suave);font-size:.95rem;max-width:34ch}
+.cat-aside .aviso{color:var(--salvia);font-weight:500;font-size:.88rem}
+
+.carta{display:flex;flex-direction:column;min-width:0}
+.prod{padding-block:24px;border-top:1px solid var(--linea);display:grid;grid-template-columns:112px 1fr;gap:22px;align-items:start}
+.fotos{display:flex;flex-direction:column;gap:10px}
+.fotos{align-self:center}
+.prod.porfila,.prod.sinfoto{grid-template-columns:1fr}
+.porfila .prod-head,.porfila>.prod-body>.desc{padding-left:134px}
+.porfila ul.vars{gap:14px;margin-top:10px}
+.porfila ul.vars li{display:grid;grid-template-columns:112px 1fr;gap:22px;align-items:center}
+.porfila .frow{display:flex;align-items:center;gap:10px;min-width:0}
+@media (max-width:520px){.porfila .prod-head,.porfila>.prod-body>.desc{padding-left:90px}.porfila ul.vars li{grid-template-columns:76px 1fr;gap:14px}}
+.prod-body{display:flex;flex-direction:column;gap:6px;min-width:0}
+.foto{width:112px;aspect-ratio:1;max-width:100%;border:0;padding:0;background:var(--crema);overflow:hidden;border-radius:14px;cursor:zoom-in;display:block}
+.foto img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.foto:hover img{transform:scale(1.04)}
+.foto:focus-visible{outline:2px solid var(--canela);outline-offset:3px}
+.dmini{flex:none;width:52px;height:52px;border-radius:50%;border:0;padding:4px;background:var(--crema);cursor:zoom-in;display:grid;place-items:center}
+.dmini img{width:100%;height:100%;object-fit:contain;display:block}
+.dmini:focus-visible{outline:2px solid var(--canela);outline-offset:2px}
+ul.vars li:has(.dmini){min-height:62px}
+.visor img[src$=".webp"]{background:var(--crema);padding:24px}
+.foto.vacia{cursor:default;display:grid;place-items:center;color:var(--canela)}
+.foto.vacia svg{width:64%;height:auto;opacity:.55}
+.visor{position:fixed;inset:0;z-index:30;background:rgba(62,46,39,.88);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));cursor:zoom-out}
+.visor[hidden]{display:none}
+.visor img{max-width:min(92vw,900px);max-height:84vh;object-fit:contain;display:block;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.visor p{margin:14px 0 0;color:var(--crema);text-align:center;font-size:.9rem;letter-spacing:.08em}
+.visor button{position:absolute;top:max(16px,env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));font:inherit;font-size:1.6rem;line-height:1;width:44px;height:44px;border-radius:50%;border:1px solid var(--crema);background:transparent;color:var(--crema);cursor:pointer}
+.prod:first-child,.sub+.prod{border-top:0;padding-top:0}
+@media (max-width:520px){.prod{grid-template-columns:76px 1fr;gap:14px}.foto{width:76px;border-radius:10px}}
+.sub{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;padding:36px 0 18px;border-bottom:1px solid var(--canela);margin-bottom:22px}
+.sub:first-child{padding-top:0}
+.sub h3{margin:0;font-weight:300;font-size:1.5rem;color:var(--canela);letter-spacing:.01em}
+.sub p{margin:0;color:var(--tinta-suave);font-size:.88rem}
+.prod-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.prod h3{margin:0;font-weight:500;font-size:1.32rem;line-height:1.3}
+.unidad{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--salvia);font-weight:600}
+.desc{margin:0;color:var(--tinta-suave);font-size:.93rem;font-weight:300;max-width:62ch}
+.nota{margin:0;color:var(--canela);font-size:.86rem}
+.nota-item{font-size:.82rem;color:var(--canela);font-style:italic;font-weight:400}
+.nota-item::before{content:"· ";font-style:normal;color:var(--rosado)}
+ul.vars{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:2px}
+ul.vars li{display:flex;align-items:center;gap:10px;min-height:42px}
+.vn{font-size:.95rem;min-width:0;flex:0 1 auto}
+.lead{flex:1 1 24px;min-width:24px;border-bottom:1px dotted var(--rosado);transform:translateY(-4px)}
+.vp{font-variant-numeric:tabular-nums;font-weight:500;color:var(--tinta);white-space:nowrap}
+.vp small{font-weight:400;color:var(--tinta-suave);font-size:.78rem}
+.min{margin-left:8px;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--salvia);font-weight:600;white-space:nowrap}
+.ctrl .q{min-width:22px}
+.ctrl{flex:none;display:flex;align-items:center;gap:6px;justify-content:flex-end}
+.ctrl button{font:inherit;width:32px;height:32px;border-radius:50%;border:1px solid var(--canela);background:var(--blanco);color:var(--canela);cursor:pointer;display:grid;place-items:center;font-size:1.1rem;line-height:1;padding:0}
+.ctrl button:hover{background:var(--canela);color:var(--blanco)}
+.ctrl button:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+.ctrl .q{min-width:18px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums;color:var(--canela)}
+.ctrl .menos,.ctrl .q{display:none}
+.ctrl.on .menos,.ctrl.on .q{display:grid}
+.ctrl.on .mas{background:var(--canela);color:var(--blanco)}
+
+/* ── Pie ── */
+footer.pie{position:relative;background:var(--canela);overflow:hidden}
+section.cat:last-child{border-bottom:0}
+footer.pie::before{content:"";position:absolute;inset:0;background:url("recursos/pattern-blanco.svg") calc(50% - 150px) var(--py2,0px)/600px 330px repeat;opacity:.28}
+footer.pie .wrap{position:relative;display:flex;flex-direction:column;align-items:center;padding-block:clamp(80px,10vw,110px) clamp(150px,18vw,190px)}
+footer.pie dl{display:grid;grid-template-columns:repeat(4,auto);gap:12px clamp(28px,5vw,64px);margin:0;text-align:center}
+footer.pie dl div{display:flex;flex-direction:column;gap:4px}
+footer.pie dt{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--crema);font-weight:600;opacity:.85}
+footer.pie dd{margin:0;font-weight:500;color:var(--blanco)}
+footer.pie .corto{display:none}
+footer.pie dd a,footer.pie dd a:visited{color:inherit;text-decoration:underline;text-decoration-color:rgba(255,255,255,.45);text-underline-offset:4px}
+footer.pie dd a:hover{text-decoration-color:currentColor}
+footer.pie dd,footer.pie dd *{-webkit-text-fill-color:currentColor}
+@media (max-width:720px){footer.pie dl{grid-template-columns:1fr 1fr;gap:10px 20px}footer.pie dd{font-size:.95rem}footer.pie .largo{display:none}footer.pie .corto{display:inline}}
+
+/* ── Datos del pedido ── */
+.pedido button.wa{font:inherit;border:0;cursor:pointer;background:var(--salvia);color:var(--blanco);font-weight:500;letter-spacing:.04em;padding:13px 22px;white-space:nowrap}
+.pedido button.wa:hover{background:#6F826F}
+.checkout{position:fixed;inset:0;z-index:25;background:rgba(62,46,39,.55);display:flex;justify-content:flex-end}
+.checkout[hidden]{display:none}
+.co-panel{background:var(--blanco);width:min(520px,100%);height:100%;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.co-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:24px max(24px,env(safe-area-inset-right,0px)) 16px 24px;border-bottom:1px solid var(--linea)}
+.co-head h2{margin:4px 0 0;font-weight:300;font-size:1.7rem;color:var(--canela);line-height:1.1}
+.co-cerrar{font:inherit;font-size:1.5rem;line-height:1;width:40px;height:40px;border-radius:50%;border:1px solid var(--linea);background:var(--blanco);color:var(--tinta);cursor:pointer;flex:none}
+.co-body{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:22px}
+.co-resumen{background:var(--crema);padding:16px 18px}
+.co-resumen ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:.9rem}
+.co-resumen li{display:flex;justify-content:space-between;gap:12px}
+.co-resumen li span:last-child{font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--tinta-suave)}
+.co-total{display:flex;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid var(--rosado)}
+.co-total strong{font-variant-numeric:tabular-nums;color:var(--canela);font-size:1.1rem}
+#co-form{display:flex;flex-direction:column;gap:20px}
+.campo{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;min-width:0}
+.campo label,.campo legend{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--canela);font-weight:600;padding:0}
+.campo legend small{letter-spacing:.04em;text-transform:none;font-weight:400;color:var(--tinta-suave);font-size:.8rem;margin-left:6px}
+.campo input[type=text],.campo input[type=tel],.campo input:not([type]){font:inherit;font-size:1rem;padding:12px 14px;border:1px solid var(--linea);background:var(--blanco);color:var(--tinta);border-radius:10px}
+.campo input:focus{outline:none;border-color:var(--canela);box-shadow:0 0 0 3px rgba(180,128,105,.18)}
+.campo input[aria-invalid="true"]{border-color:#B5523B}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{font:inherit;font-size:.88rem;padding:9px 12px;border:1px solid var(--linea);background:var(--blanco);color:var(--tinta);border-radius:999px;cursor:pointer;line-height:1.2;text-align:center}
+.chips button small{display:block;font-size:.7rem;color:var(--tinta-suave);letter-spacing:.06em;text-transform:uppercase}
+.chips button:hover{border-color:var(--canela)}
+.chips button[aria-pressed="true"]{background:var(--canela);border-color:var(--canela);color:var(--blanco)}
+.chips button[aria-pressed="true"] small{color:var(--crema)}
+.chips button:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
+.chips button:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+.horas{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}
+.err{margin:0;color:#B5523B;font-size:.84rem}
+.co-local{margin:0;font-size:.88rem;color:var(--tinta-suave)}
+.co-aviso{margin:0;padding:12px 14px;background:var(--crema);border-left:3px solid var(--canela);font-size:.9rem;color:var(--tinta)}
+.co-foot{border-top:1px solid var(--linea);padding:16px 24px max(16px,env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px}
+.co-foot a.wa{display:block;text-align:center;text-decoration:none;background:var(--salvia);color:var(--blanco);font-weight:500;letter-spacing:.04em;padding:15px 22px}
+.co-foot a.wa[aria-disabled="true"]{background:#B7C2B7}
+.co-nota{margin:0;font-size:.8rem;color:var(--tinta-suave);text-align:center}
+#desayuno .co-body{padding:28px 28px 36px;gap:28px}
+#desayuno .co-panel{width:min(560px,100%)}
+#ds-form{gap:0}
+#ds-form>.campo,#ds-form>.co-aviso{padding-block:26px;border-top:1px solid var(--linea)}
+#ds-form>.campo:first-child{border-top:0;padding-top:4px}
+#ds-form>.co-aviso{border-top:0;margin-top:8px;padding:16px 18px}
+#ds-form .campo{gap:12px}
+#ds-form .campo legend{float:left;width:100%;margin:0 0 4px}
+#ds-form fieldset.campo>*:not(legend){clear:both}
+#ds-form .ayuda{line-height:1.55;margin-bottom:2px}
+#ds-form .opciones{gap:10px}
+#ds-form .opciones.dos-op{display:grid;grid-template-columns:1fr 1fr}
+#ds-form .opciones label{padding:14px 16px;line-height:1.45}
+#ds-form .chips{gap:10px}
+#ds-form .dos{gap:14px}
+#ds-form .dos>div{gap:8px}
+#ds-form .contador{margin-top:-4px}
+#desayuno .co-intro{line-height:1.6}
+@media (max-width:520px){#desayuno .co-body{padding:22px 20px 30px}}
+.des-cta{margin-bottom:28px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px}
+.des-cta p{margin:0;max-width:52ch;color:var(--tinta)}
+.des-cta button.wa{font:inherit;border:0;cursor:pointer;background:var(--salvia);color:var(--blanco);font-weight:500;letter-spacing:.04em;padding:14px 24px}
+.des-cta button.wa:hover{background:#6F826F}
+.co-intro{margin:0;color:var(--tinta-suave);font-size:.92rem}
+.ayuda{margin:0;font-size:.84rem;color:var(--tinta-suave)}
+.campo textarea{font:inherit;font-size:1rem;padding:12px 14px;border:1px solid var(--linea);background:var(--blanco);color:var(--tinta);border-radius:10px;resize:vertical}
+.campo textarea:focus{outline:none;border-color:var(--canela);box-shadow:0 0 0 3px rgba(180,128,105,.18)}
+.campo textarea[aria-invalid="true"],.campo input[aria-invalid="true"]{border-color:#B5523B}
+.opciones{display:flex;flex-direction:column;gap:8px}
+.opciones label{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--linea);border-radius:10px;cursor:pointer;font-size:.93rem}
+.opciones label:has(input:checked){border-color:var(--canela);background:var(--crema)}
+.opciones input{accent-color:var(--canela);margin:3px 0 0;flex:none}
+.campo .opciones label{font-size:.93rem;letter-spacing:normal;text-transform:none;color:var(--tinta);font-weight:400}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dos>div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.sub-l{font-size:.78rem!important;letter-spacing:.04em!important;text-transform:none!important;color:var(--tinta-suave)!important;font-weight:500!important}
+.opc{letter-spacing:.04em;text-transform:none;font-weight:400;color:var(--tinta-suave);font-size:.8rem;margin-left:6px}
+.contador{margin:0;font-size:.8rem;color:var(--tinta-suave);text-align:right;font-variant-numeric:tabular-nums}
+.contador.mal{color:#B5523B;font-weight:600}
+@media (max-width:420px){.dos{grid-template-columns:1fr}}
+/* ── Barra de pedido ── */
+.pedido{position:fixed;left:0;right:0;bottom:0;z-index:15;background:var(--blanco);border-top:1px solid var(--canela);padding-bottom:env(safe-area-inset-bottom,0px)}
+.pedido .wrap{display:flex;align-items:center;gap:12px 20px;padding-block:14px;flex-wrap:wrap}
+.pedido .res{flex:1;min-width:0}
+.pedido .res .eyebrow{display:block;margin-bottom:2px}
+.pedido .tot{font-size:1.05rem}
+.pedido .tot strong{font-weight:600;font-variant-numeric:tabular-nums}
+.pedido .lista{color:var(--tinta-suave);font-size:.84rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pedido .vaciar{font:inherit;font-size:.82rem;background:none;border:0;color:var(--tinta-suave);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:6px}
+.pedido a.wa{text-decoration:none;background:var(--salvia);color:var(--blanco);font-weight:500;letter-spacing:.04em;padding:13px 22px;white-space:nowrap}
+.pedido a.wa:hover{background:#6F826F}
+.pedido a.wa:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+
+@media (max-width:820px){
+  section.cat{grid-template-columns:1fr;gap:28px}
+  .cat-aside{position:static;gap:10px}
+  .cat-aside .ilus{width:84px}
+  .cat-aside .txt{display:flex;flex-direction:column;gap:8px}
+  nav.indice .mini{display:none}
+  .como{grid-template-columns:1fr;gap:20px}
+  .pasos{grid-template-columns:1fr;gap:16px}
+  .paso{flex-direction:row;align-items:baseline;gap:16px}
+  .paso::before{font-size:1.9rem;flex:none;width:22px}
+}
+@media (max-width:420px){
+  .pedido .vaciar{order:3}
+  .pedido a.wa{flex:1;text-align:center}
+}
+
+/* ── Ajustes 28/10: fondo crema en toda la página (sin pattern) y más aire en la carta ── */
+body,body::before,nav.indice,.pedido{background:var(--crema)}
+.como{background:rgba(180,128,105,.8);color:var(--blanco)}
+.como .eyebrow,.como h2,.paso::before,.paso h3{color:var(--blanco)}
+.paso p{color:var(--crema)}
+.foto,.dmini{background:var(--blanco)}
+.prod{padding-block:34px;gap:26px}
+.prod-body{gap:10px}
+.prod-head{gap:6px 16px}
+.prod h3{letter-spacing:.015em;word-spacing:.08em}
+.desc{line-height:1.7;letter-spacing:.01em}
+ul.vars{gap:8px;margin-top:10px}
+ul.vars li{gap:14px;min-height:48px}
+.vn{letter-spacing:.02em;word-spacing:.06em;line-height:1.45;flex:1 1 auto}
+.lead{flex:0 0 40px;width:40px;min-width:40px}
+ul.vars li .vp{margin-left:auto}
+.porfila ul.vars{gap:18px}
+.sub{padding-bottom:22px;margin-bottom:30px}
+@media (max-width:520px){
+  .prod{grid-template-columns:1fr;gap:16px}
+  .prod>.fotos{flex-direction:row;align-self:start}
+  .prod>.fotos .foto{width:120px}
+  .prod>.foto.vacia{display:none}
+  .porfila .prod-head,.porfila>.prod-body>.desc{padding-left:0}
+  .porfila ul.vars li{grid-template-columns:64px 1fr;gap:12px}
+  .porfila ul.vars li .foto{width:64px}
+}
+
+
+/* Encabezado de cada sección a todo el ancho, separado de los productos */
+section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
+.cat-aside{position:static;flex-direction:column;align-items:center;text-align:center;gap:16px;padding-top:8px}
+.cat-aside .ilus{width:clamp(70px,8vw,96px);flex:none}
+.cat-aside .txt{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;min-width:0}
+.cat-aside h2{margin:0;display:flex;align-items:center;gap:clamp(16px,3vw,32px);width:100%}
+.cat-aside h2::before,.cat-aside h2::after{content:"";flex:1;height:1px;background:var(--canela);opacity:.6}
+.cat-aside p{max-width:46ch}
+
+.prod.grande.cuadro>.fotos .foto{aspect-ratio:1;max-width:460px}
+@media (max-width:520px){.prod.grande.cuadro>.fotos .foto{width:100%;max-width:none}}
+
+.dmini,.foto.dmini{background:transparent!important;padding:0}
+
+
+
+/* ── Formulario de desayunos: pasos simples para celular ── */
+#desayuno .co-body{background:var(--crema);padding:18px 16px 28px;gap:16px}
+#desayuno .co-intro{margin:0;font-size:.95rem;color:var(--tinta)}
+#ds-form{display:flex;flex-direction:column;gap:14px}
+.ds-paso{background:var(--blanco);border-radius:18px;padding:18px 16px 20px;display:flex;flex-direction:column;gap:14px}
+.ds-paso h3{margin:0;display:flex;align-items:center;gap:10px;font-weight:500;font-size:1.08rem;color:var(--tinta)}
+.ds-paso h3>span{flex:none;width:26px;height:26px;border-radius:50%;background:var(--canela);color:var(--blanco);display:grid;place-items:center;font-size:.8rem;font-weight:600}
+.ds-paso h3 .opc{margin-left:0}
+.ds-paso .ayuda{margin:-6px 0 0;font-size:.85rem}
+.ds-paso .campo{gap:10px}
+#ds-form .campo legend{float:none;width:auto;margin:0}
+#ds-form fieldset.campo>*:not(legend){clear:none}
+.req{color:var(--canela);font-weight:600;margin-left:3px}
+.ds-paso h3 .req{margin-left:-6px}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ds-sub{font-size:.72rem!important;letter-spacing:.18em!important;text-transform:uppercase;color:var(--canela)!important;font-weight:600!important;padding:0;border:0;margin:0}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tiles label{position:relative;display:flex;flex-direction:column;gap:2px;padding:14px;border:1.5px solid var(--linea);border-radius:14px;cursor:pointer;background:var(--blanco);font-size:.95rem;color:var(--tinta);letter-spacing:normal;text-transform:none}
+.tiles label strong{font-weight:600;font-size:1rem}
+.tiles label small{font-size:.8rem;color:var(--tinta-suave)}
+.tiles label em{font-style:normal;margin-top:6px;font-weight:600;color:var(--canela)}
+.tiles input,.zonas input{position:absolute;opacity:0;pointer-events:none}
+.tiles label:has(input:checked),.zonas label:has(input:checked){border-color:var(--canela);background:var(--crema);box-shadow:inset 0 0 0 1px var(--canela)}
+.tiles label:has(input:focus-visible),.zonas label:has(input:focus-visible){outline:2px solid var(--canela);outline-offset:2px}
+.check{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--linea);border-radius:14px;cursor:pointer;font-size:.95rem;color:var(--tinta)}
+.check input{width:20px;height:20px;accent-color:var(--canela);margin:0;flex:none}
+.check:has(input:checked){border-color:var(--canela);background:var(--crema)}
+.zonas{gap:8px}
+.zonas label{position:relative;border-width:1.5px;border-radius:14px;padding:12px 14px}
+.zonas label span{display:flex;flex-direction:column;gap:2px}
+.zonas label strong{font-weight:600;font-size:.98rem;color:var(--tinta)}
+.zonas label small{font-size:.8rem;color:var(--tinta-suave);line-height:1.4}
+.mapa-det summary{cursor:pointer;color:var(--canela);font-size:.88rem;font-weight:500;text-decoration:underline;text-underline-offset:3px;list-style:none;padding:2px 0}
+.mapa-det summary::-webkit-details-marker{display:none}
+.mapa-det[open] summary{margin-bottom:8px}
+#ds-form .dos{grid-template-columns:1fr 1fr;gap:8px}
+#ds-form .campo input[type=text],#ds-form .campo input[type=tel],#ds-form .campo textarea{font-size:16px;padding:13px 14px;border-radius:12px;width:100%}
+#ds-form .chips.horas{grid-template-columns:repeat(2,1fr);gap:8px}
+#ds-form .chips.horas button{padding:12px 8px;border-radius:12px;font-size:.92rem}
+.ds-paso .cal{max-width:none;border:0;padding:0}
+.nota-pago{margin:0!important;font-size:.82rem!important}
+#desayuno .co-foot{background:var(--blanco);box-shadow:0 -6px 20px rgba(74,58,51,.06)}
+#desayuno .co-foot a.wa{border-radius:14px}
+#ds-falta{font-weight:500;color:var(--canela)}
+@media (max-width:420px){#ds-form .dos{grid-template-columns:1fr}}
+/* Calendario de desayunos */
+.cal{border:1px solid var(--linea);border-radius:14px;padding:14px;background:var(--blanco);max-width:360px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-head strong{font-weight:500;color:var(--canela);text-transform:capitalize}
+.cal-head button{font:inherit;width:34px;height:34px;border-radius:50%;border:1px solid var(--linea);background:var(--blanco);color:var(--canela);cursor:pointer;font-size:1.1rem;line-height:1}
+.cal-head button:disabled{opacity:.3;cursor:default}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cal-grid .dow{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);padding:4px 0}
+.cal-grid button{font:inherit;font-size:.92rem;aspect-ratio:1;border:0;border-radius:50%;background:transparent;color:var(--tinta);cursor:pointer;font-variant-numeric:tabular-nums}
+.cal-grid button:hover:not(:disabled):not([aria-pressed="true"]){background:var(--crema)}
+.cal-grid button:disabled{color:var(--tinta-suave);opacity:.35;cursor:not-allowed;text-decoration:line-through}
+.cal-grid button[aria-pressed="true"]{background:var(--canela);color:var(--blanco)}
+.cal-grid button:focus-visible{outline:2px solid var(--canela);outline-offset:2px}
+.cal-sel{margin:10px 0 0;font-size:.88rem;color:var(--canela)}
+/* Mapa de zonas */
+.mapa{margin:4px 0 6px;padding:10px;background:var(--blanco);border:1px solid var(--linea);border-radius:14px}
+.mapa svg{width:100%;height:auto}
+.mapa text{font-family:var(--display);font-size:7.2px;text-anchor:middle;fill:var(--tinta)}
+.mapa .m-rio{font-size:8px;fill:#7d8f86;font-style:italic;letter-spacing:.05em}
+.mapa .z1 rect,.ley.z1{fill:#f1d9c9;background:#f1d9c9}
+.mapa .z2 rect,.ley.z2{fill:#d6ae9b;background:#d6ae9b}
+.mapa .z3 rect,.ley.z3{fill:#cfdccf;background:#cfdccf}
+.mapa rect{stroke:var(--blanco);stroke-width:1.5}
+.mapa figcaption{font-size:.72rem;color:var(--tinta-suave);margin-top:6px;line-height:1.6}
+.ley{display:inline-block;width:10px;height:10px;border-radius:3px;margin:0 4px 0 6px;vertical-align:-1px}
+.ley.z1{margin-left:0}
+
+/* Dips: foto grande pero más chica que las tablas */
+.prod.grande.medio>.fotos .foto{max-width:360px}
+@media (max-width:520px){.prod.grande.medio>.fotos .foto{width:80%;max-width:300px}}
+
+/* Roll, croissants, sacramentos y quiche: foto al costado también en el celular */
+@media (max-width:520px){
+  .prod.lado{grid-template-columns:96px 1fr;gap:16px}
+  .prod.lado>.fotos{flex-direction:column;align-self:start}
+  .prod.lado>.fotos .foto,.prod.lado>.foto.vacia{width:96px}
+  .prod.lado>.foto.vacia{display:grid}
+}
+
+/* Tablas: foto grande arriba y detalle más chico */
+.prod.grande{grid-template-columns:1fr;gap:20px}
+.prod.grande>.fotos{align-self:stretch;align-items:center}
+.prod.grande>.fotos .foto{width:100%;max-width:560px;aspect-ratio:4/3;border-radius:18px}
+.prod.grande .desc{font-size:.82rem;line-height:1.6;max-width:70ch}
+@media (max-width:520px){.prod.grande>.fotos{flex-direction:column}.prod.grande>.fotos .foto{width:100%;max-width:none}}
+
+/* Sándwiches: fotos en fila arriba y la lista a todo el ancho, con más aire */
+.prod.ancho{grid-template-columns:1fr;gap:22px}
+.prod.ancho>.fotos{flex-direction:row;align-self:stretch;justify-content:center;gap:18px;width:100%}
+.prod.ancho>.fotos .foto{width:170px}
+.prod.ancho ul.vars{gap:20px;margin-top:14px}
+.prod.ancho ul.vars li{min-height:0}
+.prod.ancho .vn{line-height:1.5}
+@media (max-width:520px){.prod.ancho>.fotos{gap:10px}.prod.ancho>.fotos .foto{width:calc((100% - 20px) / 3)}}
+
+/* Portada: ilustraciones del pattern ubicadas a los costados del logo, sin superponerse */
+.portada::before{display:none}
+.portada .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:clamp(24px,5vw,72px);padding-block:clamp(56px,8vw,100px)}
+.ilus-lado{width:min(100%,280px);justify-self:center;display:grid;grid-template-columns:1fr 1fr;gap:28px 24px;color:var(--canela);opacity:.6}
+.ilus-lado>div{aspect-ratio:1;display:grid;place-items:center}
+.ilus-lado svg{width:100%;height:100%}
+.ilus-lado>div:nth-child(1){transform:translateY(-14px) rotate(-6deg)}
+.ilus-lado>div:nth-child(2){transform:translateY(12px) rotate(5deg)}
+.ilus-lado>div:nth-child(3){transform:translateY(-6px) rotate(4deg)}
+.ilus-lado>div:nth-child(4){transform:translateY(16px) rotate(-5deg)}
+@media (max-width:720px){
+  .portada .wrap{grid-template-columns:1fr;gap:28px;padding-block:36px}
+  .ilus-lado{width:100%;max-width:340px;grid-template-columns:repeat(4,1fr);gap:16px}
+  .ilus-lado>div{transform:none!important}
+}
+</style>
+
+<header class="portada">
+  <div class="wrap">
+    <div class="ilus-lado" aria-hidden="true" data-ilus="croissant torta flores jarra"></div>
+    <div class="etiqueta">
+      <div class="logo" role="img" aria-label="Atelier Gusto Casero"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="295.0 262.0 250.0 150.0"><defs /><path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 364.292969 272.089844 L 362.148438 278.019531 L 367.453125 279.660156 Z M 358.289062 284.75 C 358.820312 284.652344 359.300781 283.878906 359.832031 282.601562 L 364.679688 269.894531 L 365.113281 269.894531 L 370.441406 282.359375 C 371.117188 283.953125 371.648438 284.675781 371.914062 284.722656 L 372.058594 284.75 L 372.058594 284.820312 L 368.515625 284.820312 L 368.515625 284.75 L 368.660156 284.722656 C 369.117188 284.628906 369.140625 283.808594 368.632812 282.601562 L 367.597656 280.09375 L 362.027344 278.382812 L 360.4375 282.503906 C 360.027344 283.785156 360.027344 284.628906 360.484375 284.722656 L 360.628906 284.75 L 360.628906 284.820312 L 358.289062 284.820312 Z M 358.289062 284.75 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 382.792969 284.601562 L 382.890625 284.578125 C 383.277344 284.484375 383.519531 283.566406 383.519531 282.265625 L 383.519531 270.667969 L 381.058594 270.667969 C 379.539062 270.667969 378.214844 271.148438 377.585938 271.871094 L 377.417969 272.066406 L 377.371094 272.066406 C 377.394531 271.511719 377.394531 270.785156 377.464844 270.230469 L 391.355469 270.230469 C 391.425781 270.785156 391.425781 271.511719 391.449219 272.066406 L 391.402344 272.066406 L 391.234375 271.871094 C 390.605469 271.148438 389.28125 270.667969 387.761719 270.667969 L 385.300781 270.667969 L 385.300781 282.265625 C 385.300781 283.566406 385.542969 284.484375 385.929688 284.578125 L 386.027344 284.601562 L 386.027344 284.675781 L 382.792969 284.675781 Z M 382.792969 284.601562 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 400.039062 284.675781 L 400.136719 284.652344 C 400.523438 284.554688 400.765625 283.613281 400.765625 282.3125 L 400.765625 272.738281 C 400.765625 271.4375 400.523438 270.496094 400.136719 270.402344 L 400.039062 270.375 L 400.039062 270.304688 L 409.660156 270.304688 C 409.660156 270.835938 409.613281 271.484375 409.613281 272.015625 L 409.566406 272.015625 L 409.421875 271.824219 C 408.960938 271.171875 407.441406 270.738281 405.632812 270.738281 L 402.523438 270.738281 L 402.523438 277.730469 L 404.667969 277.730469 C 406.382812 277.730469 407.710938 277.488281 407.996094 277.105469 L 408.070312 277.007812 L 408.140625 277.007812 L 408.140625 278.960938 L 408.070312 278.960938 L 407.996094 278.839844 C 407.710938 278.453125 406.382812 278.164062 404.667969 278.164062 L 402.523438 278.164062 L 402.523438 284.3125 L 405.828125 284.3125 C 407.636719 284.3125 409.226562 283.878906 409.804688 283.230469 L 409.972656 283.035156 L 410.023438 283.035156 C 409.925781 283.566406 409.878906 284.242188 409.757812 284.75 L 400.039062 284.75 Z M 400.039062 284.675781 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 419.554688 284.75 L 419.648438 284.722656 C 420.035156 284.628906 420.277344 283.6875 420.277344 282.359375 L 420.277344 272.691406 C 420.277344 271.367188 420.035156 270.425781 419.648438 270.328125 L 419.554688 270.304688 L 419.554688 270.230469 L 422.761719 270.230469 L 422.761719 270.304688 L 422.664062 270.328125 C 422.277344 270.425781 422.035156 271.367188 422.035156 272.691406 L 422.035156 284.457031 L 425.582031 284.457031 C 427.246094 284.457031 428.738281 283.902344 429.316406 283.15625 L 429.464844 282.9375 C 429.464844 282.9375 429.511719 282.964844 429.558594 283.011719 C 429.488281 283.566406 429.390625 284.289062 429.269531 284.820312 L 419.554688 284.820312 Z M 419.554688 284.75 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 438.945312 284.773438 L 439.042969 284.75 C 439.425781 284.652344 439.667969 283.710938 439.667969 282.386719 L 439.667969 272.714844 C 439.667969 271.390625 439.425781 270.449219 439.042969 270.351562 L 438.945312 270.328125 L 438.945312 270.257812 L 441.960938 270.257812 L 441.960938 270.328125 L 441.863281 270.351562 C 441.476562 270.449219 441.234375 271.390625 441.234375 272.714844 L 441.234375 282.386719 C 441.234375 283.710938 441.476562 284.652344 441.863281 284.75 L 441.960938 284.773438 L 441.960938 284.84375 L 438.945312 284.84375 Z M 438.945312 284.773438 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 452.164062 284.675781 L 452.261719 284.652344 C 452.644531 284.554688 452.886719 283.613281 452.886719 282.3125 L 452.886719 272.738281 C 452.886719 271.4375 452.644531 270.496094 452.261719 270.402344 L 452.164062 270.375 L 452.164062 270.304688 L 461.785156 270.304688 C 461.785156 270.835938 461.734375 271.484375 461.734375 272.015625 L 461.6875 272.015625 L 461.542969 271.824219 C 461.085938 271.171875 459.566406 270.738281 457.757812 270.738281 L 454.648438 270.738281 L 454.648438 277.730469 L 456.792969 277.730469 C 458.503906 277.730469 459.832031 277.488281 460.121094 277.105469 L 460.191406 277.007812 L 460.265625 277.007812 L 460.265625 278.960938 L 460.191406 278.960938 L 460.121094 278.839844 C 459.832031 278.453125 458.503906 278.164062 456.792969 278.164062 L 454.648438 278.164062 L 454.648438 284.3125 L 457.949219 284.3125 C 459.757812 284.3125 461.351562 283.878906 461.929688 283.230469 L 462.097656 283.035156 L 462.144531 283.035156 C 462.050781 283.566406 462 284.242188 461.878906 284.75 L 452.164062 284.75 Z M 452.164062 284.675781 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 474.398438 279.324219 L 477.246094 279.324219 C 479.753906 279.324219 481.441406 277.730469 481.441406 274.644531 C 481.441406 272.257812 480.042969 270.667969 477.945312 270.667969 L 474.398438 270.667969 Z M 483.488281 284.601562 L 483.488281 284.820312 C 483.371094 284.84375 482.355469 284.84375 482.09375 284.84375 C 481.03125 284.84375 480.355469 284.195312 479.800781 283.324219 C 479.078125 282.191406 478.28125 280.527344 476.714844 279.757812 L 474.398438 279.757812 L 474.398438 282.359375 C 474.398438 283.6875 474.640625 284.628906 475.027344 284.722656 L 475.125 284.746094 L 475.125 284.820312 L 471.914062 284.820312 L 471.914062 284.746094 L 472.011719 284.722656 C 472.398438 284.628906 472.640625 283.6875 472.640625 282.359375 L 472.640625 272.691406 C 472.640625 271.367188 472.398438 270.425781 472.011719 270.328125 L 471.914062 270.304688 L 471.914062 270.230469 L 477.945312 270.230469 C 481.152344 270.230469 483.273438 271.992188 483.273438 274.644531 C 483.273438 277.804688 481.128906 279.5625 477.824219 279.734375 C 479.054688 280.046875 479.945312 280.914062 480.429688 281.613281 C 481.246094 282.746094 481.511719 284.21875 482.910156 284.554688 C 483.203125 284.628906 483.464844 284.601562 483.488281 284.601562 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 325.6875 401.179688 C 315.339844 401.179688 306.238281 392.816406 306.238281 381.902344 C 306.238281 372.011719 311.554688 365.453125 320.316406 365.453125 C 331.339844 365.621094 333.035156 376.363281 338.066406 376.363281 C 340.722656 376.363281 341.34375 373.933594 341.34375 373.933594 C 339.421875 369.410156 332.808594 363.472656 322.746094 363.472656 C 311.101562 363.472656 301.433594 372.972656 301.433594 384.671875 C 301.433594 396.375 311.101562 405.875 322.746094 405.875 C 332.074219 405.875 339.875 399.65625 342.195312 391.117188 L 341.628906 390.890625 C 339.367188 396.546875 333.429688 401.179688 325.6875 401.179688 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 356.78125 401.804688 C 353.046875 401.804688 350.390625 399.089844 350.390625 395.359375 C 350.390625 385.917969 361.527344 381.679688 369.953125 375.289062 C 370.234375 376.476562 370.515625 377.605469 370.855469 378.738281 C 371.421875 384.222656 368.3125 401.804688 356.78125 401.804688 M 378.542969 385.804688 C 375.265625 375.515625 374.023438 363.472656 362.886719 363.472656 C 355.367188 363.472656 347.167969 367.320312 346.039062 369.523438 C 345.699219 371.445312 347.167969 372.859375 349.148438 372.859375 C 354.007812 372.859375 357.96875 364.605469 363.109375 364.605469 C 366.730469 364.605469 367.859375 367.882812 369.613281 374.214844 C 359.324219 381.453125 344.738281 384.5625 344.738281 396.433594 C 344.738281 401.632812 348.242188 405.875 354.574219 405.875 C 364.410156 405.875 370.289062 395.585938 372.15625 383.261719 C 373.851562 389.195312 376.058594 396.828125 376.453125 398.296875 C 377.921875 403.78125 378.429688 405.027344 381.203125 405.027344 L 389.796875 405.027344 L 389.796875 404.460938 C 384.140625 404.460938 383.40625 400.957031 378.542969 385.804688 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 394.601562 372.632812 C 394.601562 367.488281 400.367188 364.945312 404.496094 364.945312 C 413.371094 364.945312 414.558594 372.40625 419.535156 372.40625 C 421.851562 372.40625 423.546875 370.597656 423.152344 368.335938 C 418.796875 364.945312 414.050781 363.472656 407.773438 363.472656 C 399.746094 363.472656 390.078125 367.148438 390.078125 375.0625 C 390.078125 389.988281 420.777344 384.164062 420.777344 395.808594 C 420.777344 401.578125 414.726562 404.628906 408.960938 404.628906 C 399.972656 404.628906 393.527344 397.449219 391.886719 388.914062 L 391.324219 388.914062 L 391.324219 400.558594 C 396.917969 404.347656 400.707031 405.875 408.054688 405.875 C 415.96875 405.875 424.847656 402.480469 424.847656 394.566406 C 424.847656 377.324219 394.601562 385.011719 394.601562 372.632812 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 448.253906 365.453125 C 456.054688 365.453125 461.308594 369.238281 461.308594 375.34375 C 461.308594 380.207031 455.261719 380.433594 449.4375 380.433594 C 443.21875 380.433594 439.769531 380.601562 434.175781 380.714844 C 434.628906 371.5 439.828125 365.453125 448.253906 365.453125 M 469.5625 390.894531 C 467.304688 396.546875 461.367188 401.179688 453.621094 401.179688 C 443.277344 401.179688 434.175781 392.8125 434.175781 381.902344 L 459.613281 381.902344 C 463.121094 381.902344 467.078125 380.886719 467.078125 376.082031 C 467.078125 371.277344 462.328125 363.472656 450.683594 363.472656 C 439.035156 363.472656 429.371094 372.972656 429.371094 384.671875 C 429.371094 396.375 439.035156 405.875 450.683594 405.875 C 460.007812 405.875 467.8125 399.65625 470.128906 391.117188 Z M 469.5625 390.894531 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 499.074219 364.320312 C 497.945312 363.53125 495.910156 363.472656 494.554688 363.472656 C 486.015625 363.472656 478.609375 372.574219 478.382812 380.546875 C 478.382812 370.992188 478.441406 363.472656 478.441406 363.472656 C 475.332031 365.679688 471.203125 367.375 467.53125 367.375 L 467.53125 367.9375 C 473.410156 367.9375 472.730469 374.160156 472.730469 386.199219 C 472.730469 398.242188 473.410156 404.460938 467.53125 404.460938 L 467.53125 405.027344 L 483.585938 405.027344 L 483.585938 404.460938 C 477.707031 404.460938 478.382812 398.242188 478.382812 388.007812 C 478.382812 378.285156 482.003906 368.675781 488.445312 368.675781 C 491.726562 368.675781 492.574219 369.804688 494.890625 369.804688 C 498.113281 369.804688 500.261719 367.714844 499.074219 364.320312 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 523.78125 402.480469 C 512.476562 402.480469 501.566406 392.023438 501.113281 381.902344 C 500.320312 372.464844 506.652344 366.867188 514.339844 366.867188 C 525.648438 366.867188 536.558594 377.324219 536.953125 387.445312 C 537.746094 396.882812 531.46875 402.480469 523.78125 402.480469 M 519.035156 363.472656 C 507.386719 363.472656 497.71875 372.972656 497.71875 384.671875 C 497.71875 396.375 507.386719 405.875 519.035156 405.875 C 530.679688 405.875 540.347656 396.375 540.347656 384.671875 C 540.347656 372.972656 530.679688 363.472656 519.035156 363.472656 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 373.402344 328.269531 C 373.402344 333.019531 373.34375 336.636719 373.34375 336.636719 C 373.34375 336.636719 372.496094 347.945312 383.972656 347.945312 C 391.886719 347.945312 397.878906 339.746094 400.308594 333.019531 C 400.253906 341.894531 400.253906 347.945312 400.253906 347.945312 C 403.363281 345.738281 407.488281 344.042969 411.164062 344.042969 L 411.164062 343.476562 C 405.285156 343.476562 405.964844 337.257812 405.964844 325.21875 C 405.964844 314.308594 406.019531 305.542969 406.019531 305.542969 C 402.910156 307.75 398.785156 309.445312 395.109375 309.445312 L 395.109375 310.011719 C 400.707031 310.011719 400.308594 316.511719 400.308594 323.464844 L 400.308594 326.800781 C 399.972656 337.148438 391.324219 344.835938 385.101562 344.835938 C 381.597656 344.835938 379.054688 342.460938 379.054688 336.808594 L 379.054688 327.140625 C 379.054688 316.230469 379.109375 305.542969 379.109375 305.542969 C 376 307.75 371.875 309.445312 368.199219 309.445312 L 368.199219 310.011719 C 374.078125 310.011719 373.402344 316.230469 373.402344 328.269531 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 448.761719 336.636719 C 448.761719 319.394531 418.515625 327.082031 418.515625 314.703125 C 418.515625 309.558594 424.28125 307.015625 428.410156 307.015625 C 437.285156 307.015625 438.472656 314.476562 443.449219 314.476562 C 445.765625 314.476562 447.460938 312.667969 447.066406 310.40625 C 442.710938 307.015625 437.964844 305.542969 431.6875 305.542969 C 423.660156 305.542969 413.992188 309.21875 413.992188 317.132812 C 413.992188 332.058594 444.691406 326.234375 444.691406 337.882812 C 444.691406 343.648438 438.640625 346.699219 432.875 346.699219 C 423.886719 346.699219 417.441406 339.519531 415.800781 330.984375 L 415.238281 330.984375 L 415.238281 342.628906 C 420.832031 346.417969 424.621094 347.945312 431.96875 347.945312 C 439.882812 347.945312 448.761719 344.550781 448.761719 336.636719 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 456.957031 337.429688 C 456.957031 342.96875 458.710938 347.945312 465.4375 347.945312 C 469.113281 347.945312 472.390625 344.722656 473.464844 342.800781 L 472.902344 342.402344 C 471.601562 344.496094 469.453125 346.078125 466.738281 346.078125 C 463.515625 346.078125 462.613281 341.667969 462.613281 338.558594 L 462.613281 308.089844 L 471.601562 308.089844 L 471.601562 306.390625 L 462.613281 306.390625 C 462.613281 299.382812 462.667969 294.40625 462.667969 294.40625 L 462.101562 294.40625 C 460.578125 299.210938 454.695312 306.390625 451.023438 306.390625 L 451.023438 308.089844 L 456.957031 308.089844 Z M 456.957031 337.429688 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 487.824219 308.9375 C 499.132812 308.9375 510.042969 319.394531 510.441406 329.515625 C 511.230469 338.953125 504.957031 344.550781 497.265625 344.550781 C 485.960938 344.550781 475.050781 334.09375 474.597656 323.972656 C 473.804688 314.535156 480.136719 308.9375 487.824219 308.9375 M 492.519531 347.945312 C 504.164062 347.945312 513.832031 338.445312 513.832031 326.742188 C 513.832031 315.042969 504.164062 305.542969 492.519531 305.542969 C 480.871094 305.542969 471.207031 315.042969 471.207031 326.742188 C 471.207031 338.445312 480.871094 347.945312 492.519531 347.945312 " />
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 332.695312 320.695312 C 332.695312 313.796875 336.03125 308.542969 342.363281 308.542969 C 351.972656 308.542969 360.511719 317.585938 360.511719 327.195312 C 360.511719 334.039062 357.234375 339.351562 350.84375 339.351562 C 341.234375 339.351562 332.695312 330.304688 332.695312 320.695312 M 360.113281 345.375 C 359.308594 345.117188 358.734375 345.117188 358.101562 345.175781 C 358.058594 345.179688 358.011719 345.191406 357.96875 345.195312 C 357.402344 345.265625 356.65625 345.441406 355.964844 345.636719 C 355.925781 345.648438 355.890625 345.660156 355.851562 345.671875 C 347.875 348.082031 343.667969 353.425781 337.105469 353.425781 C 335.75 353.425781 334.789062 352.695312 334.789062 351.394531 C 334.789062 347.832031 343.496094 344.835938 353.273438 340.652344 C 360.285156 338.105469 365.316406 331.605469 365.316406 324.085938 C 365.316406 313.855469 356.269531 306.222656 346.320312 306.394531 L 359.039062 302.945312 L 358.304688 300.625 C 343.609375 306.394531 327.949219 308.03125 327.949219 324.085938 C 327.949219 334.320312 336.992188 342.007812 346.886719 341.839844 C 340.160156 345.457031 330.210938 347.605469 330.210938 353.371094 C 330.210938 356.480469 332.980469 358.515625 336.652344 358.515625 C 344.585938 358.515625 351.710938 351.953125 358.359375 350.191406 C 359.171875 349.996094 360.027344 349.859375 360.886719 349.835938 C 361.945312 349.8125 362.78125 350.023438 363.40625 350.414062 C 363.523438 349.613281 363.417969 348.773438 363.0625 348.046875 C 362.445312 346.785156 361.53125 345.824219 360.113281 345.375 " />
+</svg></div>
+      <span class="eyebrow" id="bajada">Panadería y pastelería artesanal</span>
+    </div>
+    <div class="ilus-lado" aria-hidden="true" data-ilus="roll tarta bagel croissant"></div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="como">
+    <div class="como-tit"><span class="eyebrow">Pedidos</span><h2>Cómo hacer tu pedido</h2></div>
+    <div class="pasos">
+      <div class="paso"><div><h3>Elegí</h3><p>Tocá + en cada producto de la carta.</p></div></div>
+      <div class="paso"><div><h3>Completá</h3><p>Abajo aparece tu pedido con el total. Tocá «Continuar pedido» y elegí día y horario de retiro.</p></div></div>
+      <div class="paso"><div><h3>Enviá</h3><p>Se abre WhatsApp con tu pedido listo: solo tenés que enviarlo.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<nav class="indice" aria-label="Categorías">
+  <div class="wrap">
+    <div class="mini" aria-hidden="true"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="383 268 377 90"><defs><g id="l1-glyph-7-0">
+<path d="M 1.875 -19.046875 C 1.875 -10.578125 9.359375 -4.21875 17.5625 -4.359375 C 11.984375 -1.359375 3.75 0.421875 3.75 5.203125 C 3.75 7.765625 6.03125 9.453125 9.078125 9.453125 C 16.671875 9.453125 23.359375 2.203125 29.578125 2.203125 C 31.546875 2.203125 32.34375 3.46875 32.34375 4.59375 C 32.34375 10.765625 11.1875 8.796875 11.1875 17.1875 C 11.1875 18.015625 11.796875 18.578125 12.5 18.578125 C 13.90625 18.578125 13.53125 16.625 14.046875 15.359375 C 16.484375 9.40625 34.734375 11.796875 34.734375 2.953125 C 34.734375 0.234375 32.671875 -2.015625 29.34375 -2.015625 C 21.0625 -2.015625 15.640625 5.25 9.453125 5.25 C 8.328125 5.25 7.53125 4.640625 7.53125 3.5625 C 7.53125 0.609375 14.75 -1.875 22.84375 -5.34375 C 28.65625 -7.4375 32.8125 -12.828125 32.8125 -19.046875 C 32.8125 -27.53125 25.328125 -33.84375 17.09375 -33.703125 L 27.625 -36.5625 L 27.015625 -38.484375 C 14.84375 -33.703125 1.875 -32.34375 1.875 -19.046875 Z M 5.8125 -21.859375 C 5.8125 -27.578125 8.5625 -31.921875 13.8125 -31.921875 C 21.765625 -31.921875 28.84375 -24.4375 28.84375 -16.484375 C 28.84375 -10.8125 26.125 -6.40625 20.828125 -6.40625 C 12.875 -6.40625 5.8125 -13.90625 5.8125 -21.859375 Z M 5.8125 -21.859375 " />
+</g>
+<g id="l1-glyph-7-1">
+<path d="M 0.46875 -31.171875 L 0.46875 -30.703125 C 5.34375 -30.703125 4.78125 -25.5625 4.78125 -15.59375 C 4.78125 -11.65625 4.734375 -8.65625 4.734375 -8.65625 C 4.734375 -8.65625 4.03125 0.703125 13.53125 0.703125 C 20.078125 0.703125 25.046875 -6.078125 27.0625 -11.65625 C 27.015625 -4.3125 27.015625 0.703125 27.015625 0.703125 C 29.578125 -1.125 33 -2.53125 36.046875 -2.53125 L 36.046875 -3 C 31.171875 -3 31.734375 -8.140625 31.734375 -18.109375 C 31.734375 -27.15625 31.78125 -34.40625 31.78125 -34.40625 C 29.21875 -32.578125 25.796875 -31.171875 22.75 -31.171875 L 22.75 -30.703125 C 27.390625 -30.703125 27.0625 -25.328125 27.0625 -19.5625 C 27.0625 -18.625 27.0625 -17.734375 27.0625 -16.8125 C 26.78125 -8.234375 19.609375 -1.875 14.46875 -1.875 C 11.5625 -1.875 9.453125 -3.84375 9.453125 -8.515625 L 9.453125 -16.53125 C 9.453125 -25.5625 9.5 -34.40625 9.5 -34.40625 C 6.921875 -32.578125 3.515625 -31.171875 0.46875 -31.171875 Z M 0.46875 -31.171875 " />
+</g>
+<g id="l1-glyph-7-2">
+<path d="M 27.296875 -7.625 C 27.296875 -2.859375 22.28125 -0.328125 17.515625 -0.328125 C 10.0625 -0.328125 4.734375 -6.265625 3.375 -13.34375 L 2.90625 -13.34375 L 2.90625 -3.703125 C 7.53125 -0.5625 10.671875 0.703125 16.765625 0.703125 C 23.3125 0.703125 30.65625 -2.109375 30.65625 -8.65625 C 30.65625 -22.9375 5.625 -16.578125 5.625 -26.828125 C 5.625 -31.078125 10.390625 -33.1875 13.8125 -33.1875 C 21.15625 -33.1875 22.140625 -27.015625 26.265625 -27.015625 C 28.1875 -27.015625 29.578125 -28.515625 29.265625 -30.375 C 25.65625 -33.1875 21.71875 -34.40625 16.53125 -34.40625 C 9.875 -34.40625 1.875 -31.359375 1.875 -24.8125 C 1.875 -12.453125 27.296875 -17.28125 27.296875 -7.625 Z M 27.296875 -7.625 " />
+</g>
+<g id="l1-glyph-7-3">
+<path d="M 0 -32.296875 L 4.921875 -32.296875 L 4.921875 -8 C 4.921875 -3.421875 6.359375 0.703125 11.9375 0.703125 C 14.984375 0.703125 17.6875 -1.96875 18.578125 -3.5625 L 18.109375 -3.890625 C 17.046875 -2.15625 15.265625 -0.84375 13.015625 -0.84375 C 10.34375 -0.84375 9.59375 -4.5 9.59375 -7.0625 L 9.59375 -27.109375 C 9.59375 -28.9375 9.59375 -30.65625 9.59375 -32.296875 L 17.046875 -32.296875 L 17.046875 -33.703125 L 9.59375 -33.703125 C 9.59375 -39.515625 9.640625 -43.625 9.640625 -43.625 L 9.171875 -43.625 C 7.90625 -39.65625 3.046875 -33.703125 0 -33.703125 Z M 0 -32.296875 " />
+</g>
+<g id="l1-glyph-7-4">
+<path d="M 1.875 -16.859375 C 1.875 -7.15625 9.875 0.703125 19.515625 0.703125 C 29.171875 0.703125 37.171875 -7.15625 37.171875 -16.859375 C 37.171875 -26.546875 29.171875 -34.40625 19.515625 -34.40625 C 9.875 -34.40625 1.875 -26.546875 1.875 -16.859375 Z M 15.640625 -31.59375 C 25 -31.59375 34.03125 -22.9375 34.359375 -14.5625 C 35.015625 -6.734375 29.8125 -2.109375 23.453125 -2.109375 C 14.09375 -2.109375 5.0625 -10.765625 4.6875 -19.140625 C 4.03125 -26.96875 9.265625 -31.59375 15.640625 -31.59375 Z M 15.640625 -31.59375 " />
+</g>
+<g id="l1-glyph-7-5">
+</g>
+<g id="l1-glyph-7-6">
+<path d="M 1.875 -16.859375 C 1.875 -7.15625 9.875 0.703125 19.515625 0.703125 C 27.25 0.703125 33.703125 -4.453125 35.625 -11.515625 L 35.15625 -11.703125 C 33.28125 -7.015625 28.375 -3.1875 21.953125 -3.1875 C 13.390625 -3.1875 5.859375 -10.109375 5.859375 -19.140625 C 5.859375 -27.34375 10.25 -32.765625 17.515625 -32.765625 C 26.640625 -32.625 28.046875 -23.734375 32.203125 -23.734375 C 34.40625 -23.734375 34.921875 -25.75 34.921875 -25.75 C 33.328125 -29.484375 27.859375 -34.40625 19.515625 -34.40625 C 9.875 -34.40625 1.875 -26.546875 1.875 -16.859375 Z M 1.875 -16.859375 " />
+</g>
+<g id="l1-glyph-7-7">
+<path d="M 1.40625 -7.109375 C 1.40625 -2.8125 4.3125 0.703125 9.546875 0.703125 C 17.6875 0.703125 22.5625 -7.8125 24.109375 -18.015625 C 25.515625 -13.109375 27.34375 -6.78125 27.671875 -5.578125 C 28.890625 -1.03125 29.296875 0 31.59375 0 L 38.71875 0 L 38.71875 -0.46875 C 34.03125 -0.46875 33.421875 -3.375 29.390625 -15.921875 C 26.6875 -24.4375 25.65625 -34.40625 16.4375 -34.40625 C 10.203125 -34.40625 3.421875 -31.21875 2.484375 -29.390625 C 2.203125 -27.8125 3.421875 -26.640625 5.0625 -26.640625 C 9.078125 -26.640625 12.359375 -33.46875 16.625 -33.46875 C 19.609375 -33.46875 20.546875 -30.75 22 -25.515625 C 13.484375 -19.515625 1.40625 -16.953125 1.40625 -7.109375 Z M 22.28125 -24.625 C 22.515625 -23.640625 22.75 -22.703125 23.03125 -21.765625 C 23.5 -17.234375 20.921875 -2.671875 11.375 -2.671875 C 8.28125 -2.671875 6.078125 -4.921875 6.078125 -8 C 6.078125 -15.828125 15.3125 -19.328125 22.28125 -24.625 Z M 22.28125 -24.625 " />
+</g>
+<g id="l1-glyph-7-8">
+<path d="M 19.515625 0.703125 C 27.25 0.703125 33.703125 -4.453125 35.625 -11.515625 L 35.15625 -11.703125 C 33.28125 -7.015625 28.375 -3.1875 21.953125 -3.1875 C 13.390625 -3.1875 5.859375 -10.109375 5.859375 -19.140625 L 26.921875 -19.140625 C 29.8125 -19.140625 33.09375 -19.984375 33.09375 -23.96875 C 33.09375 -27.953125 29.171875 -34.40625 19.515625 -34.40625 C 9.875 -34.40625 1.875 -26.546875 1.875 -16.859375 C 1.875 -7.15625 9.875 0.703125 19.515625 0.703125 Z M 5.859375 -20.125 C 6.21875 -27.765625 10.53125 -32.765625 17.515625 -32.765625 C 23.96875 -32.765625 28.328125 -29.625 28.328125 -24.578125 C 28.328125 -20.546875 23.3125 -20.359375 18.484375 -20.359375 C 13.34375 -20.359375 10.484375 -20.21875 5.859375 -20.125 Z M 5.859375 -20.125 " />
+</g>
+<g id="l1-glyph-7-9">
+<path d="M 4.78125 -15.59375 C 4.78125 -5.625 5.34375 -0.46875 0.46875 -0.46875 L 0.46875 0 L 13.765625 0 L 13.765625 -0.46875 C 8.890625 -0.46875 9.453125 -5.625 9.453125 -14.09375 C 9.453125 -22.140625 12.453125 -30.09375 17.78125 -30.09375 C 20.5 -30.09375 21.203125 -29.171875 23.125 -29.171875 C 25.796875 -29.171875 27.578125 -30.890625 26.59375 -33.703125 C 25.65625 -34.359375 23.96875 -34.40625 22.84375 -34.40625 C 15.78125 -34.40625 9.640625 -26.875 9.453125 -20.265625 C 9.453125 -28.1875 9.5 -34.40625 9.5 -34.40625 C 6.921875 -32.578125 3.515625 -31.171875 0.46875 -31.171875 L 0.46875 -30.703125 C 5.34375 -30.703125 4.78125 -25.5625 4.78125 -15.59375 Z M 4.78125 -15.59375 " />
+</g>
+<g id="l1-glyph-8-0">
+<path d="M 0.296875 0 L 2.234375 0 L 2.234375 -0.0625 L 2.109375 -0.078125 C 1.734375 -0.15625 1.734375 -0.859375 2.078125 -1.921875 L 3.390625 -5.328125 L 8 -3.90625 L 8.859375 -1.84375 C 9.28125 -0.84375 9.265625 -0.15625 8.890625 -0.078125 L 8.765625 -0.0625 L 8.765625 0 L 11.703125 0 L 11.703125 -0.0625 L 11.578125 -0.078125 C 11.359375 -0.125 10.921875 -0.71875 10.359375 -2.03125 L 5.953125 -12.359375 L 5.59375 -12.359375 L 1.578125 -1.84375 C 1.140625 -0.78125 0.734375 -0.140625 0.296875 -0.0625 Z M 7.890625 -4.265625 L 3.5 -5.625 L 5.265625 -10.546875 Z M 7.890625 -4.265625 " />
+</g>
+<g id="l1-glyph-8-1">
+<path d="M 4.890625 -0.125 L 7.5625 -0.125 L 7.5625 -0.1875 L 7.484375 -0.203125 C 7.171875 -0.28125 6.96875 -1.03125 6.96875 -2.109375 L 6.96875 -11.71875 L 9 -11.71875 C 10.265625 -11.71875 11.359375 -11.328125 11.875 -10.71875 L 12.015625 -10.5625 L 12.0625 -10.5625 C 12.046875 -11.015625 12.046875 -11.625 11.984375 -12.078125 L 0.484375 -12.078125 C 0.421875 -11.625 0.421875 -11.015625 0.40625 -10.5625 L 0.4375 -10.5625 L 0.578125 -10.71875 C 1.09375 -11.328125 2.203125 -11.71875 3.453125 -11.71875 L 5.484375 -11.71875 L 5.484375 -2.109375 C 5.484375 -1.03125 5.296875 -0.28125 4.96875 -0.203125 L 4.890625 -0.1875 Z M 4.890625 -0.125 " />
+</g>
+<g id="l1-glyph-8-2">
+<path d="M 1.3125 -0.0625 L 9.359375 -0.0625 C 9.46875 -0.484375 9.5 -1.03125 9.578125 -1.484375 L 9.546875 -1.484375 L 9.40625 -1.3125 C 8.921875 -0.78125 7.609375 -0.421875 6.109375 -0.421875 L 3.375 -0.421875 L 3.375 -5.515625 L 5.15625 -5.515625 C 6.5625 -5.515625 7.671875 -5.265625 7.90625 -4.953125 L 7.96875 -4.859375 L 8.03125 -4.859375 L 8.03125 -6.46875 L 7.96875 -6.46875 L 7.90625 -6.390625 C 7.671875 -6.078125 6.5625 -5.875 5.15625 -5.875 L 3.375 -5.875 L 3.375 -11.65625 L 5.953125 -11.65625 C 7.453125 -11.65625 8.703125 -11.296875 9.078125 -10.765625 L 9.203125 -10.609375 L 9.25 -10.609375 C 9.25 -11.046875 9.28125 -11.578125 9.28125 -12.015625 L 1.3125 -12.015625 L 1.3125 -11.96875 L 1.390625 -11.9375 C 1.71875 -11.859375 1.921875 -11.078125 1.921875 -10 L 1.921875 -2.078125 C 1.921875 -1 1.71875 -0.21875 1.390625 -0.140625 L 1.3125 -0.125 Z M 1.3125 -0.0625 " />
+</g>
+<g id="l1-glyph-8-3">
+<path d="M 1.3125 0 L 9.359375 0 C 9.46875 -0.4375 9.546875 -1.03125 9.609375 -1.5 C 9.5625 -1.53125 9.53125 -1.5625 9.53125 -1.5625 L 9.40625 -1.375 C 8.921875 -0.765625 7.6875 -0.296875 6.3125 -0.296875 L 3.375 -0.296875 L 3.375 -10.046875 C 3.375 -11.140625 3.578125 -11.921875 3.890625 -12 L 3.96875 -12.015625 L 3.96875 -12.078125 L 1.3125 -12.078125 L 1.3125 -12.015625 L 1.390625 -12 C 1.71875 -11.921875 1.921875 -11.140625 1.921875 -10.046875 L 1.921875 -2.03125 C 1.921875 -0.9375 1.71875 -0.15625 1.390625 -0.078125 L 1.3125 -0.0625 Z M 1.3125 0 " />
+</g>
+<g id="l1-glyph-8-4">
+<path d="M 1.65625 0.015625 L 4.15625 0.015625 L 4.15625 -0.046875 L 4.078125 -0.0625 C 3.75 -0.140625 3.546875 -0.921875 3.546875 -2.015625 L 3.546875 -10.03125 C 3.546875 -11.125 3.75 -11.90625 4.078125 -11.984375 L 4.15625 -12 L 4.15625 -12.0625 L 1.65625 -12.0625 L 1.65625 -12 L 1.734375 -11.984375 C 2.0625 -11.90625 2.25 -11.125 2.25 -10.03125 L 2.25 -2.015625 C 2.25 -0.921875 2.0625 -0.140625 1.734375 -0.0625 L 1.65625 -0.046875 Z M 1.65625 0.015625 " />
+</g>
+<g id="l1-glyph-8-5">
+<path d="M 10.421875 -0.21875 C 9.265625 -0.5 9.046875 -1.71875 8.359375 -2.65625 C 7.96875 -3.234375 7.234375 -3.953125 6.203125 -4.21875 C 8.953125 -4.359375 10.71875 -5.8125 10.71875 -8.421875 C 10.71875 -10.625 8.96875 -12.078125 6.3125 -12.078125 L 1.3125 -12.078125 L 1.3125 -12.015625 L 1.390625 -12 C 1.71875 -11.921875 1.921875 -11.140625 1.921875 -10.046875 L 1.921875 -2.03125 C 1.921875 -0.9375 1.71875 -0.15625 1.390625 -0.078125 L 1.3125 -0.0625 L 1.3125 0 L 3.96875 0 L 3.96875 -0.0625 L 3.890625 -0.078125 C 3.578125 -0.15625 3.375 -0.9375 3.375 -2.03125 L 3.375 -4.1875 L 5.296875 -4.1875 C 6.59375 -3.546875 7.25 -2.171875 7.84375 -1.234375 C 8.3125 -0.515625 8.859375 0.015625 9.75 0.015625 C 9.96875 0.015625 10.796875 0.015625 10.90625 0 L 10.90625 -0.1875 C 10.890625 -0.1875 10.65625 -0.15625 10.421875 -0.21875 Z M 3.375 -11.71875 L 6.3125 -11.71875 C 8.046875 -11.71875 9.203125 -10.40625 9.203125 -8.421875 C 9.203125 -5.875 7.8125 -4.546875 5.734375 -4.546875 L 3.375 -4.546875 Z M 3.375 -11.71875 " />
+</g>
+</defs><g fill="currentColor" fill-opacity="1">
+<use xlink:href="#l1-glyph-7-0" x="384.396652" y="342.947792" />
+<use xlink:href="#l1-glyph-7-1" x="419.132242" y="342.947792" />
+<use xlink:href="#l1-glyph-7-2" x="455.646743" y="342.947792" />
+<use xlink:href="#l1-glyph-7-3" x="488.1821" y="342.947792" />
+</g>
+<g fill="currentColor" fill-opacity="1">
+<use xlink:href="#l1-glyph-7-4" x="503.021968" y="342.947792" />
+<use xlink:href="#l1-glyph-7-5" x="542.064397" y="342.947792" />
+<use xlink:href="#l1-glyph-7-6" x="558.449109" y="342.947792" />
+<use xlink:href="#l1-glyph-7-7" x="594.776357" y="342.947792" />
+</g>
+<g fill="currentColor" fill-opacity="1">
+<use xlink:href="#l1-glyph-7-2" x="631.85262" y="342.947792" />
+<use xlink:href="#l1-glyph-7-8" x="664.387977" y="342.947792" />
+</g>
+<g fill="currentColor" fill-opacity="1">
+<use xlink:href="#l1-glyph-7-9" x="697.386787" y="342.947792" />
+</g>
+<g fill="currentColor" fill-opacity="1">
+<use xlink:href="#l1-glyph-7-4" x="720.980773" y="342.947792" />
+</g>
+<g fill="currentColor" fill-opacity="1">
+<use xlink:href="#l1-glyph-8-0" x="520.072936" y="284.711422" />
+</g>
+<g fill="currentColor" fill-opacity="1">
+<use xlink:href="#l1-glyph-8-1" x="535.771014" y="284.711422" />
+</g>
+<g fill="currentColor" fill-opacity="1">
+<use xlink:href="#l1-glyph-8-2" x="553.62608" y="284.711422" />
+<use xlink:href="#l1-glyph-8-3" x="569.783516" y="284.711422" />
+<use xlink:href="#l1-glyph-8-4" x="585.501566" y="284.711422" />
+<use xlink:href="#l1-glyph-8-2" x="596.785807" y="284.711422" />
+</g>
+<g fill="currentColor" fill-opacity="1">
+<use xlink:href="#l1-glyph-8-5" x="613.142965" y="284.711422" />
+</g>
+</svg></div>
+    <ul id="indice"></ul>
+  </div>
+</nav>
+
+<main class="wrap" id="catalogo"></main>
+
+<footer class="pie">
+  <div class="wrap">
+    <dl id="pie-datos">
+      <div><dt>Dirección</dt><dd>Solano García 2405</dd></div>
+      <div><dt>Horario</dt><dd><span class="largo">Martes a sábado, 9 a 19 h</span><span class="corto">Mar. a sáb., 9 a 19 h</span></dd></div>
+      <div><dt>WhatsApp</dt><dd class="tel"><a href="https://wa.me/59898747114" target="_blank" rel="noopener">098 747 114</a></dd></div>
+      <div><dt>Instagram</dt><dd><a href="https://instagram.com/gusto_casero" target="_blank" rel="noopener">@gusto_casero</a></dd></div>
+    </dl>
+  </div>
+</footer>
+
+<div class="pedido" id="pedido" hidden>
+  <div class="wrap">
+    <div class="res">
+      <span class="eyebrow">Tu pedido</span>
+      <div class="tot"><strong id="p-cant">0</strong> <span id="p-word">productos</span> · <strong id="p-total">$0</strong></div>
+      <div class="lista" id="p-lista"></div>
+    </div>
+    <button class="vaciar" id="p-vaciar" type="button">Vaciar</button>
+    <button class="wa" id="p-seguir" type="button">Continuar pedido</button>
+  </div>
+</div>
+
+<div class="checkout" id="checkout" hidden role="dialog" aria-modal="true" aria-labelledby="co-tit">
+  <div class="co-panel">
+    <div class="co-head">
+      <div><span class="eyebrow">Último paso</span><h2 id="co-tit">Datos para tu pedido</h2></div>
+      <button type="button" class="co-cerrar" id="co-cerrar" aria-label="Volver a la carta">×</button>
+    </div>
+    <div class="co-body">
+      <div class="co-resumen">
+        <ul id="co-items"></ul>
+        <div class="co-total"><span>Total estimado</span><strong id="co-total">$0</strong></div>
+      </div>
+      <form id="co-form" novalidate>
+        <div class="campo">
+          <label for="co-nombre">Nombre</label>
+          <input id="co-nombre" name="nombre" type="text" autocomplete="name" required>
+          <p class="err" id="e-nombre" hidden>Escribí tu nombre.</p>
+        </div>
+        <div class="campo">
+          <label for="co-cel">Celular de contacto</label>
+          <input id="co-cel" name="cel" type="tel" inputmode="tel" autocomplete="tel" placeholder="09X XXX XXX" required>
+          <p class="err" id="e-cel" hidden>Escribí un celular válido, por ejemplo 099 123 456.</p>
+        </div>
+        <fieldset class="campo">
+          <legend>Fecha de retiro <small>martes a sábado</small></legend>
+          <div class="chips" id="co-fechas"></div>
+          <p class="err" id="e-fecha" hidden>Elegí una fecha.</p>
+        </fieldset>
+        <fieldset class="campo">
+          <legend>Horario de retiro <small>elegí una franja de 1 hora</small></legend>
+          <div class="chips horas" id="co-horas"></div>
+          <p class="err" id="e-hora" hidden>Elegí un horario.</p>
+        </fieldset>
+        <p class="co-aviso" id="co-aviso" hidden>Para pedidos con 24 horas de anticipación o menos, vas a recibir una confirmación nuestra por WhatsApp.</p>
+        <p class="co-local">Retiro en el local: Solano García 2405.</p>
+      </form>
+    </div>
+    <div class="co-foot">
+      <a class="wa" id="p-wa" href="https://wa.me/59898747114" target="_blank" rel="noopener">Enviar pedido por WhatsApp</a>
+      <p class="co-nota">Se abre WhatsApp con tu pedido armado. Te respondemos por ahí.</p>
+    </div>
+  </div>
+</div>
+<div class="checkout" id="desayuno" hidden role="dialog" aria-modal="true" aria-labelledby="ds-tit">
+  <div class="co-panel">
+    <div class="co-head">
+      <div><span class="eyebrow">Desayunos a domicilio</span><h2 id="ds-tit">Datos de tu desayuno</h2></div>
+      <button type="button" class="co-cerrar" id="ds-cerrar" aria-label="Volver a la carta">×</button>
+    </div>
+    <div class="co-body">
+      <p class="co-intro">Completá estos 6 pasos y te armamos el pedido para enviarlo por WhatsApp. Los pasos con <b class="req">*</b> son obligatorios.</p>
+      <form id="ds-form" novalidate>
+        <section class="ds-paso">
+          <h3><span>1</span>Tu desayuno<b class="req" aria-hidden="true">*</b></h3>
+          <fieldset class="campo">
+            <legend class="vh">Opción de desayuno</legend>
+            <div class="tiles" id="ds-opcion">
+              <label><input type="radio" name="opcion" value="Petit"><strong>Petit</strong><small>Hasta 2 personas</small><em>$2.000</em></label>
+              <label><input type="radio" name="opcion" value="Compartir"><strong>Compartir</strong><small>Hasta 4 personas</small><em>$2.650</em></label>
+            </div>
+            <p class="err" hidden data-e="opcion">Elegí una opción.</p>
+          </fieldset>
+          <label class="check"><input type="checkbox" id="ds-vegchk"><span>Lo quiero vegetariano <small class="opc">opcional</small></span></label>
+        </section>
+
+        <section class="ds-paso">
+          <h3><span>2</span>¿Cuándo lo entregamos?<b class="req" aria-hidden="true">*</b></h3>
+          <p class="ayuda">Martes a sábado. Pedidos hasta las 19 h del día anterior.</p>
+          <fieldset class="campo">
+            <legend class="vh">Día de entrega</legend>
+            <div class="cal" id="ds-cal"></div>
+            <p class="err" hidden data-e="fecha">Elegí el día de entrega.</p>
+          </fieldset>
+          <fieldset class="campo">
+            <legend class="ds-sub">Horario</legend>
+            <div class="chips horas" id="ds-horas"></div>
+            <p class="err" hidden data-e="hora">Elegí el horario.</p>
+          </fieldset>
+        </section>
+
+        <section class="ds-paso">
+          <h3><span>3</span>¿Dónde?<b class="req" aria-hidden="true">*</b></h3>
+          <fieldset class="campo">
+            <legend class="vh">Zona de entrega</legend>
+            <div class="opciones zonas" id="ds-zona">
+              <label><input type="radio" name="zona" value="Pocitos / Parque Batlle / Buceo / Punta Carretas / Parque Rodó"><span><strong>Pocitos y alrededores</strong><small>Parque Batlle, Buceo, Punta Carretas, Parque Rodó</small></span></label>
+              <label><input type="radio" name="zona" value="Palermo / Cordón / Centro / Ciudad Vieja / La Aguada / Tres Cruces"><span><strong>Centro y alrededores</strong><small>Palermo, Cordón, Ciudad Vieja, La Aguada, Tres Cruces</small></span></label>
+              <label><input type="radio" name="zona" value="Barra de Carrasco / Carrasco / Carrasco Norte / Punta Gorda / Malvín"><span><strong>Carrasco y alrededores</strong><small>Barra de Carrasco, Carrasco Norte, Punta Gorda, Malvín</small></span></label>
+            </div>
+            <details class="mapa-det"><summary>Ver mapa de zonas</summary>
+              <figure class="mapa" aria-label="Mapa ilustrativo de las zonas de entrega">
+                <svg viewBox="0 0 360 230" role="img" aria-hidden="true">
+              <path d="M0 176 C40 170 52 186 70 184 C96 182 104 196 130 200 C160 205 178 214 206 210 C236 206 250 196 282 194 C312 192 330 186 360 182 L360 230 L0 230 Z" fill="#dfe6e2"/>
+              <text x="180" y="224" text-anchor="middle" class="m-rio">Río de la Plata</text>
+              <g class="z1">
+                <rect x="4" y="150" width="46" height="22" rx="6"/><text x="27" y="164">Ciudad Vieja</text>
+                <rect x="40" y="122" width="44" height="24" rx="6"/><text x="62" y="137">Centro</text>
+                <rect x="40" y="94" width="44" height="24" rx="6"/><text x="62" y="109">Aguada</text>
+                <rect x="88" y="108" width="44" height="24" rx="6"/><text x="110" y="123">Cordón</text>
+                <rect x="70" y="150" width="46" height="24" rx="6"/><text x="93" y="165">Palermo</text>
+                <rect x="94" y="78" width="52" height="24" rx="6"/><text x="120" y="93">Tres Cruces</text>
+              </g>
+              <g class="z2">
+                <rect x="120" y="160" width="52" height="24" rx="6"/><text x="146" y="175">Parque Rodó</text>
+                <rect x="150" y="190" width="56" height="16" rx="6"/><text x="178" y="201">Punta Carretas</text>
+                <rect x="176" y="150" width="46" height="26" rx="6"/><text x="199" y="166">Pocitos</text>
+                <rect x="150" y="112" width="56" height="30" rx="6"/><text x="178" y="130">Parque Batlle</text>
+                <rect x="226" y="140" width="40" height="26" rx="6"/><text x="246" y="156">Buceo</text>
+              </g>
+              <g class="z3">
+                <rect x="270" y="138" width="40" height="24" rx="6"/><text x="290" y="153">Malvín</text>
+                <rect x="276" y="166" width="46" height="18" rx="6"/><text x="299" y="178">Punta Gorda</text>
+                <rect x="314" y="128" width="42" height="26" rx="6"/><text x="335" y="144">Carrasco</text>
+                <rect x="300" y="96" width="56" height="26" rx="6"/><text x="328" y="112">Carrasco Norte</text>
+                <rect x="314" y="62" width="42" height="28" rx="6"/><text x="335" y="74">Barra de</text><text x="335" y="84">Carrasco</text>
+              </g>
+            </svg>
+                <figcaption><span class="ley z2"></span>Pocitos y alrededores <span class="ley z1"></span>Centro y alrededores <span class="ley z3"></span>Carrasco y alrededores<br>Mapa ilustrativo, no a escala. Por ahora no llegamos a otros barrios.</figcaption>
+              </figure>
+            </details>
+            <p class="err" hidden data-e="zona">Elegí la zona de entrega.</p>
+          </fieldset>
+          <div class="campo">
+            <label for="ds-dir" class="ds-sub">Dirección</label>
+            <textarea id="ds-dir" rows="2" placeholder="Calle, número, esquina y apto."></textarea>
+            <p class="ayuda">Si es una empresa, colegio u hospital, sumá el nombre.</p>
+            <p class="err" hidden data-e="dir">Escribí la dirección de entrega.</p>
+          </div>
+        </section>
+
+        <section class="ds-paso">
+          <h3><span>4</span>¿Quién envía y quién recibe?<b class="req" aria-hidden="true">*</b></h3>
+          <fieldset class="campo">
+            <legend class="ds-sub">Envía</legend>
+            <div class="dos">
+              <div><label for="ds-env-nom" class="vh">Nombre y apellido de quien envía</label><input id="ds-env-nom" type="text" autocomplete="name" placeholder="Nombre y apellido"></div>
+              <div><label for="ds-env-cel" class="vh">Celular de quien envía</label><input id="ds-env-cel" type="tel" inputmode="tel" autocomplete="tel" placeholder="Celular"></div>
+            </div>
+            <p class="err" hidden data-e="env">Completá nombre, apellido y un celular válido de quien envía.</p>
+          </fieldset>
+          <fieldset class="campo">
+            <legend class="ds-sub">Recibe</legend>
+            <div class="dos">
+              <div><label for="ds-rec-nom" class="vh">Nombre y apellido de quien recibe</label><input id="ds-rec-nom" type="text" placeholder="Nombre y apellido"></div>
+              <div><label for="ds-rec-cel" class="vh">Celular de quien recibe</label><input id="ds-rec-cel" type="tel" inputmode="tel" placeholder="Celular"></div>
+            </div>
+            <p class="err" hidden data-e="rec">Completá nombre, apellido y un celular válido de quien recibe.</p>
+          </fieldset>
+        </section>
+
+        <section class="ds-paso">
+          <h3><span>5</span>Mensaje para la tarjeta <small class="opc">opcional</small></h3>
+          <div class="campo">
+            <label for="ds-msj" class="vh">Mensaje para la tarjeta</label>
+            <textarea id="ds-msj" rows="3" placeholder="Hasta 35 palabras"></textarea>
+            <p class="contador" id="ds-cont">0 / 35 palabras</p>
+            <p class="err" hidden data-e="msj">Tiene más de 35 palabras. Acortalo para que entre en la tarjeta.</p>
+          </div>
+        </section>
+
+        <section class="ds-paso">
+          <h3><span>6</span>¿Cómo pagás?<b class="req" aria-hidden="true">*</b></h3>
+          <fieldset class="campo">
+            <legend class="vh">Forma de pago</legend>
+            <div class="tiles" id="ds-pago">
+              <label><input type="radio" name="pago" value="Transferencia a cuenta Santander"><strong>Transferencia</strong><small>Cuenta Santander</small></label>
+              <label><input type="radio" name="pago" value="En el local (previo pago)"><strong>En el local</strong><small>Pagás antes de la entrega</small></label>
+            </div>
+            <p class="err" hidden data-e="pago">Elegí la forma de pago.</p>
+          </fieldset>
+          <p class="ayuda nota-pago">El pedido queda confirmado cuando coordinamos el pago por WhatsApp y nos enviás el comprobante.</p>
+        </section>
+      </form>
+    </div>
+    <div class="co-foot">
+      <a class="wa" id="ds-wa" href="https://wa.me/59898747114" target="_blank" rel="noopener" aria-disabled="true">Enviar pedido por WhatsApp</a>
+      <p class="co-nota" id="ds-falta">Completá los pasos para enviar tu pedido.</p>
+    </div>
+  </div>
+</div>
+
+<div class="visor" id="visor" hidden><figure style="margin:0"><img id="visor-img" alt=""><p id="visor-txt"></p></figure><button type="button" id="visor-cerrar" aria-label="Cerrar">×</button></div>
+
+<template id="ilus"><div data-ilus="croissant"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="312.0 448.0 158.0 104.0"><defs /><path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.00173384 -0.000628543 C -0.00173384 -0.000628543 -19.818776 6.057512 -9.724482 -23.857734 C 0.3659 -53.765159 20.789147 -40.338692 20.37067 -15.5977 C 19.963926 8.106876 14.621499 21.842312 7.706849 18.533605 C 0.00999917 14.849442 24.445933 -51.473312 50.829545 -44.777678 C 77.627724 -37.976448 62.034563 50.858028 24.958274 35.78503 C 8.2583 28.995532 8.833217 19.002925 8.833217 19.002925 " transform="matrix(0.998785, 0, 0, -0.998785, 335.532982, 496.983747)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00124094 -0.000697263 C 0.00124094 -0.000697263 12.117522 20.043183 25.880334 -2.343387 C 26.963681 -4.103337 28.000097 -5.94933 28.981758 -7.857898 C 40.472279 -30.209269 44.520165 -61.024045 29.736581 -62.349874 C 17.440394 -63.448866 14.8826 -55.470424 14.8826 -55.470424 " transform="matrix(0.998785, 0, 0, -0.998785, 384.096417, 466.968054)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00125796 0.000501833 C 0.00125796 0.000501833 5.159868 13.771136 15.434068 12.304511 C 25.712178 10.837885 38.712345 -33.37598 22.775016 -32.288722 C 14.206013 -31.702072 17.166641 -4.38373 32.134042 -4.027829 C 37.456914 -4.211646 42.228335 -10.449693 36.905463 -17.790641 " transform="matrix(0.998785, 0, 0, -0.998785, 413.041712, 474.816907)" />
+</svg></div><div data-ilus="bagel"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="650.0 218.0 156.0 146.0"><defs /><path fill="none" stroke-width="0.75" stroke-linecap="butt" stroke-linejoin="miter" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.00048389 -0.000897285 C 1.004643 -2.554781 -4.271297 -7.025055 -11.78433 -9.985683 C -19.301274 -12.94631 -26.208101 -13.274835 -27.217139 -10.720951 C -28.222267 -8.167067 -22.946326 -3.696793 -15.429383 -0.736165 C -7.91635 2.224462 -1.005611 2.556897 -0.00048389 -0.000897285 Z M -0.00048389 -0.000897285 " transform="matrix(0.998785, 0, 0, -0.998785, 735.230952, 260.913166)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="butt" stroke-linejoin="miter" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00000821165 -0.000029049 C 7.747701 -18.158806 -11.251942 -43.666355 -42.434352 -56.975491 C -73.620674 -70.284627 -105.182451 -66.35016 -112.930144 -48.195294 C -120.677837 -30.036516 -101.678194 -4.528968 -70.495784 8.780168 C -39.309462 22.089304 -7.747685 18.158748 0.00000821165 -0.000029049 Z M 0.00000821165 -0.000029049 " transform="matrix(0.998785, 0, 0, -0.998785, 776.878898, 247.57419)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="butt" stroke-linejoin="miter" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.000578336 0.000559284 C 0.000578336 0.000559284 -2.263891 -11.493873 3.657364 -12.017947 C 9.57862 -12.53811 18.112424 -7.661092 16.196033 -5.920696 C 14.279643 -4.180301 9.230541 -15.850728 19.852819 -18.63536 C 30.479009 -21.423904 47.894696 -6.964933 45.282147 -4.52838 C 42.669599 -2.091826 36.224269 -18.983439 50.507245 -16.894965 C 64.786309 -14.802579 70.011406 3.657345 65.134388 3.83334 C 60.261281 4.005424 57.648732 -20.723835 80.80968 -1.391757 C 103.974539 17.940321 93.700339 24.03366 90.563716 20.900948 C 87.427094 17.764326 85.690609 2.104678 98.796373 10.329513 C 111.902137 18.558259 112.461411 26.364617 112.879888 31.245546 C 113.298365 36.126475 110.509821 39.748062 107.721277 37.381906 C 104.932734 35.01184 113.716842 27.201571 118.179294 35.985679 C 122.641746 44.769787 120.271679 55.3686 117.201544 58.990187 " transform="matrix(0.998785, 0, 0, -0.998785, 674.319735, 312.168527)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="butt" stroke-linejoin="miter" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.000464487 0.000622958 C -0.000464487 0.000622958 21.380978 -27.345096 70.85514 -7.211263 C 120.325391 12.926481 124.056486 47.980783 124.056486 47.980783 " transform="matrix(0.998785, 0, 0, -0.998785, 675.051245, 334.125622)" />
+</svg></div><div data-ilus="roll"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="462.0 48.0 140.0 110.0"><defs /><path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.0013777 0.000778922 C 0.0013777 0.000778922 -3.397282 -6.94907 5.40247 -6.640101 C 14.206133 -6.331132 7.565254 5.249342 6.020408 1.698153 C 4.479474 -1.853036 13.122786 -5.404224 15.285569 -8.337475 C 17.448353 -11.270726 5.093501 -23.003729 -9.881722 -11.423255 C -24.856944 0.153308 8.80113 14.049094 23.932792 2.007122 C 39.060544 -10.03485 32.885074 -29.797137 -1.234499 -26.863887 C -35.357982 -23.930636 -41.216661 -3.781159 -26.515209 5.773416 C -13.217806 14.420639 26.248105 23.623225 44.774517 1.080215 C 63.304839 -21.462794 34.895328 -47.862051 -4.324189 -43.383955 C -43.539796 -38.90977 -51.87805 -18.834602 -51.260112 -7.101599 C -50.642174 4.631404 -27.946635 24.241163 7.103755 23.466785 C 42.150235 22.696317 61.912523 8.491562 62.065052 -16.984698 C 62.221492 -42.457047 46.471891 -64.847528 1.080814 -64.538559 C -28.251693 -64.339098 -44.431504 -51.503193 -52.460789 -40.697097 " transform="matrix(0.998785, 0, 0, -0.998785, 527.385343, 82.778122)" />
+</svg></div><div data-ilus="flores"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="520.0 175.0 132.0 178.0"><defs /><path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.000671464 0.00131912 C -0.000671464 0.00131912 -4.056379 -16.776875 -11.025783 -4.508065 C -17.991276 7.760745 -8.467989 19.622811 -5.22968 15.168181 C -1.991371 10.713551 -12.375078 2.563025 -22.230801 8.253531 C -32.082612 13.947949 -29.614771 35.133841 -15.894979 33.456021 C -2.175188 31.778202 0.55078 20.365901 -3.094273 19.720586 C -6.735415 19.079182 -12.895242 33.944896 -9.985457 39.443764 C -7.079583 44.946542 1.090498 48.685459 5.259625 44.176075 C 9.432663 39.666691 11.904415 18.715459 5.564683 20.459765 C -0.77505 22.204072 17.047382 38.591165 26.359475 27.370504 C 35.675479 16.149842 17.477592 8.069714 14.106309 12.090223 C 10.735026 16.110732 22.401542 16.975063 29.218417 8.789338 " transform="matrix(0.998785, 0, 0, -0.998785, 572.074889, 230.372411)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.00186995 0.000702742 C -0.00186995 0.000702742 -5.989612 5.906314 -2.508822 11.346516 C 0.97588 16.79063 -1.480228 2.480277 -6.318136 8.264648 C -11.156045 14.052929 -6.736614 15.280983 -6.736614 15.280983 " transform="matrix(0.998785, 0, 0, -0.998785, 578.326086, 227.821014)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.000306514 -0.000784446 C -0.000306514 -0.000784446 -2.824049 -3.763167 -14.044711 5.889183 C -25.265373 15.541533 -16.57904 20.316865 -7.720622 16.049963 C 1.137795 11.783061 6.640573 7.817306 4.966665 5.341643 C 3.292756 2.865979 -14.205062 19.276539 -3.547584 29.883174 C 7.109893 40.489808 17.927722 8.931942 14.411732 8.231873 C 10.895742 7.535714 10.719747 21.826512 23.305348 21.341548 C 35.890949 20.852673 41.24902 5.388575 33.278401 0.988699 C 25.307781 -3.415088 19.812824 -4.693986 18.670812 -1.639494 C 17.5288 1.414998 30.685407 -0.599168 33.415286 -6.246653 C 36.145164 -11.898049 33.7047 -16.829822 27.032532 -18.042232 C 20.360364 -19.250731 8.65865 -13.047884 8.599985 -9.883884 C 8.54132 -6.715973 18.557393 -14.944719 13.633443 -22.543794 C 8.709493 -30.14678 -0.727753 -28.695798 -3.621893 -24.045618 C -6.512123 -19.395438 -6.836736 -11.800274 2.064702 -8.737961 " transform="matrix(0.998785, 0, 0, -0.998785, 551.254212, 265.702342)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.0000721403 -0.00152128 C -0.0000721403 -0.00152128 12.687215 2.869153 10.888154 6.96006 C 9.089094 11.054878 0.0351269 -1.812315 9.50366 -1.319529 " transform="matrix(0.998785, 0, 0, -0.998785, 552.793041, 269.123481)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00186462 0.00110848 C 0.00186462 0.00110848 9.861498 -11.020092 10.995688 -1.109616 C 11.382877 2.300777 -1.519515 -10.867563 1.257296 -18.568324 C 4.030196 -26.269085 9.83021 -25.979671 13.686457 -18.924225 C 17.546615 -11.868779 16.130833 -6.545907 14.269196 -6.487242 C 12.411471 -6.432488 9.552529 -13.652196 15.020108 -22.346351 C 20.491599 -31.040506 29.185754 -30.379547 31.207741 -19.819844 C 33.23364 -9.260142 25.114402 0.337455 23.733818 -0.957087 C 22.353235 -2.255539 33.112399 -14.931093 42.643508 -5.818461 C 52.178528 3.294171 23.878525 17.999535 22.134219 6.900114 C 22.513586 3.779135 30.93006 11.738022 31.51671 19.364474 C 32.095538 26.994837 30.194792 34.124592 25.055737 34.981101 C 19.91277 35.833699 10.252598 26.310412 12.086858 15.59818 C 13.921117 4.885949 18.629962 22.117819 9.196628 27.018303 C -0.236706 31.918787 -6.807188 26.764088 -7.444681 22.078709 C -8.082174 17.397241 -4.026466 9.219338 4.116238 10.279219 " transform="matrix(0.998785, 0, 0, -0.998785, 588.916106, 253.63392)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.000946088 -0.00107107 C -0.000946088 -0.00107107 3.8905 -6.774925 7.336092 0.409584 C 10.785595 7.594093 1.395281 -1.788399 6.503048 -5.863661 C 11.614727 -9.938924 11.239271 -2.011326 11.239271 -2.011326 " transform="matrix(0.998785, 0, 0, -0.998785, 598.36032, 247.659086)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.00103662 -0.00156039 C -0.00103662 -0.00156039 37.235603 -39.213256 44.580463 -55.295292 C 29.296271 -19.939843 20.954106 3.702158 20.954106 3.702158 " transform="matrix(0.998785, 0, 0, -0.998785, 575.567442, 290.193754)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00138872 -0.00115176 C 0.00138872 -0.00115176 14.413427 44.987092 26.783923 34.227929 C 39.150508 23.468765 5.101334 1.054818 5.332083 5.755842 C 5.566743 10.456865 40.660155 28.298851 4.678946 -4.819505 " transform="matrix(0.998785, 0, 0, -0.998785, 614.065019, 308.229318)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.000565545 0.000181089 C -0.000565545 0.000181089 -43.54565 0.356082 -49.967514 12.613159 C -56.389377 24.870236 -7.063833 6.805323 -11.080431 4.701204 C -15.097029 2.597086 -18.53871 4.028512 -18.53871 4.028512 " transform="matrix(0.998785, 0, 0, -0.998785, 592.352127, 321.215025)" />
+</svg></div><div data-ilus="tarta"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="600.0 45.0 168.0 161.0"><defs /><path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.0009678 0.00148815 C -0.0009678 0.00148815 -6.954727 -6.737166 -28.042845 -5.434803 C -49.127051 -4.128529 -103.693336 -5.000682 -103.255304 -21.086629 C -102.821183 -37.172576 -60.433754 -35.866302 -34.781499 -23.695267 C -9.129244 -11.520321 8.912203 -1.738907 16.738116 -10.652078 C 24.564029 -19.56525 2.60767 -54.345781 -48.043703 -55.214023 C -98.691166 -56.086176 -110.647096 -51.303022 -106.517079 -33.47668 " transform="matrix(0.998785, 0, 0, -0.998785, 723.235342, 118.958518)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00136994 0.00111183 C 0.00136994 0.00111183 11.304163 4.999371 13.259663 -5.650285 C 15.215164 -16.303851 -17.824972 -25.870159 -25.650885 -29.562144 C -33.476798 -33.261951 -42.82409 -36.738831 -58.041795 -45.648091 C -73.2595 -54.561262 -94.128601 -54.561262 -104.997272 -49.128882 C -115.865944 -43.692591 -122.170478 -38.475315 -117.387323 -30.215281 " transform="matrix(0.998785, 0, 0, -0.998785, 742.775975, 145.012829)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00088846 0.00127161 C 0.00088846 0.00127161 25.434128 -8.043657 42.173212 10.435822 C 47.390487 17.389582 44.347728 23.694115 39.345558 22.172736 " transform="matrix(0.998785, 0, 0, -0.998785, 699.569425, 191.259083)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00106394 -0.00158693 C 0.00106394 -0.00158693 -3.076894 6.150418 3.634384 8.805987 " transform="matrix(0.998785, 0, 0, -0.998785, 623.217687, 131.658571)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00191019 -0.00027748 C 0.00191019 -0.00027748 3.912911 1.955223 11.461143 1.955223 C 19.009375 1.955223 25.302175 11.462866 25.302175 11.462866 " transform="matrix(0.998785, 0, 0, -0.998785, 653.095748, 117.417692)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.000195174 0.0011892 C 0.000195174 0.0011892 9.926316 -6.291611 17.893025 1.397417 " transform="matrix(0.998785, 0, 0, -0.998785, 710.757618, 106.387907)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00139368 0.00176582 C 0.00139368 0.00176582 8.245784 -4.053942 -1.257949 -10.76522 " transform="matrix(0.998785, 0, 0, -0.998785, 729.326733, 107.923639)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.000105228 -0.00175862 C -0.000105228 -0.00175862 -2.796471 -4.753625 -1.396333 -11.324106 C -0.000105228 -17.894588 -2.374083 -18.453861 1.536918 -21.527908 C 5.45183 -24.601955 11.881516 -29.353821 18.870474 -27.539116 " transform="matrix(0.998785, 0, 0, -0.998785, 622.519636, 93.263869)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00146145 -0.00135017 C 0.00146145 -0.00135017 0.69762 -16.353245 25.861 -25.301615 " transform="matrix(0.998785, 0, 0, -0.998785, 633.549322, 87.26037)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.000233115 -0.00112579 C -0.000233115 -0.00112579 22.366781 -8.8087 20.688962 -32.571942 " transform="matrix(0.998785, 0, 0, -0.998785, 643.601795, 77.487157)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.000157854 -0.000959278 C 0.000157854 -0.000959278 -2.166537 2.857982 1.478516 3.843555 C 5.123569 4.829127 4.239683 5.619149 2.956875 6.40526 C 1.674066 7.195282 1.279055 10.151999 5.221344 10.054224 C 6.601927 9.854763 5.51858 11.430896 7.094714 12.909255 C 8.674758 14.387613 11.432014 12.81148 11.432014 12.81148 " transform="matrix(0.998785, 0, 0, -0.998785, 626.980311, 87.725604)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00192198 -0.00157008 C 0.00192198 -0.00157008 10.248744 8.082469 21.191725 4.042405 C 32.130795 -0.00157008 33.609153 -13.40457 33.609153 -13.40457 " transform="matrix(0.998785, 0, 0, -0.998785, 644.009799, 70.400776)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.000599415 -0.0000229591 C -0.000599415 -0.0000229591 -3.250641 12.221855 12.025728 15.178572 " transform="matrix(0.998785, 0, 0, -0.998785, 687.715442, 74.042946)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.0011935 0.00092724 C -0.0011935 0.00092724 -0.88508 5.617125 3.154984 5.026563 C 7.195048 4.436002 5.618915 1.479286 7.488373 2.069847 C 9.361743 2.660408 10.644551 3.743755 12.517921 2.660408 C 14.387379 1.577061 13.206257 0.0987023 14.289604 -0.589634 C 15.376862 -1.281881 17.246321 0.196477 18.92414 -2.169678 C 20.598048 -4.535834 19.811937 -6.108056 19.811937 -6.108056 " transform="matrix(0.998785, 0, 0, -0.998785, 707.99338, 60.852489)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.000793022 0.000760375 C 0.000793022 0.000760375 6.504788 -18.924573 -12.12331 -30.649754 " transform="matrix(0.998785, 0, 0, -0.998785, 734.866395, 72.664822)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.00170713 0.00149923 C -0.00170713 0.00149923 4.042268 -12.41984 -7.784599 -21.387765 " transform="matrix(0.998785, 0, 0, -0.998785, 721.872799, 73.255404)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00119248 -0.00164799 C 0.00119248 -0.00164799 0.689529 8.277941 5.914626 10.839647 " transform="matrix(0.998785, 0, 0, -0.998785, 703.760528, 78.275698)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.00129379 -0.00158963 C -0.00129379 -0.00158963 -0.196844 4.926272 4.042681 3.447913 C 8.278295 1.969555 4.238231 -1.479948 4.238231 -1.479948 " transform="matrix(0.998785, 0, 0, -0.998785, 690.27473, 76.799194)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.000646728 -0.0000731079 C -0.000646728 -0.0000731079 -3.055138 5.123338 1.184387 6.503921 C 5.420001 7.884505 6.307798 3.844441 6.307798 3.844441 " transform="matrix(0.998785, 0, 0, -0.998785, 682.301427, 82.902271)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00173387 -0.000117585 C 0.00173387 -0.000117585 -4.042241 4.239407 1.675642 6.210552 C 7.393526 8.181696 8.770198 1.873252 8.277412 -0.297354 C 7.784626 -2.464048 3.549012 -3.054609 3.549012 -3.054609 " transform="matrix(0.998785, 0, 0, -0.998785, 688.896706, 84.870976)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00168372 0.000546197 C 0.00168372 0.000546197 -4.433391 1.971691 -1.18335 6.207305 C 0.88557 8.37791 3.646737 6.207305 3.646737 6.207305 " transform="matrix(0.998785, 0, 0, -0.998785, 680.037381, 89.891171)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00167268 -0.00105107 C 0.00167268 -0.00105107 -4.828413 2.46288 -1.183361 6.99573 C 0.885559 8.376313 4.041737 7.687977 5.42232 5.716832 C 6.798992 3.745688 5.125084 1.281757 5.125084 1.281757 " transform="matrix(0.998785, 0, 0, -0.998785, 683.974892, 95.108325)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.00131588 -0.000939726 C -0.00131588 -0.000939726 -0.986888 4.633596 2.759851 3.448563 C 6.50659 2.267441 5.517106 -0.19649 5.517106 -0.19649 " transform="matrix(0.998785, 0, 0, -0.998785, 698.149752, 81.327186)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.00035464 -0.000956442 C -0.00035464 -0.000956442 -1.576488 3.843557 2.956362 3.648007 C 7.489212 3.448546 6.010854 -1.38154 6.010854 -1.38154 " transform="matrix(0.998785, 0, 0, -0.998785, 707.402698, 84.280295)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.000763445 -0.000239973 C -0.000763445 -0.000239973 -3.645816 -1.576373 -2.069683 -5.420887 C -0.49355 -9.265401 2.267617 -7.294257 2.267617 -7.294257 " transform="matrix(0.998785, 0, 0, -0.998785, 679.348419, 94.714604)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.000286755 -0.00178709 C 0.000286755 -0.00178709 5.323159 5.039493 6.504281 -1.280684 C 7.388168 -6.016907 3.344193 -6.736531 0.985859 -4.632412 C -0.296949 -3.486489 0.590848 -2.958504 0.590848 -2.958504 " transform="matrix(0.998785, 0, 0, -0.998785, 692.538776, 91.072434)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00191462 0.00132953 C 0.00191462 0.00132953 -1.675905 3.450832 2.168609 4.827505 C 6.013123 6.208088 8.375368 0.986902 5.320876 -1.085929 C 2.266384 -3.154848 0.00191462 0.00132953 0.00191462 0.00132953 Z M 0.00191462 0.00132953 " transform="matrix(0.998785, 0, 0, -0.998785, 700.216838, 88.513047)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.00194623 0.0005156 C -0.00194623 0.0005156 -2.364191 3.055007 2.070884 5.421163 C 5.715937 6.602285 6.701509 1.381099 5.618162 0.297752 C 4.534815 -0.789507 3.647018 -1.872854 1.085312 -1.184518 " transform="matrix(0.998785, 0, 0, -0.998785, 709.076163, 92.352077)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.000602251 0.00043769 C -0.000602251 0.00043769 -1.2795 5.816096 4.336698 5.421085 C 9.952895 5.026074 7.981751 -3.15574 3.843912 -2.760729 " transform="matrix(0.998785, 0, 0, -0.998785, 684.270133, 100.227)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.0013887 -0.000370949 C 0.0013887 -0.000370949 -5.247175 -0.250675 -4.13645 3.015011 C -3.021815 6.280697 0.447243 7.532217 1.471925 2.940702 " transform="matrix(0.998785, 0, 0, -0.998785, 704.682207, 98.737911)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.00189071 -0.00108167 C -0.00189071 -0.00108167 1.675929 3.546196 4.433184 1.183952 C 7.194351 -1.182204 5.125432 -5.323954 2.759276 -5.026718 C 0.39312 -4.729482 0.592581 -2.856112 0.592581 -2.856112 " transform="matrix(0.998785, 0, 0, -0.998785, 707.107357, 97.569232)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.0011174 0.000409929 C 0.0011174 0.000409929 2.265587 -5.518012 -2.760049 -6.108574 C -7.785685 -6.703046 -7.195124 -0.492376 -4.140633 -0.492376 " transform="matrix(0.998785, 0, 0, -0.998785, 699.330915, 99.242597)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.000122726 0.00107088 C 0.000122726 0.00107088 -3.25383 0.591632 -2.956594 3.845585 C -2.659358 7.095627 -0.590438 7.291177 1.282931 7.095627 C 3.152389 6.900077 4.732434 4.33446 4.337423 2.26554 C 3.942412 0.196621 0.000122726 0.00107088 0.000122726 0.00107088 Z M 0.000122726 0.00107088 " transform="matrix(0.998785, 0, 0, -0.998785, 684.171752, 107.708101)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00176447 0.000390377 C 0.00176447 0.000390377 -3.154413 -3.546887 0.494551 -4.731921 C 4.139603 -5.913043 4.534615 -2.166304 4.534615 -2.166304 " transform="matrix(0.998785, 0, 0, -0.998785, 691.357613, 105.641015)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.000504789 0.00160662 C -0.000504789 0.00160662 0.789517 -5.716277 4.532345 -2.661785 C 8.279084 0.392707 5.025131 3.64666 3.253448 3.447198 " transform="matrix(0.998785, 0, 0, -0.998785, 698.543473, 104.64223)" />
+</svg></div><div data-ilus="torta"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="348.0 290.0 142.0 156.0"><defs /><path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.000513118 0.00077778 C -0.000513118 0.00077778 -10.990426 -8.685555 -17.369268 5.315828 C -23.748111 19.317211 -23.216215 27.82755 -15.42159 21.092806 C -7.619143 14.354151 -12.582203 7.091422 -23.04022 9.039101 C -33.498236 10.99069 -32.96634 17.193538 -30.486766 18.965221 C -28.00328 20.736905 -16.305476 8.507205 -27.827285 1.948456 C -39.345183 -4.606381 -45.903931 -0.707113 -45.372035 6.735521 C -44.840139 14.178156 -30.130864 8.6832 -30.130864 8.6832 " transform="matrix(0.998785, 0, 0, -0.998785, 441.566919, 326.614058)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00110078 0.00192633 C 0.00110078 0.00192633 -22.686616 2.305506 -24.634294 -6.204832 C -26.585884 -14.711259 -19.143249 -17.72273 -19.143249 -17.72273 C -19.143249 -17.72273 -40.587267 -23.041691 -35.980108 -32.787906 C -31.372949 -42.538031 -6.201747 -33.675703 -6.201747 -33.675703 C -6.201747 -33.675703 -24.990195 -44.485709 -7.62144 -52.10825 C 9.747315 -59.730791 28.891665 -49.44877 30.663348 -34.739495 C 37.750082 -44.309714 57.246422 -46.969195 64.337066 -33.319802 C 71.427711 -19.674319 52.283361 -11.519882 52.283361 -11.519882 C 52.283361 -11.519882 62.389388 -11.699789 62.033487 -4.785139 C 61.677586 2.1256 47.144306 6.024868 39.877666 3.189392 " transform="matrix(0.998785, 0, 0, -0.998785, 404.037963, 307.84958)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.0000368179 0.00171483 C 0.0000368179 0.00171483 -4.783117 -34.031815 51.754312 -36.867291 C 108.291742 -39.702767 122.293125 -10.280307 117.509971 5.14077 " transform="matrix(0.998785, 0, 0, -0.998785, 362.968713, 342.90015)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.000104762 0.0012149 C 0.000104762 0.0012149 5.847051 -18.079342 28.358773 -15.419862 C 30.486357 -15.419862 28.890669 -15.419862 29.954461 -17.899436 C 31.018253 -20.382922 40.353813 -34.223954 58.019804 -27.786447 C 69.862315 -23.472613 68.059343 -17.899436 68.059343 -17.899436 C 68.059343 -17.899436 87.199782 -26.409774 99.961378 -7.445331 " transform="matrix(0.998785, 0, 0, -0.998785, 366.863177, 367.329338)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.00108056 -0.000236083 C -0.00108056 -0.000236083 6.698464 -35.985356 50.356968 -40.69029 C 89.897187 -44.94937 114.583425 -25.3357 121.142174 -11.510312 " transform="matrix(0.998785, 0, 0, -0.998785, 357.282329, 363.156014)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.00149245 0.00120337 C -0.00149245 0.00120337 -3.544859 -7.089441 7.976949 -15.243878 C 19.494847 -23.394404 30.13277 -15.419873 30.13277 -15.419873 C 30.13277 -15.419873 29.420968 -28.889361 48.385411 -30.309054 C 67.349855 -31.724836 70.009336 -21.978622 70.009336 -21.978622 C 70.009336 -21.978622 81.175243 -29.065356 95.000632 -21.446726 C 108.822109 -13.824185 106.166539 -4.253966 106.166539 -4.253966 " transform="matrix(0.998785, 0, 0, -0.998785, 365.978053, 390.165264)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.0000368179 -0.000789941 C 0.0000368179 -0.000789941 5.850894 -27.295666 51.754312 -32.434721 C 97.65773 -37.573776 112.19101 -17.54554 116.622174 -5.495746 " transform="matrix(0.998785, 0, 0, -0.998785, 362.968713, 403.796086)" />
+</svg></div><div data-ilus="jarra"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="512.0 368.0 143.0 144.0"><defs /><path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.00019241 0.0000659069 C -0.00019241 0.0000659069 -34.338781 -2.373912 -40.185727 4.384298 C -46.032674 11.142508 -51.691892 27.764262 -51.691892 44.75365 C -51.691892 61.739127 -46.580214 64.844462 -42.743522 66.123359 C -38.90683 67.402256 -33.423607 66.20549 -30.826702 70.836115 C -28.229797 75.46674 -28.679562 80.887388 -29.586915 83.707219 " transform="matrix(0.998785, 0, 0, -0.998785, 592.910348, 470.390691)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.000832712 -0.000827617 C 0.000832712 -0.000827617 -38.053207 9.823607 -34.326023 18.971438 C -30.60275 28.115358 11.855077 12.987607 17.842819 6.323261 C 23.82665 -0.337174 24.162997 -1.240615 24.053489 -6.434424 C 23.94007 -11.632144 26.083298 -15.695674 30.03732 -12.422167 C 33.987431 -9.144748 26.310136 -4.291196 19.309444 -4.064358 C 12.308753 -3.83752 3.501179 -0.904269 3.501179 -0.904269 " transform="matrix(0.998785, 0, 0, -0.998785, 597.534325, 402.460111)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.000768046 0.000809484 C 0.000768046 0.000809484 -3.726416 -3.049771 -0.452908 -6.886463 C 2.824511 -10.727066 7.564644 -14.000574 7.114879 -20.778339 C 6.661203 -27.552192 6.324857 -28.228795 6.324857 -28.228795 " transform="matrix(0.998785, 0, 0, -0.998785, 619.526577, 414.414871)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00088791 -0.00107367 C 0.00088791 -0.00107367 11.518786 12.306846 23.826706 10.726802 C 36.134626 9.146758 40.988178 -1.35428 50.362847 -1.581118 C 59.733605 -1.807956 76.78557 3.499272 76.78557 3.499272 " transform="matrix(0.998785, 0, 0, -0.998785, 544.753019, 431.557521)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.00117035 -0.00134664 C 0.00117035 -0.00134664 -7.902963 8.243043 -14.113632 -4.178296 C -20.324302 -16.599635 -20.777978 -28.567298 -7.339778 -35.118224 " transform="matrix(0.998785, 0, 0, -0.998785, 546.557425, 402.572874)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.000415021 0.000704645 C -0.000415021 0.000704645 -8.354313 -1.469832 -14.228636 11.968368 C -20.099049 25.406567 -13.888379 50.585591 1.46621 49.795569 C 10.614042 47.765759 12.307505 41.441671 12.307505 41.441671 " transform="matrix(0.998785, 0, 0, -0.998785, 540.918383, 442.610079)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.000990292 0.00141904 C -0.000990292 0.00141904 -17.389301 2.371486 -30.8275 -0.452257 C -44.265699 -3.276 -52.506178 -7.789295 -37.601353 -7.226111 C -22.696529 -6.662927 -8.918072 -5.986323 2.595914 -1.695955 " transform="matrix(0.998785, 0, 0, -0.998785, 642.872083, 445.091261)" />
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.0000194438 -0.00139721 C 0.0000194438 -0.00139721 4.110481 -24.366933 8.224854 -36.549701 C 12.335316 -48.73638 14.466812 -47.363619 24.365555 -47.363619 C 34.26821 -47.363619 43.556837 -48.126264 44.4681 -42.185453 C 45.383274 -36.244643 46.908565 2.587685 46.908565 2.587685 " transform="matrix(0.998785, 0, 0, -0.998785, 596.429668, 454.361886)" />
+</svg></div></template>
+
+<script>
+const WA="59898747114";
+const C=[
+ {id:"panaderia",nombre:"Panadería",ilus:"croissant",intro:"",items:[
+  {n:"Bagels chicos",u:"x6",v:[["Sin relleno",300],["Lomito ahumado, queso colonia y queso crema",480],["Capresse",510],["Jamón crudo, queso crema y rúcula",600],["Morrón asado, hummus y rúcula",600],["Salmón ahumado, queso crema y ciboulette",660]]},
+  {n:"English muffins chicos",u:"x6",ancho:1,v:[["Sin relleno",270],["Lomito ahumado, queso colonia y queso crema",510],["Queso dulce y bondiola",600],["Tomates confitados, queso fontina y albahaca",600]]},
+  {n:"Pitas",u:"x10",ancho:1,v:[["Sin relleno",450],["Capresse",900],["Morrón asado, hummus y rúcula",1000],["Salmón ahumado, queso crema y ciboulette",1100],["Pollo a la mostaza",1100],["Bondiola desmechada a la cerveza",1200]]},
+  {n:"Panes enteros",v:[["Pan de nuez",435],["Pan de ciruela",435],["Pan de romero",705],["Pan de calabaza y ciruela",565]]},
+  {n:"Sándwiches",ancho:1,v:[["Pan de nuez con lomito ahumado, queso colonia y queso crema (x10)",1100],["Pan de ciruela con bondiola, queso colonia, queso crema y rúcula (x10)",1100],["Pan de calabaza y ciruela con lomito ahumado, queso colonia y queso crema (x10)",1650],["Tostados de pan de romero con lomito ahumado, queso emmental y queso crema (x5)",1350]]},
+  {n:"Scons de queso emmental",u:"x6",ancho:1,v:[["Sin relleno",480],["Lomito ahumado y queso crema",720],["Jamón crudo, queso crema y rúcula",810]]},
+  {n:"Croissants",u:"x10",v:[["Sin relleno",1200],["Lomito ahumado, queso colonia y queso crema",1400]]},
+  {n:"Roll de queso emmental y tomillo",lado:1,u:"x5",v:[["Roll de queso emmental y tomillo",875]]},
+  {n:"Sacramentos de queso emmental",lado:1,u:"x10",v:[["Sacramentos de queso emmental",1050]]},
+  {n:"Quiche de queso",lado:1,u:"x6",v:[["Quiche de queso",990]]}
+ ]},
+ {id:"picada",nombre:"Para la picada",ilus:"bagel",intro:"",items:[
+  {n:"Galletones y frutos secos",u:"130 g",v:[["Galletón de aceite de oliva y pimentón",220],["Galletón de semillas",220],["Frutos secos escarchados",220]]},
+  {n:"Dips",grande:1,medio:1,u:"190 g",v:[["Queso endulzado",325],["Hummus",325],["Tomates y cebolla asados",325]]},
+  {n:"Tabla chica",grande:1,u:"Aprox. 5 personas",d:"Queso semiduro, queso fontina, jamón serrano, galletones de semillas, bagels, dip de queso endulzado, hummus, fruta de estación, bastoncitos de zanahoria, tomatitos cherry, albahaca y frutos secos escarchados.",v:[["Tabla chica",2270]]},
+  {n:"Tabla grande",grande:1,u:"Aprox. 10 personas",d:"Todo lo de la tabla chica, más lomito ahumado, galletones de aceite de oliva y pimentón y dip de tomates y cebolla asados.",v:[["Tabla grande",4450]]}
+ ]},
+ {id:"te",nombre:"Hora del té",ilus:"roll",intro:"",items:[
+  {n:"Alfajores",u:"x6",ancho:1,v:[["Maicena",360],["Marplatenses",360]]},
+  {n:"Rolls",u:"x5",ancho:1,v:[["Cinnamon rolls",925],["Cinnamon rolls con frosting",1225]]},
+  {n:"Mini budines",u:"x4",ancho:1,v:[["Banana con crumble",720],["Blueberry con crumble",820],["Chocolate especiado",1340]]},
+  {n:"Mini muffins",u:"x12",ancho:1,v:[["Blueberry con crumble",720],["Carrot cake",720]]},
+  {n:"Carrot cake 8 cm",lado:1,u:"x2",v:[["Carrot cake 8 cm",820]]},
+  {n:"Cuadrados 6 × 6 cm",u:"x6",ancho:1,v:[["Brownies de chocolate belga",630],["Brownies con dulce de leche y merengue",930],["Crumble de frambuesa",720],["Coco y dulce de leche",630]]},
+  {n:"Merengón",lado:1,u:"x4",v:[["Merengón",600]]},
+  {n:"Cookies",u:"x6",ancho:1,v:[["Avena, chocolate y nuez",930],["Brookies",960]]}
+ ]},
+ {id:"dulces",nombre:"Dulces individuales",ilus:"tarta",intro:"Versiones individuales de nuestras tartas y tortas.",items:[
+  {n:"Variedades",u:"x6",v:[["Lemon pie",990],["Crema pastelera y frutos rojos",990],["Crema pastelera y praliné de almendras",990],["Crema de naranja y ganache de chocolate belga",990],["Havannet",990],["Toffee y frutos secos",990],["Crumble de manzana",990],["Torta alfajor de chocolate y nuez",990],["Rogel",990],["Cheesecake de maracuyá",990],["Pavlova",990]]}
+ ]},
+ {id:"tartas",nombre:"Tartas",ilus:"flores",intro:"20 cm: 5 porciones<br>30 cm: 12 porciones",items:[
+  {n:"Lemon pie",v:[["20 cm",1400],["30 cm",2700]]},
+  {n:"Crema pastelera y frutos rojos",nota:"Sujeta a disponibilidad del mercado.",v:[["20 cm",1480],["30 cm",3150]]},
+  {n:"Crema pastelera y praliné de almendras",v:[["20 cm",1560],["30 cm",3340]]},
+  {n:"Crema de naranja y ganache de chocolate belga",v:[["20 cm",1480],["30 cm",3150]]},
+  {n:"Havannet",v:[["20 cm",1480],["30 cm",3150]]},
+  {n:"Toffee y frutos secos",v:[["20 cm",1550],["30 cm",2890]]},
+  {n:"Crumble de manzana",v:[["20 cm",1400],["30 cm",2700]]}
+ ]},
+ {id:"tortas",nombre:"Tortas",ilus:"torta",intro:"",aviso:"Encargalas con anticipación.",items:[
+  {lado:1,n:"Torta alfajor de chocolate y nuez",u:"Una de nuestras favoritas",d:"Capas de chocolate y nuez rellenas de dulce de leche, baño de ganache de chocolate belga y decoración de dulce de leche y ganache.",v:[["20 cm",2380],["28 cm",3570]]},
+  {lado:1,n:"Torta brownie",d:"Capas de brownie rellenas de dulce de leche con merengue y alfajorcitos marplatenses.",v:[["20 cm",1950],["28 cm",3140]]},
+  {lado:1,n:"Pasión de chocolate",d:"Bizcochuelo de chocolate, relleno de dulce de leche y baño de ganache de chocolate belga. Decorada con alfajores marplatenses.",v:[["20 cm",3700]]},
+  {lado:1,n:"Rogel",d:"Infinitas capas con mucho dulce de leche y merengue.",v:[["20 cm",2050],["28 cm",3400]]},
+  {lado:1,n:"New York cheesecake de maracuyá",d:"La tradicional cheesecake con base de chocolate y coulis de maracuyá.",v:[["20 cm",1620],["28 cm",2700]]},
+  {lado:1,n:"Torta vasca de queso",d:"Torta de queso tradicional de San Sebastián, super suave, con salsa caramel.",v:[["20 cm",1620],["28 cm",2700]]},
+  {lado:1,n:"Carrot cake",d:"Esponjoso bizcochuelo de zanahoria con nuestra selección de especias y frosting de queso crema.",v:[["20 cm",1800],["28 cm",2800]]},
+  {lado:1,n:"Pavlova",d:"Nido de merengue cocido por fuera y cremoso por dentro, relleno de crema chantilly y frutos rojos.",v:[["20 cm",2200],["28 cm",3220]]}
+ ]},
+ {id:"desayunos",nombre:"Desayunos",ilus:"jarra",intro:"Martes a sábado a partir de las 8 am.<br>Pedidos hasta las 19 h del día anterior.",items:[
+  {n:"Desayuno Petit",grande:1,medio:1,cuadro:1,u:"Hasta 2 personas",d:"Tostado de pan de romero, 2 english muffins rellenos, 2 scons de emmental rellenos, 2 alfajorcitos marplatenses, cookie de avena, chocolate y nueces, mini budín de banana con crumble, jugo de naranja natural 500 ml y té verde de jazmín y vainilla. Incluye tarjeta con mensaje personalizado.",v:[["Desayuno Petit",2000]]},
+  {n:"Desayuno Compartir",grande:1,medio:1,cuadro:1,u:"Hasta 4 personas",d:"2 tostados de pan de romero, 4 english muffins rellenos, 4 scons de emmental rellenos, 4 alfajorcitos marplatenses, 2 cookies, mini budín de banana con crumble, 2 cinnamon rolls, jugo de naranja natural 500 ml y té verde de jazmín y vainilla. Incluye tarjeta con mensaje personalizado.",v:[["Desayuno Compartir",2650]]}
+ ]}
+];
+
+const FOTOS={"panaderia|Bagels chicos": "panaderia-bagels-chicos", "panaderia|English muffins chicos": ["panaderia-english-muffins-chicos", "panaderia-english-muffins-jamon"], "panaderia|Pitas": ["panaderia-pitas", "panaderia-pitas-capresse", "panaderia-pitas-pollo"], "panaderia|Sándwiches": ["panaderia-sandwiches", "panaderia-sandwiches-calabaza", "panaderia-sandwiches-romero"], "panaderia|Scons de queso emmental": ["panaderia-scons-de-queso-emmental", "panaderia-scons-bandeja", "panaderia-scons-jamon"], "panaderia|Roll de queso emmental y tomillo": "panaderia-roll-de-queso-emmental-y-tomillo", "panaderia|Croissants": "panaderia-croissants", "panaderia|Sacramentos de queso emmental": "panaderia-sacramentos-de-queso-emmental", "picada|Dips": "picada-dips", "picada|Tabla chica": "picada-tabla-chica", "picada|Tabla grande": "picada-tabla-grande", "te|Alfajores": ["te-alfajor-maicena", "te-alfajor-marplatense"], "te|Rolls": ["te-rolls-sin", "te-rolls"], "te|Mini muffins": ["te-mini-muffins", "te-mini-muffins-carrot"], "te|Mini budines": ["te-mini-budines", "te-mini-budin-chocolate"], "te|Carrot cake 8 cm": "te-carrot-cake-8-cm", "te|Cuadrados 6 × 6 cm": ["te-cuadrados-6-6-cm", "te-cuadrados-coco"], "dulces|Variedades": "", "tartas|Lemon pie": "tartas-lemon-pie", "tartas|Crema pastelera y frutos rojos": "tartas-crema-pastelera-y-frutos-rojos", "tartas|Crema pastelera y praliné de almendras": "tartas-crema-pastelera-y-praline-de-almendras", "tartas|Crema de naranja y ganache de chocolate belga": "tartas-crema-de-naranja-y-ganache-de-chocolate-belga", "tortas|Torta alfajor de chocolate y nuez": "tortas-torta-alfajor-de-chocolate-y-nuez", "tortas|Torta brownie": "tortas-torta-brownie", "tortas|Pasión de chocolate": "tortas-pasion-de-chocolate", "tortas|Torta vasca de queso": "tortas-torta-vasca-de-queso", "tortas|Carrot cake": "tortas-carrot-cake", "tortas|Pavlova": "tortas-pavlova", "desayunos|Desayuno Petit": "desayunos-desayuno-petit", "desayunos|Desayuno Compartir": "desayunos-desayuno-compartir", "te|Merengón": "te-merengon", "te|Cookies": ["te-cookies", "te-cookies-brookies"]};
+const VAR={"dulces|Lemon pie": "lemon", "dulces|Crema pastelera y frutos rojos": "frutos-rojos", "dulces|Crema pastelera y praliné de almendras": "praline", "dulces|Crema de naranja y ganache de chocolate belga": "naranja", "dulces|Havannet": "havannet", "dulces|Toffee y frutos secos": "toffee", "dulces|Crumble de manzana": "crumble", "dulces|Torta alfajor de chocolate y nuez": "alfajor", "dulces|Rogel": "rogel", "dulces|Cheesecake de maracuyá": "cheesecake", "dulces|Pavlova": "pavlova"};
+const FILA={"picada|Galletones y frutos secos|Galletón de aceite de oliva y pimentón": "picada-galleton-pimenton", "picada|Galletones y frutos secos|Galletón de semillas": "picada-galleton-semillas", "picada|Galletones y frutos secos|Frutos secos escarchados": "picada-frutos-escarchados"};
+const fmt=n=>"$"+n.toLocaleString("es-UY");
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ilus=document.getElementById("ilus").content;
+const pedido=new Map();
+let html="",idx="";
+C.forEach(c=>{
+  idx+=`<li><a href="#${c.id}">${c.nombre}</a></li>`;
+  const svg=ilus.querySelector(`[data-ilus="${c.ilus}"]`).innerHTML;
+  html+=`<section class="cat" id="${c.id}"><div class="cat-aside"><div class="ilus" aria-hidden="true">${svg}</div><div class="txt"><h2>${c.nombre}</h2>${c.intro?`<p>${c.intro}</p>`:""}${c.aviso?`<p class="aviso">${c.aviso}</p>`:""}</div></div><div class="carta">`;
+  if(c.id==="desayunos")html+=`<div class="des-cta"><button type="button" class="wa" id="des-abrir">Pedir desayuno a domicilio</button></div>`;
+  c.items.forEach((p,i)=>{
+    if(p.sub){html+=`<div class="sub"><h3>${p.sub}</h3>${p.txt?`<p>${p.txt}</p>`:""}</div>`;return}
+    const solo=p.v.length===1&&p.v[0][0]===p.n;
+    const mp=(p.u&&/^x(\d+)$/.test(p.u))?+p.u.slice(1):(p.min||1);
+    const chip=mp>1?`Mínimo ${mp} unidades`:(p.u||"");
+    const porFila=p.v.some(v=>(c.id+"|"+p.n+"|"+v[0]) in FILA);
+    const fs=FOTOS[c.id+"|"+p.n];
+    const lista=fs?[].concat(fs):[];
+    const foto=lista.length?`<div class="fotos">${lista.map(f=>`<button type="button" class="foto" data-big="fotos/${f}.jpg" aria-label="Ver foto de ${esc(p.n)}"><img src="fotos/${f}${p.grande?"":"-t"}.jpg" alt="${esc(p.n)}" loading="lazy" width="360" height="360"></button>`).join("")}</div>`:(fs===""?`<div aria-hidden="true"></div>`:`<div class="foto vacia" aria-hidden="true">${svg}</div>`);
+    const sinFoto=fs==="";
+    html+=`<article class="prod${p.ancho?" ancho":""}${p.grande?" grande":""}${p.lado?" lado":""}${p.medio?" medio":""}${p.cuadro?" cuadro":""}${porFila?" porfila":""}${sinFoto?" sinfoto":""}">${porFila||sinFoto?"":foto}<div class="prod-body"><div class="prod-head"><h3>${p.n}</h3>${chip&&!(solo&&mp===1)?`<span class="unidad">${chip}</span>`:""}${p.nota?`<span class="nota-item">${p.nota}</span>`:""}</div>${p.d?`<p class="desc">${p.d}</p>`:""}<ul class="vars">`;
+    p.v.forEach((v,j)=>{
+      const k=`${c.id}-${i}-${j}`;
+      let nombre=v[0],m=mp;
+      const mm=nombre.match(/\s*\(x(\d+)\)$/);
+      if(mm){m=+mm[1];nombre=nombre.slice(0,mm.index)}
+      const unit=m>1?Math.round(v[1]/m):v[1];
+      const etiqueta=solo?p.n:`${p.n}: ${nombre}`;
+      const label=solo?(m>1?"":(p.u||"Precio")):nombre;
+      const minTxt=(mm&&m>1)?`<span class="min">mín. ${m}</span>`:"";
+      const vf=VAR[c.id+"|"+v[0]];
+      const mini=vf?`<button type="button" class="dmini" data-big="fotos/dulce-${vf}.webp" aria-label="Ver foto de ${esc(v[0])}"><img src="fotos/dulce-${vf}-t.webp" alt="${esc(v[0])}" loading="lazy" width="128" height="128"></button>`:"";
+      const ff=FILA[c.id+"|"+p.n+"|"+v[0]];
+      const celda=porFila?(ff?`<button type="button" class="foto" data-big="fotos/${ff}.jpg" aria-label="Ver foto de ${esc(nombre)}"><img src="fotos/${ff}-t.jpg" alt="${esc(nombre)}" loading="lazy" width="360" height="360"></button>`:`<div class="foto vacia" aria-hidden="true">${svg}</div>`):"";
+      html+=`<li>${celda}${porFila?'<span class="frow">':""}${mini}<span class="vn">${label}${minTxt}</span>${label||minTxt?`<span class="lead" aria-hidden="true"></span>`:""}<span class="vp">${fmt(unit)}${m>1?`<small> c/u</small>`:""}</span>${c.id==="desayunos"?"":`<span class="ctrl" data-k="${k}" data-l="${esc(etiqueta)}" data-p="${unit}" data-m="${m}"><button type="button" class="menos" aria-label="Quitar de ${esc(etiqueta)}">−</button><span class="q" aria-live="polite">0</span><button type="button" class="mas" aria-label="${m>1?`Agregar ${esc(etiqueta)}, mínimo ${m}`:`Agregar ${esc(etiqueta)}`}">+</button></span>`}${porFila?"</span>":""}</li>`;
+    });
+    html+=`</ul></div></article>`;
+  });
+  html+=`</div></section>`;
+});
+document.getElementById("indice").innerHTML=idx;
+document.getElementById("catalogo").innerHTML=html;
+
+const bar=document.getElementById("pedido");
+function render(){
+  let cant=0,total=0;const lin=[];
+  pedido.forEach(it=>{cant++;total+=it.q*it.p;lin.push(`${it.q} × ${it.l}`)});
+  bar.hidden=cant===0;
+  document.getElementById("p-cant").textContent=cant;document.getElementById("p-word").textContent=cant===1?"producto":"productos";
+  document.getElementById("p-total").textContent=fmt(total);
+  document.getElementById("p-lista").textContent=lin.join(" · ");
+  if(typeof actualizarCheckout==="function")actualizarCheckout();
+  document.querySelectorAll(".ctrl").forEach(el=>{
+    const it=pedido.get(el.dataset.k);el.classList.toggle("on",!!it);el.querySelector(".q").textContent=it?it.q:0;
+  });
+}
+document.getElementById("catalogo").addEventListener("click",e=>{
+  const b=e.target.closest(".ctrl button");if(!b)return;
+  const el=b.closest(".ctrl"),k=el.dataset.k,it=pedido.get(k);
+  const m=+el.dataset.m||1;
+  if(b.classList.contains("mas")){if(it)it.q++;else pedido.set(k,{l:el.dataset.l,p:+el.dataset.p,q:m})}
+  else if(it){if(it.q-1<m)pedido.delete(k);else it.q--}
+  render();
+});
+
+/* ── Datos del pedido ── */
+const co=document.getElementById("checkout"),wa=document.getElementById("p-wa");
+const DIAS=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"],DC=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"],MES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+const FR=[9,10,11,12,13,14,15,16,17,18];
+let fechaSel=null,horaSel=null;
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+function franjasLibres(d){const now=new Date();if(iso(d)!==iso(now))return FR;return FR.filter(h=>h>now.getHours())}
+function pintarFechas(){
+  const box=document.getElementById("co-fechas");let html="",n=0;const d=new Date();d.setHours(12,0,0,0);
+  for(let i=0;i<21&&n<10;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay();if(w<2||w>6)continue;if(!franjasLibres(x).length)continue;
+    const k=iso(x);html+=`<button type="button" data-f="${k}" aria-pressed="${fechaSel===k}"><small>${i===0?"Hoy":i===1?"Mañana":DC[w]}</small>${x.getDate()} ${MES[x.getMonth()]}</button>`;n++}
+  box.innerHTML=html}
+function pintarHoras(){
+  const box=document.getElementById("co-horas");let libres=FR;
+  if(fechaSel){const [y,m,dd]=fechaSel.split("-").map(Number);libres=franjasLibres(new Date(y,m-1,dd,12))}
+  if(horaSel!==null&&!libres.includes(horaSel))horaSel=null;
+  box.innerHTML=FR.map(h=>`<button type="button" data-h="${h}" aria-pressed="${horaSel===h}" ${libres.includes(h)?"":"disabled"}>${h} a ${h+1} h</button>`).join("")}
+function fechaTexto(){if(!fechaSel)return"";const [y,m,d]=fechaSel.split("-").map(Number);const x=new Date(y,m-1,d);return `${DIAS[x.getDay()]} ${d} de ${["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"][m-1]}`}
+function datos(){return{nombre:document.getElementById("co-nombre").value.trim(),cel:document.getElementById("co-cel").value.trim()}}
+function errores(){const {nombre,cel}=datos();return{nombre:!nombre,cel:(cel.replace(/\D/g,"").length<8),fecha:!fechaSel,hora:horaSel===null}}
+function actualizarCheckout(){
+  let total=0;const items=[],lin=[];
+  pedido.forEach(it=>{total+=it.q*it.p;items.push(`<li><span>${it.q} × ${esc(it.l)}</span><span>${fmt(it.q*it.p)}</span></li>`);lin.push(`• ${it.q} × ${it.l}`)});
+  document.getElementById("co-items").innerHTML=items.join("");document.getElementById("co-total").textContent=fmt(total);
+  const {nombre,cel}=datos();
+  let corto=false;
+  if(fechaSel&&horaSel!==null){const [y,m,dd]=fechaSel.split("-").map(Number);corto=(new Date(y,m-1,dd,horaSel)-new Date())<=24*3600e3}
+  document.getElementById("co-aviso").hidden=!corto;
+  const msg=`¡Hola Gusto Casero! Quiero hacer este pedido:\n\n${lin.join("\n")}\n\nTotal estimado: ${fmt(total)}\n\nNombre: ${nombre}\nCelular: ${cel}\nRetiro: ${fechaTexto()}${horaSel!==null?`, de ${horaSel} a ${horaSel+1} h`:""}${corto?"\n\n(Pedido con 24 horas de anticipación o menos: quedo a la espera de su confirmación.)":""}`;
+  wa.href=`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+  const e=errores();wa.setAttribute("aria-disabled",String(Object.values(e).some(Boolean)));
+  if(!pedido.size&&!co.hidden)cerrarCo();
+}
+function mostrarErrores(){const e=errores();
+  [["nombre","co-nombre"],["cel","co-cel"]].forEach(([k,id])=>{document.getElementById("e-"+k).hidden=!e[k];document.getElementById(id).setAttribute("aria-invalid",String(e[k]))});
+  document.getElementById("e-fecha").hidden=!e.fecha;document.getElementById("e-hora").hidden=!e.hora;
+  const primero=e.nombre?"co-nombre":e.cel?"co-cel":e.fecha?"co-fechas":e.hora?"co-horas":null;
+  if(primero){const el=document.getElementById(primero);el.scrollIntoView({block:"center",behavior:"smooth"});if(el.tagName==="INPUT")el.focus()}
+  return !primero}
+function abrirCo(){pintarFechas();pintarHoras();actualizarCheckout();co.hidden=false;document.body.style.overflow="hidden";setTimeout(()=>document.getElementById("co-nombre").focus(),50)}
+function cerrarCo(){co.hidden=true;document.body.style.overflow=""}
+document.getElementById("p-seguir").addEventListener("click",abrirCo);
+document.getElementById("co-cerrar").addEventListener("click",cerrarCo);
+co.addEventListener("click",e=>{if(e.target===co)cerrarCo()});
+addEventListener("keydown",e=>{if(e.key==="Escape"&&!co.hidden)cerrarCo()});
+document.getElementById("co-fechas").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;fechaSel=b.dataset.f;pintarFechas();pintarHoras();document.getElementById("e-fecha").hidden=true;actualizarCheckout()});
+document.getElementById("co-horas").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.disabled)return;horaSel=+b.dataset.h;pintarHoras();document.getElementById("e-hora").hidden=true;actualizarCheckout()});
+document.getElementById("co-form").addEventListener("input",e=>{const k=e.target.id==="co-nombre"?"nombre":"cel";if(e.target.getAttribute("aria-invalid")==="true"&&!errores()[k]){e.target.setAttribute("aria-invalid","false");document.getElementById("e-"+k).hidden=true}actualizarCheckout()});
+document.getElementById("co-form").addEventListener("submit",e=>e.preventDefault());
+wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores())e.preventDefault()});
+
+/* ── Desayunos a domicilio ── */
+(function(){
+  const pan=document.getElementById("desayuno"),wa2=document.getElementById("ds-wa"),f=document.getElementById("ds-form");
+  const HS=["8:00 a 8:30","8:30 a 9:00","9:00 a 9:30","9:30 a 10:00","10:00 a 10:30","10:30 a 11:00","11:00 a 11:30","11:30 a 12:00"];
+  const MESL=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  let fecha=null,hora=null,intento=false;
+  const $=id=>document.getElementById(id);
+  const radio=n=>{const r=f.querySelector(`input[name="${n}"]:checked`);return r?r.value:""};
+  const palabras=s=>s.trim()?s.trim().split(/\s+/).length:0;
+  function fechas(){let h="",n=0;const d=new Date();d.setHours(12,0,0,0);
+    const tarde=new Date().getHours()>=19;
+    if(fecha){const [fy,fm,fd]=fecha.split("-").map(Number);const t=new Date();t.setHours(12,0,0,0);const lim=new Date(t);lim.setDate(t.getDate()+(tarde?2:1));if(new Date(fy,fm-1,fd,12)<lim)fecha=null}
+    for(let i=(tarde?2:1);i<24&&n<12;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay();if(w<2||w>6)continue;const k=iso(x);
+      h+=`<button type="button" data-f="${k}" aria-pressed="${fecha===k}"><small>${i===1?"Mañana":DC[w]}</small>${x.getDate()} ${MES[x.getMonth()]}</button>`;n++}
+    $("ds-fechas").innerHTML=h}
+  function horas(){$("ds-horas").innerHTML=HS.map((x,i)=>`<button type="button" data-h="${i}" aria-pressed="${hora===i}">${x}</button>`).join("")}
+  function vals(){return{dir:$("ds-dir").value.trim(),en:$("ds-env-nom").value.trim(),ec:$("ds-env-cel").value.trim(),rn:$("ds-rec-nom").value.trim(),rc:$("ds-rec-cel").value.trim(),msj:$("ds-msj").value.trim()}}
+  const celOk=c=>c.replace(/\D/g,"").length>=8;
+  const nomOk=n=>n.trim().split(/\s+/).filter(Boolean).length>=2;
+  function errs(){const v=vals();return{fecha:!fecha,opcion:!radio("opcion"),zona:!radio("zona"),dir:!v.dir,env:!nomOk(v.en)||!celOk(v.ec),rec:!nomOk(v.rn)||!celOk(v.rc),hora:hora===null,msj:palabras(v.msj)>35,pago:!radio("pago")}}
+  const hoy0=()=>{const t=new Date();t.setHours(0,0,0,0);return t};
+  function minFecha(){const t=hoy0();t.setDate(t.getDate()+(new Date().getHours()>=19?2:1));return t}
+  let mesCal=null;
+  function habil(x){const w=x.getDay();return w>=2&&w<=6&&x>=minFecha()}
+  function cal(){
+    const box=$("ds-cal"),min=minFecha();
+    if(!mesCal)mesCal=new Date(min.getFullYear(),min.getMonth(),1);
+    if(fecha){const [y,m,d]=fecha.split("-").map(Number);if(!habil(new Date(y,m-1,d)))fecha=null}
+    const y=mesCal.getFullYear(),m=mesCal.getMonth(),first=new Date(y,m,1),dias=new Date(y,m+1,0).getDate();
+    const off=(first.getDay()+6)%7;
+    const puedeAtras=new Date(y,m,1)>new Date(min.getFullYear(),min.getMonth(),1);
+    let h=`<div class="cal-head"><button type="button" data-nav="-1" aria-label="Mes anterior" ${puedeAtras?"":"disabled"}>‹</button><strong>${MESL[m]} ${y}</strong><button type="button" data-nav="1" aria-label="Mes siguiente">›</button></div><div class="cal-grid">`;
+    h+=["Lu","Ma","Mi","Ju","Vi","Sá","Do"].map(d=>`<span class="dow">${d}</span>`).join("");
+    for(let i=0;i<off;i++)h+="<span></span>";
+    for(let d=1;d<=dias;d++){const x=new Date(y,m,d),k=iso(x),ok=habil(x);h+=`<button type="button" data-f="${k}" aria-pressed="${fecha===k}" ${ok?"":"disabled"} aria-label="${DIAS[x.getDay()]} ${d} de ${MESL[m]}">${d}</button>`}
+    h+=`</div><p class="cal-sel">${fecha?"Entrega: "+fechaTxt():"Elegí un día (martes a sábado)."}</p>`;
+    box.innerHTML=h}
+  function fechaTxt(){if(!fecha)return"";const [y,m,d]=fecha.split("-").map(Number);return `${DIAS[new Date(y,m-1,d).getDay()]} ${d} de ${MESL[m-1]}`}
+  function actualizar(){
+    const v=vals(),e=errs(),n=palabras(v.msj);
+    const c=$("ds-cont");c.textContent=`${n} / 35 palabras`;c.classList.toggle("mal",n>35);
+    const msg=`¡Hola Gusto Casero! Quiero pedir un desayuno a domicilio:\n\n• Desayuno: ${radio("opcion")}${$("ds-vegchk").checked?" vegetariano":""}\n• Día de entrega: ${fechaTxt()}\n• Hora de entrega: ${hora!==null?HS[hora]+" h":""}\n• Zona: ${radio("zona")}\n• Dirección: ${v.dir}\n\nEnvía: ${v.en} – ${v.ec}\nRecibe: ${v.rn} – ${v.rc}\n\nMensaje para la tarjeta: ${v.msj||"(sin mensaje)"}\n\nForma de pago: ${radio("pago")}`;
+    wa2.href=`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+    wa2.setAttribute("aria-disabled",String(Object.values(e).some(Boolean)));
+    const faltan=Object.values(e).filter(Boolean).length;
+    $("ds-falta").textContent=faltan?(faltan===1?"Te falta 1 dato.":`Te faltan ${faltan} datos.`):"¡Listo! Se abre WhatsApp con tu pedido.";
+    if(intento)marcar(false)}
+  function marcar(foco){const e=errs();let primero=null;
+    f.querySelectorAll(".err").forEach(p=>{const k=p.dataset.e;p.hidden=!e[k];if(e[k]&&!primero)primero=p.closest(".campo")});
+    [["dir","ds-dir"],["msj","ds-msj"]].forEach(([k,id])=>$(id).setAttribute("aria-invalid",String(e[k])));
+    const v=vals();[["ds-env-nom",!nomOk(v.en)],["ds-env-cel",!celOk(v.ec)],["ds-rec-nom",!nomOk(v.rn)],["ds-rec-cel",!celOk(v.rc)]].forEach(([id,b])=>$(id).setAttribute("aria-invalid",String(b)));
+    if(foco&&primero)primero.scrollIntoView({block:"center",behavior:"smooth"});return !primero}
+  function abrir(){cal();horas();actualizar();pan.hidden=false;document.body.style.overflow="hidden"}
+  function cerrar(){pan.hidden=true;document.body.style.overflow=""}
+  document.addEventListener("click",e=>{if(e.target.closest("#des-abrir"))abrir()});
+  $("ds-cerrar").addEventListener("click",cerrar);
+  pan.addEventListener("click",e=>{if(e.target===pan)cerrar()});
+  addEventListener("keydown",e=>{if(e.key==="Escape"&&!pan.hidden)cerrar()});
+  $("ds-cal").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.disabled)return;if(b.dataset.nav){mesCal=new Date(mesCal.getFullYear(),mesCal.getMonth()+(+b.dataset.nav),1)}else{fecha=b.dataset.f}cal();actualizar()});
+  $("ds-horas").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;hora=+b.dataset.h;horas();actualizar()});
+  f.addEventListener("input",actualizar);f.addEventListener("change",actualizar);
+  f.addEventListener("submit",e=>e.preventDefault());
+  wa2.addEventListener("click",e=>{intento=true;actualizar();if(!marcar(true))e.preventDefault()});
+})();
+
+document.getElementById("p-vaciar").addEventListener("click",()=>{pedido.clear();render()});
+render();
+
+const links=[...document.querySelectorAll("nav.indice a")];
+const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){links.forEach(a=>a.classList.toggle("activa",a.getAttribute("href")==="#"+en.target.id));const a=links.find(a=>a.classList.contains("activa"));if(a&&a.scrollIntoView){const ul=a.closest("ul");ul.scrollTo({left:a.offsetLeft-ul.offsetLeft-16,behavior:"smooth"})}}})},{rootMargin:"-45% 0px -50% 0px"});
+document.querySelectorAll("section.cat").forEach(s=>io.observe(s));
+
+(function(){
+  const hero=document.querySelector(".portada"),baj=document.getElementById("bajada");
+  function alinear(){
+    const h=hero.getBoundingClientRect(),b=baj.getBoundingClientRect();
+    const centro=b.top+b.height/2-h.top;
+    hero.style.setProperty("--py",(centro-297)+"px");
+  }
+  alinear();addEventListener("resize",alinear);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(alinear);
+})();
+
+(function(){
+  const pie=document.querySelector("footer.pie"),dl=document.getElementById("pie-datos");
+  function alinear(){const f=pie.getBoundingClientRect(),d=dl.getBoundingClientRect();pie.style.setProperty("--py2",(d.top+d.height/2-f.top-297)+"px")}
+  alinear();addEventListener("resize",alinear);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(alinear);
+})();
+
+(function(){
+  const v=document.getElementById("visor"),im=document.getElementById("visor-img"),tx=document.getElementById("visor-txt");
+  document.getElementById("catalogo").addEventListener("click",e=>{const b=e.target.closest("button.foto,button.dmini");if(!b)return;im.src=b.dataset.big;im.alt=b.querySelector("img").alt;tx.textContent=im.alt;v.hidden=false});
+  const cerrar=()=>{v.hidden=true;im.removeAttribute("src")};
+  v.addEventListener("click",cerrar);addEventListener("keydown",e=>{if(e.key==="Escape"&&!v.hidden)cerrar()});
+})();
+</script>
+<script>
+document.querySelectorAll(".ilus-lado[data-ilus]").forEach(el=>{const t=document.getElementById("ilus").content;el.innerHTML=el.dataset.ilus.split(" ").map(n=>`<div>${t.querySelector(`[data-ilus="${n}"]`).innerHTML}</div>`).join("")});
+</script>
+
+</body></html>
