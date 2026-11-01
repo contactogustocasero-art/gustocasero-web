@@ -1,6 +1,7 @@
 <!doctype html><html lang="es"><head><meta charset=utf-8><title>Gusto Casero · Carta y pedidos</title><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <meta name="format-detection" content="telephone=no">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@200;300;400;500;600&display=swap">
 <style>
 /* Layout: carta de pastelería según el manual de marca — portada con pattern y logo en etiqueta, índice fijo, cada categoría abre con su ilustración lineal a la izquierda y la carta a la derecha; pie con logo. Tema único claro, fiel a la paleta del manual. */
@@ -321,14 +322,6 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 .check{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--linea);border-radius:14px;cursor:pointer;font-size:.95rem;color:var(--tinta)}
 .check input{width:20px;height:20px;accent-color:var(--canela);margin:0;flex:none}
 .check:has(input:checked){border-color:var(--canela);background:var(--crema)}
-.zonas{gap:8px}
-.zonas label{position:relative;border-width:1.5px;border-radius:14px;padding:12px 14px}
-.zonas label span{display:flex;flex-direction:column;gap:2px}
-.zonas label strong{font-weight:600;font-size:.98rem;color:var(--tinta)}
-.zonas label small{font-size:.8rem;color:var(--tinta-suave);line-height:1.4}
-.mapa-det summary{cursor:pointer;color:var(--canela);font-size:.88rem;font-weight:500;text-decoration:underline;text-underline-offset:3px;list-style:none;padding:2px 0}
-.mapa-det summary::-webkit-details-marker{display:none}
-.mapa-det[open] summary{margin-bottom:8px}
 #ds-form .dos{grid-template-columns:1fr 1fr;gap:8px}
 #ds-form .campo input[type=text],#ds-form .campo input[type=tel],#ds-form .campo textarea{font-size:16px;padding:13px 14px;border-radius:12px;width:100%}
 #ds-form .chips.horas{grid-template-columns:repeat(2,1fr);gap:8px}
@@ -353,18 +346,26 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 .cal-grid button[aria-pressed="true"]{background:var(--canela);color:var(--blanco)}
 .cal-grid button:focus-visible{outline:2px solid var(--canela);outline-offset:2px}
 .cal-sel{margin:10px 0 0;font-size:.88rem;color:var(--canela)}
-/* Mapa de zonas */
-.mapa{margin:4px 0 6px;padding:10px;background:var(--blanco);border:1px solid var(--linea);border-radius:14px}
-.mapa svg{width:100%;height:auto}
-.mapa text{font-family:var(--display);font-size:7.2px;text-anchor:middle;fill:var(--tinta)}
-.mapa .m-rio{font-size:8px;fill:#7d8f86;font-style:italic;letter-spacing:.05em}
-.mapa .z1 rect,.ley.z1{fill:#f1d9c9;background:#f1d9c9}
-.mapa .z2 rect,.ley.z2{fill:#d6ae9b;background:#d6ae9b}
-.mapa .z3 rect,.ley.z3{fill:#cfdccf;background:#cfdccf}
-.mapa rect{stroke:var(--blanco);stroke-width:1.5}
-.mapa figcaption{font-size:.72rem;color:var(--tinta-suave);margin-top:6px;line-height:1.6}
-.ley{display:inline-block;width:10px;height:10px;border-radius:3px;margin:0 4px 0 6px;vertical-align:-1px}
-.ley.z1{margin-left:0}
+/* Mapa de zonas con buscador */
+.busca{display:flex;gap:8px}
+#ds-form .busca input{flex:1;min-width:0}
+.busca button{font:inherit;font-size:.95rem;font-weight:500;padding:0 18px;border:1px solid var(--canela);border-radius:12px;background:var(--canela);color:var(--blanco);cursor:pointer;flex:none}
+.busca button:disabled{opacity:.6;cursor:wait}
+.ds-res{list-style:none;margin:0;padding:0;border:1px solid var(--linea);border-radius:12px;overflow:hidden}
+.ds-res li+li{border-top:1px solid var(--linea)}
+.ds-res button{font:inherit;font-size:.9rem;width:100%;text-align:left;padding:11px 14px;border:0;background:var(--blanco);color:var(--tinta);cursor:pointer;line-height:1.35}
+.ds-res button:hover,.ds-res button:focus-visible{background:var(--crema);outline:none}
+.ds-res small{display:block;color:var(--tinta-suave);font-size:.78rem}
+.ds-mapa{height:260px;border-radius:14px;border:1px solid var(--linea);overflow:hidden;background:var(--crema);z-index:0}
+.ds-mapa .leaflet-tile-pane{filter:sepia(.22) saturate(.85)}
+.ds-mapa .leaflet-control-attribution{font-size:9px}
+.ds-pin{width:26px;height:26px;border-radius:50% 50% 50% 0;background:var(--canela);transform:rotate(-45deg);border:2px solid #fff;box-shadow:0 2px 6px rgba(74,58,51,.35)}
+.ds-pin::after{content:"";position:absolute;left:7px;top:7px;width:8px;height:8px;border-radius:50%;background:#fff}
+.ds-est{margin:0;padding:10px 12px;border-radius:12px;font-size:.88rem;line-height:1.45;background:var(--crema);color:var(--tinta)}
+.ds-est.ok{background:#E7EDE4;color:#4F6450}
+.ds-est.fuera{background:#F6E3DC;color:#B5523B}
+.ley-zonas{margin:-2px 0 0;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.78rem;color:var(--tinta-suave)}
+.ley-zonas i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;opacity:.75}
 
 /* Dips: foto grande pero más chica que las tablas */
 .prod.grande.medio>.fotos .foto{max-width:360px}
@@ -649,51 +650,24 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 
         <section class="ds-paso">
           <h3><span>3</span>¿Dónde?<b class="req" aria-hidden="true">*</b></h3>
-          <fieldset class="campo">
-            <legend class="vh">Zona de entrega</legend>
-            <div class="opciones zonas" id="ds-zona">
-              <label><input type="radio" name="zona" value="Pocitos / Parque Batlle / Buceo / Punta Carretas / Parque Rodó"><span><strong>Pocitos y alrededores</strong><small>Parque Batlle, Buceo, Punta Carretas, Parque Rodó</small></span></label>
-              <label><input type="radio" name="zona" value="Palermo / Cordón / Centro / Ciudad Vieja / La Aguada / Tres Cruces"><span><strong>Centro y alrededores</strong><small>Palermo, Cordón, Ciudad Vieja, La Aguada, Tres Cruces</small></span></label>
-              <label><input type="radio" name="zona" value="Barra de Carrasco / Carrasco / Carrasco Norte / Punta Gorda / Malvín"><span><strong>Carrasco y alrededores</strong><small>Barra de Carrasco, Carrasco Norte, Punta Gorda, Malvín</small></span></label>
-            </div>
-            <details class="mapa-det"><summary>Ver mapa de zonas</summary>
-              <figure class="mapa" aria-label="Mapa ilustrativo de las zonas de entrega">
-                <svg viewBox="0 0 360 230" role="img" aria-hidden="true">
-              <path d="M0 176 C40 170 52 186 70 184 C96 182 104 196 130 200 C160 205 178 214 206 210 C236 206 250 196 282 194 C312 192 330 186 360 182 L360 230 L0 230 Z" fill="#dfe6e2"/>
-              <text x="180" y="224" text-anchor="middle" class="m-rio">Río de la Plata</text>
-              <g class="z1">
-                <rect x="4" y="150" width="46" height="22" rx="6"/><text x="27" y="164">Ciudad Vieja</text>
-                <rect x="40" y="122" width="44" height="24" rx="6"/><text x="62" y="137">Centro</text>
-                <rect x="40" y="94" width="44" height="24" rx="6"/><text x="62" y="109">Aguada</text>
-                <rect x="88" y="108" width="44" height="24" rx="6"/><text x="110" y="123">Cordón</text>
-                <rect x="70" y="150" width="46" height="24" rx="6"/><text x="93" y="165">Palermo</text>
-                <rect x="94" y="78" width="52" height="24" rx="6"/><text x="120" y="93">Tres Cruces</text>
-              </g>
-              <g class="z2">
-                <rect x="120" y="160" width="52" height="24" rx="6"/><text x="146" y="175">Parque Rodó</text>
-                <rect x="150" y="190" width="56" height="16" rx="6"/><text x="178" y="201">Punta Carretas</text>
-                <rect x="176" y="150" width="46" height="26" rx="6"/><text x="199" y="166">Pocitos</text>
-                <rect x="150" y="112" width="56" height="30" rx="6"/><text x="178" y="130">Parque Batlle</text>
-                <rect x="226" y="140" width="40" height="26" rx="6"/><text x="246" y="156">Buceo</text>
-              </g>
-              <g class="z3">
-                <rect x="270" y="138" width="40" height="24" rx="6"/><text x="290" y="153">Malvín</text>
-                <rect x="276" y="166" width="46" height="18" rx="6"/><text x="299" y="178">Punta Gorda</text>
-                <rect x="314" y="128" width="42" height="26" rx="6"/><text x="335" y="144">Carrasco</text>
-                <rect x="300" y="96" width="56" height="26" rx="6"/><text x="328" y="112">Carrasco Norte</text>
-                <rect x="314" y="62" width="42" height="28" rx="6"/><text x="335" y="74">Barra de</text><text x="335" y="84">Carrasco</text>
-              </g>
-            </svg>
-                <figcaption><span class="ley z2"></span>Pocitos y alrededores <span class="ley z1"></span>Centro y alrededores <span class="ley z3"></span>Carrasco y alrededores<br>Mapa ilustrativo, no a escala. Por ahora no llegamos a otros barrios.</figcaption>
-              </figure>
-            </details>
-            <p class="err" hidden data-e="zona">Elegí la zona de entrega.</p>
-          </fieldset>
           <div class="campo">
-            <label for="ds-dir" class="ds-sub">Dirección</label>
-            <textarea id="ds-dir" rows="2" placeholder="Calle, número, esquina y apto."></textarea>
-            <p class="ayuda">Si es una empresa, colegio u hospital, sumá el nombre.</p>
+            <label for="ds-dir" class="ds-sub">Dirección de entrega</label>
+            <div class="busca">
+              <input id="ds-dir" type="text" autocomplete="street-address" enterkeyhint="search" placeholder="Calle y número">
+              <button type="button" id="ds-buscar">Buscar</button>
+            </div>
+            <ul class="ds-res" id="ds-res" hidden></ul>
+            <p class="ds-est" id="ds-est" role="status" aria-live="polite" hidden></p>
+            <div class="ds-mapa" id="ds-mapa" aria-label="Mapa de las zonas de entrega"></div>
+            <p class="ley-zonas"><span><i style="background:#B48069"></i>Pocitos y alrededores</span><span><i style="background:#D9A88A"></i>Centro y alrededores</span><span><i style="background:#8A9E8A"></i>Carrasco y alrededores</span></p>
+            <p class="ayuda">Buscá la dirección y la ubicamos en el mapa. Si el punto no quedó justo, arrastrá el marcador o tocá el lugar correcto.</p>
             <p class="err" hidden data-e="dir">Escribí la dirección de entrega.</p>
+            <p class="err" hidden data-e="zona" id="ds-err-zona">Buscá la dirección para ubicarla en el mapa.</p>
+          </div>
+          <div class="campo">
+            <label for="ds-dir2" class="ds-sub">Apto, esquina e indicaciones <small class="opc">opcional</small></label>
+            <textarea id="ds-dir2" rows="2" placeholder="Apto 302, esquina, timbre…"></textarea>
+            <p class="ayuda">Si es una empresa, colegio u hospital, sumá el nombre.</p>
           </div>
         </section>
 
@@ -819,6 +793,8 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 <path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M 0.0000194438 -0.00139721 C 0.0000194438 -0.00139721 4.110481 -24.366933 8.224854 -36.549701 C 12.335316 -48.73638 14.466812 -47.363619 24.365555 -47.363619 C 34.26821 -47.363619 43.556837 -48.126264 44.4681 -42.185453 C 45.383274 -36.244643 46.908565 2.587685 46.908565 2.587685 " transform="matrix(0.998785, 0, 0, -0.998785, 596.429668, 454.361886)" />
 </svg></div></template>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="zonas.js"></script>
 <script>
 const WA="59898747114";
 const C=[
@@ -1003,6 +979,43 @@ wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores())e.prev
   const HS=["8:00 a 8:30","8:30 a 9:00","9:00 a 9:30","9:30 a 10:00","10:00 a 10:30","10:30 a 11:00","11:00 a 11:30","11:30 a 12:00"];
   const MESL=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
   let fecha=null,hora=null,intento=false;
+  /* Ubicación en el mapa */
+  let punto=null,zonaP=null,mapa=null,pin=null,buscando=false;
+  function dentro(lat,lng,r){let c=false;for(let i=0,j=r.length-1;i<r.length;j=i++){const [yi,xi]=r[i],[yj,xj]=r[j];if((yi>lat)!==(yj>lat)&&lng<(xj-xi)*(lat-yi)/(yj-yi)+xi)c=!c}return c}
+  function zonaDe(lat,lng){if(typeof ZONAS==="undefined")return null;for(const z of ZONAS)for(const [b,polys] of z.b)for(const r of polys)if(dentro(lat,lng,r))return{z:z.n,b};return null}
+  function estado(txt,cls){const e=$("ds-est");e.textContent=txt;e.className="ds-est"+(cls?" "+cls:"");e.hidden=!txt}
+  function fijar(lat,lng,aviso){
+    punto=[+lat.toFixed(6),+lng.toFixed(6)];zonaP=zonaDe(lat,lng);
+    if(mapa){if(pin)pin.setLatLng(punto);else{pin=L.marker(punto,{draggable:true,icon:L.divIcon({className:"",html:'<div class="ds-pin"></div>',iconSize:[26,26],iconAnchor:[13,30]}),keyboard:false}).addTo(mapa);pin.on("dragend",()=>{const q=pin.getLatLng();fijar(q.lat,q.lng)})}
+      mapa.setView(punto,Math.max(mapa.getZoom(),16))}
+    if(zonaP)estado(`✓ Llegamos: zona ${zonaP.z} (${zonaP.b}).${aviso?" "+aviso:""}`,"ok");
+    else estado("Esa ubicación queda fuera de nuestras zonas de entrega. Si creés que es un error, revisá el punto en el mapa o escribinos por WhatsApp.","fuera");
+    actualizar()}
+  function iniciarMapa(){
+    if(mapa){mapa.invalidateSize();return}
+    if(typeof L==="undefined"||typeof ZONAS==="undefined"){$("ds-mapa").hidden=true;return}
+    mapa=L.map("ds-mapa",{scrollWheelZoom:false,attributionControl:true});
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'}).addTo(mapa);
+    mapa.attributionControl.setPrefix(false);
+    const todo=L.featureGroup();
+    ZONAS.forEach(z=>z.b.forEach(([,polys])=>L.polygon(polys,{color:z.c,weight:1,opacity:.6,fillColor:z.c,fillOpacity:.3,interactive:false}).addTo(todo)));
+    todo.addTo(mapa);mapa.fitBounds(todo.getBounds(),{padding:[6,6]});
+    mapa.on("click",e=>{$("ds-res").hidden=true;fijar(e.latlng.lat,e.latlng.lng)});
+    if(punto)fijar(punto[0],punto[1])}
+  function corto(r){const a=r.address||{};const calle=[a.road||a.pedestrian||a.footway||r.name,a.house_number].filter(Boolean).join(" ");const barrio=a.suburb||a.neighbourhood||a.quarter||a.city_district||a.town||a.city||"";return{t:calle||r.display_name.split(",")[0],s:barrio}}
+  async function buscar(){
+    const q=$("ds-dir").value.trim();if(!q||buscando)return;
+    buscando=true;const btn=$("ds-buscar");btn.disabled=true;btn.textContent="Buscando…";$("ds-res").hidden=true;
+    try{
+      const u="https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&countrycodes=uy&bounded=1&viewbox=-56.30,-34.76,-55.95,-34.97&accept-language=es&q="+encodeURIComponent(q);
+      const res=await (await fetch(u,{headers:{"Accept":"application/json"}})).json();
+      const vistos=new Set(),lista=res.filter(r=>{const c=corto(r),k=c.t+"|"+c.s;if(vistos.has(k))return false;vistos.add(k);return true});
+      if(!lista.length){estado("No encontramos esa dirección. Probá con calle y número (sin esquina ni apto), o tocá el mapa para marcar el lugar.","fuera");punto=null;zonaP=null;actualizar()}
+      else if(lista.length===1)elegir(lista[0],/\d/.test(q));
+      else{const ul=$("ds-res");ul.innerHTML=lista.map((r,i)=>{const c=corto(r);return `<li><button type="button" data-i="${i}">${esc(c.t)}${c.s?`<small>${esc(c.s)}</small>`:""}</button></li>`}).join("");ul.hidden=false;ul._l=lista;estado("Encontramos varias opciones, elegí la correcta:","")}
+    }catch(err){estado("No pudimos buscar la dirección ahora. Tocá el mapa para marcar el lugar de entrega.","fuera")}
+    buscando=false;btn.disabled=false;btn.textContent="Buscar"}
+  function elegir(r,conNumero){const sinNum=conNumero&&!(r.address&&r.address.house_number);fijar(+r.lat,+r.lon,sinNum?"No encontramos el número exacto: revisá que el marcador esté en el lugar correcto.":"")}
   const $=id=>document.getElementById(id);
   const radio=n=>{const r=f.querySelector(`input[name="${n}"]:checked`);return r?r.value:""};
   const palabras=s=>s.trim()?s.trim().split(/\s+/).length:0;
@@ -1013,10 +1026,10 @@ wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores())e.prev
       h+=`<button type="button" data-f="${k}" aria-pressed="${fecha===k}"><small>${i===1?"Mañana":DC[w]}</small>${x.getDate()} ${MES[x.getMonth()]}</button>`;n++}
     $("ds-fechas").innerHTML=h}
   function horas(){$("ds-horas").innerHTML=HS.map((x,i)=>`<button type="button" data-h="${i}" aria-pressed="${hora===i}">${x}</button>`).join("")}
-  function vals(){return{dir:$("ds-dir").value.trim(),en:$("ds-env-nom").value.trim(),ec:$("ds-env-cel").value.trim(),rn:$("ds-rec-nom").value.trim(),rc:$("ds-rec-cel").value.trim(),msj:$("ds-msj").value.trim()}}
+  function vals(){return{dir:$("ds-dir").value.trim(),dir2:$("ds-dir2").value.trim(),en:$("ds-env-nom").value.trim(),ec:$("ds-env-cel").value.trim(),rn:$("ds-rec-nom").value.trim(),rc:$("ds-rec-cel").value.trim(),msj:$("ds-msj").value.trim()}}
   const celOk=c=>c.replace(/\D/g,"").length>=8;
   const nomOk=n=>n.trim().split(/\s+/).filter(Boolean).length>=2;
-  function errs(){const v=vals();return{fecha:!fecha,opcion:!radio("opcion"),zona:!radio("zona"),dir:!v.dir,env:!nomOk(v.en)||!celOk(v.ec),rec:!nomOk(v.rn)||!celOk(v.rc),hora:hora===null,msj:palabras(v.msj)>35,pago:!radio("pago")}}
+  function errs(){const v=vals();return{fecha:!fecha,opcion:!radio("opcion"),zona:!!v.dir&&!zonaP,dir:!v.dir,env:!nomOk(v.en)||!celOk(v.ec),rec:!nomOk(v.rn)||!celOk(v.rc),hora:hora===null,msj:palabras(v.msj)>35,pago:!radio("pago")}}
   const hoy0=()=>{const t=new Date();t.setHours(0,0,0,0);return t};
   function minFecha(){const t=hoy0();t.setDate(t.getDate()+(new Date().getHours()>=19?2:1));return t}
   let mesCal=null;
@@ -1038,18 +1051,19 @@ wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores())e.prev
   function actualizar(){
     const v=vals(),e=errs(),n=palabras(v.msj);
     const c=$("ds-cont");c.textContent=`${n} / 35 palabras`;c.classList.toggle("mal",n>35);
-    const msg=`¡Hola Gusto Casero! Quiero pedir un desayuno a domicilio:\n\n• Desayuno: ${radio("opcion")}${$("ds-vegchk").checked?" vegetariano":""}\n• Día de entrega: ${fechaTxt()}\n• Hora de entrega: ${hora!==null?HS[hora]+" h":""}\n• Zona: ${radio("zona")}\n• Dirección: ${v.dir}\n\nEnvía: ${v.en} – ${v.ec}\nRecibe: ${v.rn} – ${v.rc}\n\nMensaje para la tarjeta: ${v.msj||"(sin mensaje)"}\n\nForma de pago: ${radio("pago")}`;
+    const msg=`¡Hola Gusto Casero! Quiero pedir un desayuno a domicilio:\n\n• Desayuno: ${radio("opcion")}${$("ds-vegchk").checked?" vegetariano":""}\n• Día de entrega: ${fechaTxt()}\n• Hora de entrega: ${hora!==null?HS[hora]+" h":""}\n• Dirección: ${v.dir}${v.dir2?" – "+v.dir2:""}\n• Zona: ${zonaP?zonaP.z+" ("+zonaP.b+")":""}\n• Ubicación: ${punto?"https://maps.google.com/?q="+punto[0]+","+punto[1]:""}\n\nEnvía: ${v.en} – ${v.ec}\nRecibe: ${v.rn} – ${v.rc}\n\nMensaje para la tarjeta: ${v.msj||"(sin mensaje)"}\n\nForma de pago: ${radio("pago")}`;
     wa2.href=`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
     wa2.setAttribute("aria-disabled",String(Object.values(e).some(Boolean)));
     const faltan=Object.values(e).filter(Boolean).length;
     $("ds-falta").textContent=faltan?(faltan===1?"Te falta 1 dato.":`Te faltan ${faltan} datos.`):"¡Listo! Se abre WhatsApp con tu pedido.";
     if(intento)marcar(false)}
   function marcar(foco){const e=errs();let primero=null;
+    $("ds-err-zona").textContent=punto?"Esa ubicación está fuera de nuestras zonas de entrega.":"Buscá la dirección para ubicarla en el mapa.";
     f.querySelectorAll(".err").forEach(p=>{const k=p.dataset.e;p.hidden=!e[k];if(e[k]&&!primero)primero=p.closest(".campo")});
     [["dir","ds-dir"],["msj","ds-msj"]].forEach(([k,id])=>$(id).setAttribute("aria-invalid",String(e[k])));
     const v=vals();[["ds-env-nom",!nomOk(v.en)],["ds-env-cel",!celOk(v.ec)],["ds-rec-nom",!nomOk(v.rn)],["ds-rec-cel",!celOk(v.rc)]].forEach(([id,b])=>$(id).setAttribute("aria-invalid",String(b)));
     if(foco&&primero)primero.scrollIntoView({block:"center",behavior:"smooth"});return !primero}
-  function abrir(){cal();horas();actualizar();pan.hidden=false;document.body.style.overflow="hidden"}
+  function abrir(){cal();horas();actualizar();pan.hidden=false;document.body.style.overflow="hidden";requestAnimationFrame(iniciarMapa)}
   function cerrar(){pan.hidden=true;document.body.style.overflow=""}
   document.addEventListener("click",e=>{if(e.target.closest("#des-abrir"))abrir()});
   $("ds-cerrar").addEventListener("click",cerrar);
@@ -1059,6 +1073,10 @@ wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores())e.prev
   $("ds-horas").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;hora=+b.dataset.h;horas();actualizar()});
   f.addEventListener("input",actualizar);f.addEventListener("change",actualizar);
   f.addEventListener("submit",e=>e.preventDefault());
+  $("ds-buscar").addEventListener("click",buscar);
+  $("ds-dir").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();buscar()}});
+  $("ds-dir").addEventListener("input",()=>{if(punto||!$("ds-est").hidden){punto=null;zonaP=null;$("ds-res").hidden=true;if(pin&&mapa){mapa.removeLayer(pin);pin=null}estado("","");actualizar()}});
+  $("ds-res").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const ul=$("ds-res");ul.hidden=true;elegir(ul._l[+b.dataset.i],/\d/.test($("ds-dir").value))});
   wa2.addEventListener("click",e=>{intento=true;actualizar();if(!marcar(true))e.preventDefault()});
 })();
 
