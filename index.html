@@ -838,6 +838,12 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 <script src="zonas.js?v=5"></script>
 <script>
 const WA="59898747114";
+/* Registro automático: al tocar "Enviar pedido por WhatsApp" el pedido también se guarda en la planilla de Google.
+   REGISTRO = dirección de la aplicación web de Apps Script. Vacío = no registra nada. */
+const REGISTRO="";
+function registrar(d){if(!REGISTRO)return;try{fetch(REGISTRO,{method:"POST",mode:"no-cors",keepalive:true,headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(d)}).catch(()=>{})}catch(err){}}
+const nuevoId=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const textoWA=a=>{try{return decodeURIComponent((a.href.split("text=")[1]||""))}catch(err){return""}};
 const C=[
  {id:"panaderia",nombre:"Panadería",ilus:"croissant",intro:"",items:[
   {n:"Bagels chicos",u:"x6",v:[["Sin relleno",300],["Lomito ahumado, queso colonia y queso crema",480],["Capresse",510],["Jamón crudo, queso crema y rúcula",600],["Morrón asado, hummus y rúcula",600],["Salmón ahumado, queso crema y ciboulette",660]]},
@@ -1012,7 +1018,12 @@ document.getElementById("co-fechas").addEventListener("click",e=>{const b=e.targ
 document.getElementById("co-horas").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.disabled)return;horaSel=+b.dataset.h;pintarHoras();document.getElementById("e-hora").hidden=true;actualizarCheckout()});
 document.getElementById("co-form").addEventListener("input",e=>{const k=e.target.id==="co-nombre"?"nombre":"cel";if(e.target.getAttribute("aria-invalid")==="true"&&!errores()[k]){e.target.setAttribute("aria-invalid","false");document.getElementById("e-"+k).hidden=true}actualizarCheckout()});
 document.getElementById("co-form").addEventListener("submit",e=>e.preventDefault());
-wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores())e.preventDefault()});
+let idTienda=null;
+wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores()){e.preventDefault();return}
+  let total=0;const lin=[];pedido.forEach(it=>{total+=it.q*it.p;lin.push(`${it.q} × ${it.l}`)});
+  if(!idTienda)idTienda=nuevoId("w");const {nombre,cel}=datos();
+  registrar({id:idTienda,tipo:"Retiro en el local",fecha:fechaSel,hora:`${horaSel} a ${horaSel+1} h`,cliente:nombre,celular:cel,pedido:lin.join("\n"),total,notas:document.getElementById("co-aviso").hidden?"":"Pedido con 24 h o menos de anticipación",mensaje:textoWA(wa)});
+});
 
 /* ── Desayunos a domicilio ── */
 (function(){
@@ -1118,7 +1129,13 @@ wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores())e.prev
   $("ds-dir").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();buscar()}});
   $("ds-dir").addEventListener("input",()=>{if(punto||!$("ds-est").hidden){punto=null;zonaP=null;$("ds-res").hidden=true;if(pin&&mapa){mapa.removeLayer(pin);pin=null}estado("","");actualizar()}});
   $("ds-res").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const ul=$("ds-res");ul.hidden=true;elegir(ul._l[+b.dataset.i],/\d/.test($("ds-dir").value))});
-  wa2.addEventListener("click",e=>{intento=true;actualizar();if(!marcar(true))e.preventDefault()});
+  let idDes=null;
+  wa2.addEventListener("click",e=>{intento=true;actualizar();if(!marcar(true)){e.preventDefault();return}
+    const v=vals(),op=f.querySelector('input[name="opcion"]:checked'),precio=op?+(op.closest("label").querySelector("em")?.textContent||"").replace(/\D/g,""):0;
+    if(!idDes)idDes=nuevoId("d");
+    const notas=[`Entrega a domicilio: ${v.dir}${v.dir2?" – "+v.dir2:""}`,zonaP?`Zona: ${zonaP.z} (${zonaP.b})`:"",punto?`Ubicación: https://maps.google.com/?q=${punto[0]},${punto[1]}`:"",`Recibe: ${v.rn} – ${v.rc}`,`Tarjeta: ${v.msj||"(sin mensaje)"}`,`Pago elegido: ${radio("pago")}`].filter(Boolean).join("\n");
+    registrar({id:idDes,tipo:"Desayuno a domicilio",fecha,hora:HS[hora],cliente:v.en,celular:v.ec,pedido:`1 desayuno ${radio("opcion").toLowerCase()}${$("ds-vegchk").checked?" vegetariano":""}`,total:precio||null,notas,mensaje:textoWA(wa2)});
+  });
 })();
 
 document.getElementById("p-vaciar").addEventListener("click",()=>{pedido.clear();render()});
