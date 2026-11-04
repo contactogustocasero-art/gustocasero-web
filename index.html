@@ -840,7 +840,7 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 const WA="59898747114";
 /* Registro automático: al tocar "Enviar pedido por WhatsApp" el pedido también se guarda en la planilla de Google.
    REGISTRO = dirección de la aplicación web de Apps Script. Vacío = no registra nada. */
-const REGISTRO="";
+const REGISTRO="https://script.google.com/macros/s/AKfycbxZdJ6TXWQqVISRELMvR2rsMOJ7ksUKeAYc1QWOp2Ouee7QDa-jhSobfveiFY9xLYQ/exec";
 function registrar(d){if(!REGISTRO)return;try{fetch(REGISTRO,{method:"POST",mode:"no-cors",keepalive:true,headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(d)}).catch(()=>{})}catch(err){}}
 const nuevoId=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const textoWA=a=>{try{return decodeURIComponent((a.href.split("text=")[1]||""))}catch(err){return""}};
