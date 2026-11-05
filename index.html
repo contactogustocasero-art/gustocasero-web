@@ -247,6 +247,17 @@ footer.pie dd,footer.pie dd *{-webkit-text-fill-color:currentColor}
 .des-pedir:hover{background:#6F826F}
 .des-pedir:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
 @media (max-width:520px){.des-pedir{align-self:stretch;text-align:center}}
+.cuenta{padding:16px 18px;border-radius:14px;background:var(--blanco);border:1px solid var(--linea);display:flex;flex-direction:column;gap:10px}
+.cuenta-tit{margin:0;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--canela)}
+.cuenta dl{margin:0;display:flex;flex-direction:column;gap:10px}
+.cuenta dl div{display:grid;grid-template-columns:8.5em 1fr;gap:10px;align-items:baseline}
+.cuenta dt{font-size:.82rem;color:var(--tinta-suave)}
+.cuenta dd{margin:0;color:var(--tinta);min-width:0;overflow-wrap:anywhere}
+.cuenta dd small{display:block;font-size:.78rem;color:var(--tinta-suave)}
+.cuenta .num{font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:.03em;user-select:all}
+.copiar{font:inherit;font-size:.75rem;margin-left:6px;padding:3px 10px;border:1px solid var(--canela);border-radius:999px;background:transparent;color:var(--canela);cursor:pointer;vertical-align:1px}
+.copiar:hover{background:var(--canela);color:var(--blanco)}
+@media (max-width:420px){.cuenta dl div{grid-template-columns:1fr;gap:2px}}
 .ds-elegido{margin:0;padding:14px 16px;border:1.5px solid var(--canela);border-radius:14px;background:var(--blanco);display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
 .ds-elegido strong{font-weight:600;font-size:1.05rem;color:var(--tinta)}
 .ds-elegido small{font-size:.85rem;color:var(--tinta-suave)}
@@ -778,6 +789,14 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
             </div>
             <p class="err" hidden data-e="pago">Elegí la forma de pago.</p>
           </fieldset>
+          <div class="cuenta" id="ds-cuenta" hidden>
+            <p class="cuenta-tit">Datos para transferir · Santander, en pesos</p>
+            <dl>
+              <div><dt>Titular</dt><dd>Victoria Bo</dd></div>
+              <div><dt>Desde Santander</dt><dd><span class="num">932302</span> · sucursal <span class="num">0005</span> <button type="button" class="copiar" data-c="932302">Copiar</button></dd></div>
+              <div><dt>Desde otro banco</dt><dd><span class="num">0005000000932302</span> <button type="button" class="copiar" data-c="0005000000932302">Copiar</button><small>BROU, Itaú, BBVA, Scotiabank y demás</small></dd></div>
+            </dl>
+          </div>
           <p class="ayuda nota-pago">El pedido queda confirmado cuando coordinamos el pago por WhatsApp y nos enviás el comprobante.</p>
         </section>
       </form>
@@ -1162,6 +1181,11 @@ wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores()){e.pre
   function limpiarDes(){f.reset();fecha=null;hora=null;punto=null;zonaP=null;intento=false;idDes=null;if(pin){pin.remove();pin=null}estado("");$("ds-res").hidden=true;mesCal=null;f.querySelectorAll(".err").forEach(p=>p.hidden=true);f.querySelectorAll("[aria-invalid]").forEach(x=>x.setAttribute("aria-invalid","false"));cal();horas();actualizar()}
   document.addEventListener("click",e=>{const b=e.target.closest(".des-pedir");if(!b)return;const r=f.querySelector(`input[name="opcion"][value="${b.dataset.op}"]`);if(!r)return;r.checked=true;const l=r.closest("label");$("ds-elegido").innerHTML=`<strong>Desayuno ${esc(r.value)}</strong><small>${l.querySelector("small").textContent}</small><em>${l.querySelector("em").textContent}</em>`;abrir()});
   $("ds-cerrar").addEventListener("click",cerrar);
+  const verCuenta=()=>{$("ds-cuenta").hidden=radio("pago")!=="Transferencia a cuenta Santander"};
+  f.addEventListener("change",verCuenta);pan.addEventListener("click",()=>setTimeout(verCuenta,0));
+  $("ds-cuenta").addEventListener("click",e=>{const b=e.target.closest(".copiar");if(!b)return;const ok=()=>{b.textContent="Copiado";setTimeout(()=>b.textContent="Copiar",1600)};
+    const sel=()=>{const r=document.createRange();r.selectNodeContents(b.previousElementSibling);const s=getSelection();s.removeAllRanges();s.addRange(r)};
+    try{navigator.clipboard.writeText(b.dataset.c).then(ok,sel)}catch(err){sel()}});
   pan.addEventListener("click",e=>{if(e.target===pan)cerrar()});
   addEventListener("keydown",e=>{if(e.key==="Escape"&&!pan.hidden)cerrar()});
   $("ds-cal").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.disabled)return;if(b.dataset.nav){mesCal=new Date(mesCal.getFullYear(),mesCal.getMonth()+(+b.dataset.nav),1)}else{fecha=b.dataset.f}cal();actualizar()});
