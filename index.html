@@ -450,6 +450,18 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
   .ilus-lado>div{transform:none!important}
 }
 .solo-lector{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* Pantalla de gracias después de enviar */
+.gracias{display:none}
+.checkout.listo .co-body:not(.gracias),.checkout.listo .co-foot{display:none}
+.checkout.listo .co-head>div{visibility:hidden}
+.checkout.listo .co-head{border-bottom-color:transparent}
+.checkout.listo .gracias{display:flex;flex:1;flex-direction:column;justify-content:center;gap:16px;text-align:center;padding:32px 28px}
+.gracias h3{margin:0;font-weight:300;font-size:1.6rem;line-height:1.2;color:var(--canela)}
+.gracias p{margin:0;color:var(--tinta);line-height:1.6}
+.gracias .acciones{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.gracias .volver{font:inherit;font-weight:500;letter-spacing:.04em;padding:15px 22px;border:0;background:var(--salvia);color:var(--blanco);cursor:pointer}
+.gracias a.otra{color:var(--tinta-suave);font-size:.88rem}
+#desayuno .gracias .volver{border-radius:14px}
 </style>
 
 <header class="portada">
@@ -641,6 +653,11 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
           <legend>Horario de retiro <small>elegí una franja de 1 hora</small></legend>
           <div class="chips horas" id="co-horas"></div>
           <p class="err" id="e-hora" hidden>Elegí un horario.</p>
+        </fieldset>
+        <fieldset class="campo">
+          <legend>Forma de pago</legend>
+          <div class="chips" id="co-pago"><button type="button" data-p="Transferencia" aria-pressed="false">Transferencia</button><button type="button" data-p="Efectivo al retirar" aria-pressed="false">Efectivo al retirar</button><button type="button" data-p="Tarjeta al retirar" aria-pressed="false">Tarjeta al retirar</button></div>
+          <p class="err" id="e-pago" hidden>Elegí cómo vas a pagar.</p>
         </fieldset>
         <p class="co-aviso" id="co-aviso" hidden>Para pedidos con 24 horas de anticipación o menos, vas a recibir una confirmación nuestra por WhatsApp.</p>
         <p class="co-local">Retiro en el local: Solano García 2405.</p>
@@ -969,11 +986,22 @@ document.getElementById("catalogo").addEventListener("click",e=>{
   render();
 });
 
+
+/* Pantalla de gracias: después de tocar "Enviar pedido por WhatsApp" */
+function mostrarGracias(panel,href,limpiar){
+  let g=panel.querySelector(".gracias");
+  if(!g){g=document.createElement("div");g.className="co-body gracias";g.setAttribute("role","status");
+    g.innerHTML='<span class="eyebrow">¡Gracias!</span><h3>Tu pedido ya está armado en WhatsApp</h3><p>Si todavía no lo mandaste, tocá <b>Enviar</b> en WhatsApp. Te respondemos por ahí para confirmarlo.</p><div class="acciones"><button type="button" class="volver">Volver a la carta</button><a class="otra" target="_blank" rel="noopener">¿No se abrió WhatsApp? Abrilo de nuevo</a></div>';
+    panel.querySelector(".co-head").after(g);
+    g.querySelector(".volver").addEventListener("click",()=>panel.closest(".checkout").dispatchEvent(new CustomEvent("cerrar-gracias")))}
+  g.querySelector("a.otra").href=href;
+  setTimeout(()=>{panel.closest(".checkout").classList.add("listo");limpiar();g.querySelector(".volver").focus()},400);
+}
 /* ── Datos del pedido ── */
 const co=document.getElementById("checkout"),wa=document.getElementById("p-wa");
 const DIAS=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"],DC=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"],MES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
 const FR=[9,10,11,12,13,14,15,16,17,18];
-let fechaSel=null,horaSel=null;
+let fechaSel=null,horaSel=null,pagoSel=null;
 const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 function franjasLibres(d){const now=new Date();if(iso(d)!==iso(now))return FR;return FR.filter(h=>h>now.getHours())}
 function pintarFechas(){
@@ -988,7 +1016,7 @@ function pintarHoras(){
   box.innerHTML=FR.map(h=>`<button type="button" data-h="${h}" aria-pressed="${horaSel===h}" ${libres.includes(h)?"":"disabled"}>${h} a ${h+1} h</button>`).join("")}
 function fechaTexto(){if(!fechaSel)return"";const [y,m,d]=fechaSel.split("-").map(Number);const x=new Date(y,m-1,d);return `${DIAS[x.getDay()]} ${d} de ${["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"][m-1]}`}
 function datos(){return{nombre:document.getElementById("co-nombre").value.trim(),cel:document.getElementById("co-cel").value.trim()}}
-function errores(){const {nombre,cel}=datos();return{nombre:!nombre,cel:(cel.replace(/\D/g,"").length<8),fecha:!fechaSel,hora:horaSel===null}}
+function errores(){const {nombre,cel}=datos();return{nombre:!nombre,cel:(cel.replace(/\D/g,"").length<8),fecha:!fechaSel,hora:horaSel===null,pago:!pagoSel}}
 function actualizarCheckout(){
   let total=0;const items=[],lin=[];
   pedido.forEach(it=>{total+=it.q*it.p;items.push(`<li><span>${it.q} × ${esc(it.l)}</span><span>${fmt(it.q*it.p)}</span></li>`);lin.push(`• ${it.q} × ${it.l}`)});
@@ -997,32 +1025,37 @@ function actualizarCheckout(){
   let corto=false;
   if(fechaSel&&horaSel!==null){const [y,m,dd]=fechaSel.split("-").map(Number);corto=(new Date(y,m-1,dd,horaSel)-new Date())<=24*3600e3}
   document.getElementById("co-aviso").hidden=!corto;
-  const msg=`¡Hola Gusto Casero! Quiero hacer este pedido:\n\n${lin.join("\n")}\n\nTotal estimado: ${fmt(total)}\n\nNombre: ${nombre}\nCelular: ${cel}\nRetiro: ${fechaTexto()}${horaSel!==null?`, de ${horaSel} a ${horaSel+1} h`:""}${corto?"\n\n(Pedido con 24 horas de anticipación o menos: quedo a la espera de su confirmación.)":""}`;
+  const msg=`¡Hola Gusto Casero! Quiero hacer este pedido:\n\n${lin.join("\n")}\n\nTotal estimado: ${fmt(total)}\n\nNombre: ${nombre}\nCelular: ${cel}\nRetiro: ${fechaTexto()}${horaSel!==null?`, de ${horaSel} a ${horaSel+1} h`:""}\nForma de pago: ${pagoSel||""}${corto?"\n\n(Pedido con 24 horas de anticipación o menos: quedo a la espera de su confirmación.)":""}`;
   wa.href=`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
   const e=errores();wa.setAttribute("aria-disabled",String(Object.values(e).some(Boolean)));
-  if(!pedido.size&&!co.hidden)cerrarCo();
+  if(!pedido.size&&!co.hidden&&!co.classList.contains("listo"))cerrarCo();
 }
 function mostrarErrores(){const e=errores();
   [["nombre","co-nombre"],["cel","co-cel"]].forEach(([k,id])=>{document.getElementById("e-"+k).hidden=!e[k];document.getElementById(id).setAttribute("aria-invalid",String(e[k]))});
-  document.getElementById("e-fecha").hidden=!e.fecha;document.getElementById("e-hora").hidden=!e.hora;
-  const primero=e.nombre?"co-nombre":e.cel?"co-cel":e.fecha?"co-fechas":e.hora?"co-horas":null;
+  document.getElementById("e-fecha").hidden=!e.fecha;document.getElementById("e-hora").hidden=!e.hora;document.getElementById("e-pago").hidden=!e.pago;
+  const primero=e.nombre?"co-nombre":e.cel?"co-cel":e.fecha?"co-fechas":e.hora?"co-horas":e.pago?"co-pago":null;
   if(primero){const el=document.getElementById(primero);el.scrollIntoView({block:"center",behavior:"smooth"});if(el.tagName==="INPUT")el.focus()}
   return !primero}
 function abrirCo(){pintarFechas();pintarHoras();actualizarCheckout();co.hidden=false;document.body.style.overflow="hidden";setTimeout(()=>document.getElementById("co-nombre").focus(),50)}
-function cerrarCo(){co.hidden=true;document.body.style.overflow=""}
+function cerrarCo(){co.hidden=true;co.classList.remove("listo");document.body.style.overflow=""}
+co.addEventListener("cerrar-gracias",cerrarCo);
 document.getElementById("p-seguir").addEventListener("click",abrirCo);
 document.getElementById("co-cerrar").addEventListener("click",cerrarCo);
 co.addEventListener("click",e=>{if(e.target===co)cerrarCo()});
 addEventListener("keydown",e=>{if(e.key==="Escape"&&!co.hidden)cerrarCo()});
 document.getElementById("co-fechas").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;fechaSel=b.dataset.f;pintarFechas();pintarHoras();document.getElementById("e-fecha").hidden=true;actualizarCheckout()});
 document.getElementById("co-horas").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.disabled)return;horaSel=+b.dataset.h;pintarHoras();document.getElementById("e-hora").hidden=true;actualizarCheckout()});
+function pintarPago(){document.querySelectorAll("#co-pago button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.p===pagoSel)))}
+document.getElementById("co-pago").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;pagoSel=b.dataset.p;pintarPago();document.getElementById("e-pago").hidden=true;actualizarCheckout()});
 document.getElementById("co-form").addEventListener("input",e=>{const k=e.target.id==="co-nombre"?"nombre":"cel";if(e.target.getAttribute("aria-invalid")==="true"&&!errores()[k]){e.target.setAttribute("aria-invalid","false");document.getElementById("e-"+k).hidden=true}actualizarCheckout()});
 document.getElementById("co-form").addEventListener("submit",e=>e.preventDefault());
 let idTienda=null;
 wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores()){e.preventDefault();return}
   let total=0;const lin=[];pedido.forEach(it=>{total+=it.q*it.p;lin.push(`${it.q} × ${it.l}`)});
   if(!idTienda)idTienda=nuevoId("w");const {nombre,cel}=datos();
-  registrar({id:idTienda,tipo:"Retiro en el local",fecha:fechaSel,hora:`${horaSel} a ${horaSel+1} h`,cliente:nombre,celular:cel,pedido:lin.join("\n"),total,notas:document.getElementById("co-aviso").hidden?"":"Pedido con 24 h o menos de anticipación",mensaje:textoWA(wa)});
+  const hrefT=wa.href;
+  mostrarGracias(co.querySelector(".co-panel"),hrefT,()=>{pedido.clear();fechaSel=null;horaSel=null;pagoSel=null;pintarPago();idTienda=null;render()});
+  registrar({id:idTienda,tipo:"Retiro en el local",fecha:fechaSel,hora:`${horaSel} a ${horaSel+1} h`,cliente:nombre,celular:cel,pedido:lin.join("\n"),total,notas:[`Pago elegido: ${pagoSel}`,document.getElementById("co-aviso").hidden?"":"Pedido con 24 h o menos de anticipación"].filter(Boolean).join("\n"),mensaje:textoWA(wa)});
 });
 
 /* ── Desayunos a domicilio ── */
@@ -1116,7 +1149,9 @@ wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores()){e.pre
     const v=vals();[["ds-env-nom",!nomOk(v.en)],["ds-env-cel",!celOk(v.ec)],["ds-rec-nom",!nomOk(v.rn)],["ds-rec-cel",!celOk(v.rc)]].forEach(([id,b])=>$(id).setAttribute("aria-invalid",String(b)));
     if(foco&&primero)primero.scrollIntoView({block:"center",behavior:"smooth"});return !primero}
   function abrir(){cal();horas();actualizar();pan.hidden=false;document.body.style.overflow="hidden";requestAnimationFrame(iniciarMapa)}
-  function cerrar(){pan.hidden=true;document.body.style.overflow=""}
+  function cerrar(){pan.hidden=true;pan.classList.remove("listo");document.body.style.overflow=""}
+  pan.addEventListener("cerrar-gracias",cerrar);
+  function limpiarDes(){f.reset();fecha=null;hora=null;punto=null;zonaP=null;intento=false;idDes=null;if(pin){pin.remove();pin=null}estado("");$("ds-res").hidden=true;mesCal=null;f.querySelectorAll(".err").forEach(p=>p.hidden=true);f.querySelectorAll("[aria-invalid]").forEach(x=>x.setAttribute("aria-invalid","false"));cal();horas();actualizar()}
   document.addEventListener("click",e=>{if(e.target.closest("#des-abrir"))abrir()});
   $("ds-cerrar").addEventListener("click",cerrar);
   pan.addEventListener("click",e=>{if(e.target===pan)cerrar()});
@@ -1134,6 +1169,7 @@ wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores()){e.pre
     const v=vals(),op=f.querySelector('input[name="opcion"]:checked'),precio=op?+(op.closest("label").querySelector("em")?.textContent||"").replace(/\D/g,""):0;
     if(!idDes)idDes=nuevoId("d");
     const notas=[`Entrega a domicilio: ${v.dir}${v.dir2?" – "+v.dir2:""}`,zonaP?`Zona: ${zonaP.z} (${zonaP.b})`:"",punto?`Ubicación: https://maps.google.com/?q=${punto[0]},${punto[1]}`:"",`Recibe: ${v.rn} – ${v.rc}`,`Tarjeta: ${v.msj||"(sin mensaje)"}`,`Pago elegido: ${radio("pago")}`].filter(Boolean).join("\n");
+    mostrarGracias(pan.querySelector(".co-panel"),wa2.href,limpiarDes);
     registrar({id:idDes,tipo:"Desayuno a domicilio",fecha,hora:HS[hora],cliente:v.en,celular:v.ec,pedido:`1 desayuno ${radio("opcion").toLowerCase()}${$("ds-vegchk").checked?" vegetariano":""}`,total:precio||null,notas,mensaje:textoWA(wa2)});
   });
 })();
