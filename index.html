@@ -991,7 +991,7 @@ document.getElementById("catalogo").addEventListener("click",e=>{
 function mostrarGracias(panel,href,limpiar){
   let g=panel.querySelector(".gracias");
   if(!g){g=document.createElement("div");g.className="co-body gracias";g.setAttribute("role","status");
-    g.innerHTML='<span class="eyebrow">¡Gracias!</span><h3>Tu pedido ya está armado en WhatsApp</h3><p>Si todavía no lo mandaste, tocá <b>Enviar</b> en WhatsApp. Te respondemos por ahí para confirmarlo.</p><div class="acciones"><button type="button" class="volver">Volver a la carta</button><a class="otra" target="_blank" rel="noopener">¿No se abrió WhatsApp? Abrilo de nuevo</a></div>';
+    g.innerHTML='<h3>¡Gracias! Te confirmamos tu pedido por WhatsApp :)</h3><div class="acciones"><button type="button" class="volver">Volver a la carta</button><a class="otra" target="_blank" rel="noopener">¿No se abrió WhatsApp? Abrilo de nuevo</a></div>';
     panel.querySelector(".co-head").after(g);
     g.querySelector(".volver").addEventListener("click",()=>panel.closest(".checkout").dispatchEvent(new CustomEvent("cerrar-gracias")))}
   g.querySelector("a.otra").href=href;
