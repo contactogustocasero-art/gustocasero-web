@@ -243,6 +243,14 @@ footer.pie dd,footer.pie dd *{-webkit-text-fill-color:currentColor}
 .des-cta p{margin:0;max-width:52ch;color:var(--tinta)}
 .des-cta button.wa{font:inherit;border:0;cursor:pointer;background:var(--salvia);color:var(--blanco);font-weight:500;letter-spacing:.04em;padding:14px 24px}
 .des-cta button.wa:hover{background:#6F826F}
+.des-pedir{font:inherit;border:0;cursor:pointer;background:var(--salvia);color:var(--blanco);font-weight:500;letter-spacing:.04em;padding:14px 24px;border-radius:14px;align-self:flex-start;margin-top:10px}
+.des-pedir:hover{background:#6F826F}
+.des-pedir:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+@media (max-width:520px){.des-pedir{align-self:stretch;text-align:center}}
+.ds-elegido{margin:0;padding:14px 16px;border:1.5px solid var(--canela);border-radius:14px;background:var(--blanco);display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.ds-elegido strong{font-weight:600;font-size:1.05rem;color:var(--tinta)}
+.ds-elegido small{font-size:.85rem;color:var(--tinta-suave)}
+.ds-elegido em{font-style:normal;font-weight:600;color:var(--canela);margin-left:auto}
 .co-intro{margin:0;color:var(--tinta-suave);font-size:.92rem}
 .ayuda{margin:0;font-size:.84rem;color:var(--tinta-suave)}
 .campo textarea{font:inherit;font-size:1rem;padding:12px 14px;border:1px solid var(--linea);background:var(--blanco);color:var(--tinta);border-radius:10px;resize:vertical}
@@ -682,7 +690,8 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
           <h3><span>1</span>Tu desayuno<b class="req" aria-hidden="true">*</b></h3>
           <fieldset class="campo">
             <legend class="vh">Opción de desayuno</legend>
-            <div class="tiles" id="ds-opcion">
+            <p class="ds-elegido" id="ds-elegido"></p>
+            <div class="tiles" id="ds-opcion" hidden>
               <label><input type="radio" name="opcion" value="Petit"><strong>Petit</strong><small>Hasta 2 personas</small><em>$2.000</em></label>
               <label><input type="radio" name="opcion" value="Compartir"><strong>Compartir</strong><small>Hasta 4 personas</small><em>$2.650</em></label>
             </div>
@@ -930,7 +939,6 @@ C.forEach(c=>{
   idx+=`<li><a href="#${c.id}">${c.nombre}</a></li>`;
   const svg=ilus.querySelector(`[data-ilus="${c.ilus}"]`).innerHTML;
   html+=`<section class="cat" id="${c.id}"><div class="cat-aside"><div class="ilus" aria-hidden="true">${svg}</div><div class="txt"><h2>${c.nombre}</h2>${c.intro?`<p>${c.intro}</p>`:""}${c.aviso?`<p class="aviso">${c.aviso}</p>`:""}</div></div><div class="carta">`;
-  if(c.id==="desayunos")html+=`<div class="des-cta"><button type="button" class="wa" id="des-abrir">Pedir desayuno a domicilio</button></div>`;
   c.items.forEach((p,i)=>{
     if(p.sub){html+=`<div class="sub"><h3>${p.sub}</h3>${p.txt?`<p>${p.txt}</p>`:""}</div>`;return}
     const solo=p.v.length===1&&p.v[0][0]===p.n;
@@ -957,7 +965,7 @@ C.forEach(c=>{
       const celda=porFila?(ff?`<button type="button" class="foto" data-big="fotos/${ff}.jpg" aria-label="Ver foto de ${esc(nombre)}"><img src="fotos/${ff}-t.jpg" alt="${esc(nombre)}" loading="lazy" width="360" height="360"></button>`:`<div class="foto vacia" aria-hidden="true">${svg}</div>`):"";
       html+=`<li>${celda}${porFila?'<span class="frow">':""}${mini}<span class="vn">${label}${minTxt}</span>${label||minTxt?`<span class="lead" aria-hidden="true"></span>`:""}<span class="vp">${fmt(unit)}${m>1?`<small> c/u</small>`:""}</span>${c.id==="desayunos"?"":`<span class="ctrl" data-k="${k}" data-l="${esc(etiqueta)}" data-p="${unit}" data-m="${m}"><button type="button" class="menos" aria-label="Quitar de ${esc(etiqueta)}">−</button><span class="q" aria-live="polite">0</span><button type="button" class="mas" aria-label="${m>1?`Agregar ${esc(etiqueta)}, mínimo ${m}`:`Agregar ${esc(etiqueta)}`}">+</button></span>`}${porFila?"</span>":""}</li>`;
     });
-    html+=`</ul></div></article>`;
+    html+=`</ul>${c.id==="desayunos"?`<button type="button" class="wa des-pedir" data-op="${esc(p.n.replace(/^Desayuno\s+/,""))}">Pedir ${esc(p.n)}</button>`:""}</div></article>`;
   });
   html+=`</div></section>`;
 });
@@ -1152,7 +1160,7 @@ wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores()){e.pre
   function cerrar(){pan.hidden=true;pan.classList.remove("listo");document.body.style.overflow=""}
   pan.addEventListener("cerrar-gracias",cerrar);
   function limpiarDes(){f.reset();fecha=null;hora=null;punto=null;zonaP=null;intento=false;idDes=null;if(pin){pin.remove();pin=null}estado("");$("ds-res").hidden=true;mesCal=null;f.querySelectorAll(".err").forEach(p=>p.hidden=true);f.querySelectorAll("[aria-invalid]").forEach(x=>x.setAttribute("aria-invalid","false"));cal();horas();actualizar()}
-  document.addEventListener("click",e=>{if(e.target.closest("#des-abrir"))abrir()});
+  document.addEventListener("click",e=>{const b=e.target.closest(".des-pedir");if(!b)return;const r=f.querySelector(`input[name="opcion"][value="${b.dataset.op}"]`);if(!r)return;r.checked=true;const l=r.closest("label");$("ds-elegido").innerHTML=`<strong>Desayuno ${esc(r.value)}</strong><small>${l.querySelector("small").textContent}</small><em>${l.querySelector("em").textContent}</em>`;abrir()});
   $("ds-cerrar").addEventListener("click",cerrar);
   pan.addEventListener("click",e=>{if(e.target===pan)cerrar()});
   addEventListener("keydown",e=>{if(e.key==="Escape"&&!pan.hidden)cerrar()});
