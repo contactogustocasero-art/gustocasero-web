@@ -420,6 +420,8 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 .cal-grid button[aria-pressed="true"]{background:var(--canela);color:var(--blanco)}
 .cal-grid button:focus-visible{outline:2px solid var(--canela);outline-offset:2px}
 .cal-sel{margin:10px 0 0;font-size:.88rem;color:var(--canela)}
+.para-hoy{margin:12px 0 0;padding:10px 14px;background:var(--crema);border-left:3px solid var(--canela);font-size:.9rem;color:var(--tinta)}
+.para-hoy a{color:var(--canela);font-weight:600;text-decoration:underline}
 /* Mapa de zonas con buscador */
 .busca{display:flex;gap:8px}
 #ds-form .busca input{flex:1;min-width:0}
@@ -682,6 +684,7 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
         <fieldset class="campo">
           <legend>Fecha de retiro <small>martes a sábado · pedidos hasta las 19 h del día anterior</small></legend>
           <div class="chips" id="co-fechas"></div>
+          <p class="para-hoy" data-parahoy></p>
           <p class="err" id="e-fecha" hidden>Elegí una fecha.</p>
         </fieldset>
         <fieldset class="campo">
@@ -733,6 +736,7 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
           <fieldset class="campo">
             <legend class="vh">Día de entrega</legend>
             <div class="cal" id="ds-cal"></div>
+            <p class="para-hoy" data-parahoy></p>
             <p class="err" hidden data-e="fecha">Elegí el día de entrega.</p>
           </fieldset>
           <fieldset class="campo">
@@ -1064,6 +1068,8 @@ const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${Str
 function minRetiro(){const t=new Date(),h=t.getHours();t.setHours(0,0,0,0);t.setDate(t.getDate()+(h>=19?2:1));return t}
 function fechaOk(k){const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d)>=minRetiro()}
 function franjasLibres(d){return FR}
+function pintarParaHoy(){const tarde=new Date().getHours()>=19;const q=tarde?"¿Lo necesitás para hoy o para mañana?":"¿Lo necesitás para hoy?";const t=encodeURIComponent(tarde?"¡Hola Gusto Casero! Quería consultar disponibilidad para un pedido para hoy o mañana.":"¡Hola Gusto Casero! Quería consultar disponibilidad para un pedido para hoy.");document.querySelectorAll("[data-parahoy]").forEach(p=>{p.innerHTML=`${q} <a href="https://wa.me/${WA}?text=${t}" target="_blank" rel="noopener">Comunicate por WhatsApp</a> para chequear disponibilidad.`})}
+pintarParaHoy();setInterval(pintarParaHoy,60000);
 function pintarFechas(){
   const box=document.getElementById("co-fechas");let html="",n=0;const d=new Date();d.setHours(12,0,0,0);
   if(fechaSel&&!fechaOk(fechaSel))fechaSel=null;
