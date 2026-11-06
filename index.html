@@ -680,7 +680,7 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
           <p class="err" id="e-cel" hidden>Escribí un celular válido, por ejemplo 099 123 456.</p>
         </div>
         <fieldset class="campo">
-          <legend>Fecha de retiro <small>martes a sábado</small></legend>
+          <legend>Fecha de retiro <small>martes a sábado · pedidos hasta las 19 h del día anterior</small></legend>
           <div class="chips" id="co-fechas"></div>
           <p class="err" id="e-fecha" hidden>Elegí una fecha.</p>
         </fieldset>
@@ -1060,10 +1060,14 @@ const DIAS=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"
 const FR=[9,10,11,12,13,14,15,16,17,18];
 let fechaSel=null,horaSel=null,pagoSel=null;
 const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-function franjasLibres(d){const now=new Date();if(iso(d)!==iso(now))return FR;return FR.filter(h=>h>now.getHours())}
+/* Sin pedidos para el mismo día: se encarga hasta las 19 h del día anterior */
+function minRetiro(){const t=new Date(),h=t.getHours();t.setHours(0,0,0,0);t.setDate(t.getDate()+(h>=19?2:1));return t}
+function fechaOk(k){const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d)>=minRetiro()}
+function franjasLibres(d){return FR}
 function pintarFechas(){
   const box=document.getElementById("co-fechas");let html="",n=0;const d=new Date();d.setHours(12,0,0,0);
-  for(let i=0;i<21&&n<10;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay();if(w<2||w>6)continue;if(!franjasLibres(x).length)continue;
+  if(fechaSel&&!fechaOk(fechaSel))fechaSel=null;
+  for(let i=1;i<24&&n<10;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay();if(w<2||w>6)continue;if(!fechaOk(iso(x)))continue;
     const k=iso(x);html+=`<button type="button" data-f="${k}" aria-pressed="${fechaSel===k}"><small>${i===0?"Hoy":i===1?"Mañana":DC[w]}</small>${x.getDate()} ${MES[x.getMonth()]}</button>`;n++}
   box.innerHTML=html}
 function pintarHoras(){
@@ -1073,7 +1077,7 @@ function pintarHoras(){
   box.innerHTML=FR.map(h=>`<button type="button" data-h="${h}" aria-pressed="${horaSel===h}" ${libres.includes(h)?"":"disabled"}>${h} a ${h+1} h</button>`).join("")}
 function fechaTexto(){if(!fechaSel)return"";const [y,m,d]=fechaSel.split("-").map(Number);const x=new Date(y,m-1,d);return `${DIAS[x.getDay()]} ${d} de ${["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"][m-1]}`}
 function datos(){return{nombre:document.getElementById("co-nombre").value.trim(),cel:document.getElementById("co-cel").value.trim()}}
-function errores(){const {nombre,cel}=datos();return{nombre:!nombre,cel:(cel.replace(/\D/g,"").length<8),fecha:!fechaSel,hora:horaSel===null,pago:!pagoSel}}
+function errores(){const {nombre,cel}=datos();return{nombre:!nombre,cel:(cel.replace(/\D/g,"").length<8),fecha:!fechaSel||!fechaOk(fechaSel),hora:horaSel===null,pago:!pagoSel}}
 function actualizarCheckout(){
   let total=0;const items=[],lin=[];
   pedido.forEach(it=>{total+=it.q*it.p;items.push(`<li><span>${it.q} × ${esc(it.l)}</span><span>${fmt(it.q*it.p)}</span></li>`);lin.push(`• ${it.q} × ${it.l}`)});
@@ -1107,7 +1111,7 @@ document.getElementById("co-pago").addEventListener("click",e=>{const b=e.target
 document.getElementById("co-form").addEventListener("input",e=>{const k=e.target.id==="co-nombre"?"nombre":"cel";if(e.target.getAttribute("aria-invalid")==="true"&&!errores()[k]){e.target.setAttribute("aria-invalid","false");document.getElementById("e-"+k).hidden=true}actualizarCheckout()});
 document.getElementById("co-form").addEventListener("submit",e=>e.preventDefault());
 let idTienda=null;
-wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores()){e.preventDefault();return}
+wa.addEventListener("click",e=>{if(fechaSel&&!fechaOk(fechaSel)){pintarFechas();pintarHoras()}actualizarCheckout();if(!mostrarErrores()){e.preventDefault();return}
   let total=0;const lin=[];pedido.forEach(it=>{total+=it.q*it.p;lin.push(`${it.q} × ${it.l}`)});
   if(!idTienda)idTienda=nuevoId("w");const {nombre,cel}=datos();
   const hrefT=wa.href;
