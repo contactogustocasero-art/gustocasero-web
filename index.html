@@ -919,7 +919,10 @@ const WA="59898747114";
 /* Registro automático: al tocar "Enviar pedido por WhatsApp" el pedido también se guarda en la planilla de Google.
    REGISTRO = dirección de la aplicación web de Apps Script. Vacío = no registra nada. */
 const REGISTRO="https://script.google.com/macros/s/AKfycbxZdJ6TXWQqVISRELMvR2rsMOJ7ksUKeAYc1QWOp2Ouee7QDa-jhSobfveiFY9xLYQ/exec";
-function registrar(d){if(!REGISTRO)return;try{fetch(REGISTRO,{method:"POST",mode:"no-cors",keepalive:true,headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(d)}).catch(()=>{})}catch(err){}}
+/* El registro se manda con sendBeacon: el navegador lo termina de enviar aunque el celular salte a WhatsApp. Si no está disponible, fetch con keepalive. */
+function registrar(d){if(!REGISTRO)return;const body=JSON.stringify(d);
+  try{if(navigator.sendBeacon&&navigator.sendBeacon(REGISTRO,new Blob([body],{type:"text/plain;charset=utf-8"})))return}catch(err){}
+  try{fetch(REGISTRO,{method:"POST",mode:"no-cors",keepalive:true,headers:{"Content-Type":"text/plain;charset=utf-8"},body}).catch(()=>{})}catch(err){}}
 const nuevoId=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const textoWA=a=>{try{return decodeURIComponent((a.href.split("text=")[1]||""))}catch(err){return""}};
 const C=[
@@ -1120,9 +1123,9 @@ let idTienda=null;
 wa.addEventListener("click",e=>{if(fechaSel&&!fechaOk(fechaSel)){pintarFechas();pintarHoras()}actualizarCheckout();if(!mostrarErrores()){e.preventDefault();return}
   let total=0;const lin=[];pedido.forEach(it=>{total+=it.q*it.p;lin.push(`${it.q} × ${it.l}`)});
   if(!idTienda)idTienda=nuevoId("w");const {nombre,cel}=datos();
+  registrar({id:idTienda,tipo:"Retiro en el local",fecha:fechaSel,hora:`${horaSel} a ${horaSel+1} h`,cliente:nombre,celular:cel,pedido:lin.join("\n"),total,notas:[`Pago elegido: ${pagoSel}`,document.getElementById("co-aviso").hidden?"":"Pedido con 24 h o menos de anticipación"].filter(Boolean).join("\n"),mensaje:textoWA(wa)});
   const hrefT=wa.href;
   mostrarGracias(co.querySelector(".co-panel"),hrefT,()=>{pedido.clear();fechaSel=null;horaSel=null;pagoSel=null;pintarPago();idTienda=null;render()});
-  registrar({id:idTienda,tipo:"Retiro en el local",fecha:fechaSel,hora:`${horaSel} a ${horaSel+1} h`,cliente:nombre,celular:cel,pedido:lin.join("\n"),total,notas:[`Pago elegido: ${pagoSel}`,document.getElementById("co-aviso").hidden?"":"Pedido con 24 h o menos de anticipación"].filter(Boolean).join("\n"),mensaje:textoWA(wa)});
 });
 
 /* ── Desayunos a domicilio ── */
