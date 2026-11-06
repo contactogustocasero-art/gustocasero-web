@@ -806,7 +806,7 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
         <p class="cuenta-tit">Datos para transferir · Santander, en pesos</p>
         <dl>
           <div><dt>Titular</dt><dd>Victoria Bo</dd></div>
-          <div><dt>Desde Santander</dt><dd><span class="num">932302</span> · sucursal <span class="num">0005</span> <button type="button" class="copiar" data-c="932302">Copiar</button></dd></div>
+          <div><dt>Desde Santander</dt><dd><span class="num">932302</span> <button type="button" class="copiar" data-c="932302">Copiar</button><small>Sucursal 0005</small></dd></div>
           <div><dt>Desde otro banco</dt><dd><span class="num">0005000000932302</span> <button type="button" class="copiar" data-c="0005000000932302">Copiar</button><small>BROU, Itaú, BBVA, Scotiabank y demás</small></dd></div>
         </dl>
           </div>
@@ -1177,7 +1177,7 @@ wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores()){e.pre
   function actualizar(){
     const v=vals(),e=errs(),n=palabras(v.msj);
     const c=$("ds-cont");c.textContent=`${n} / 35 palabras`;c.classList.toggle("mal",n>35);
-    const msg=`¡Hola Gusto Casero! ${extraWA?"Confirmo mi pedido de desayuno a domicilio":"Quiero pedir un desayuno a domicilio"}:\n\n• Desayuno: ${radio("opcion")}${$("ds-vegchk").checked?" vegetariano":""}\n• Día de entrega: ${fechaTxt()}\n• Hora de entrega: ${hora!==null?HS[hora]+" h":""}\n• Dirección: ${v.dir}${v.dir2?" – "+v.dir2:""}\n• Zona: ${zonaP?zonaP.z+" ("+zonaP.b+")":""}\n• Ubicación: ${punto?"https://maps.google.com/?q="+punto[0]+","+punto[1]:""}\n\nEnvía: ${v.en} – ${v.ec}\nRecibe: ${v.rn} – ${v.rc}\n\nMensaje para la tarjeta: ${v.msj||"(sin mensaje)"}\n\nForma de pago: ${radio("pago")}${extraWA}`;
+    const msg=`¡Hola Gusto Casero! ${extraWA?"Confirmo mi pedido de desayuno a domicilio":"Quiero pedir un desayuno a domicilio"}:\n\n• Desayuno: ${radio("opcion")}${$("ds-vegchk").checked?" vegetariano":""}\n• Total: ${(f.querySelector('input[name="opcion"]:checked')?.closest("label").querySelector("em")?.textContent)||""}\n• Día de entrega: ${fechaTxt()}\n• Hora de entrega: ${hora!==null?HS[hora]+" h":""}\n• Dirección: ${v.dir}${v.dir2?" – "+v.dir2:""}\n• Zona: ${zonaP?zonaP.z+" ("+zonaP.b+")":""}\n• Ubicación: ${punto?"https://maps.google.com/?q="+punto[0]+","+punto[1]:""}\n\nEnvía: ${v.en} – ${v.ec}\nRecibe: ${v.rn} – ${v.rc}\n\nMensaje para la tarjeta: ${v.msj||"(sin mensaje)"}\n\nForma de pago: ${radio("pago")}${extraWA}`;
     wa2.href=`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
     $("ds-confirmar").setAttribute("aria-disabled",String(Object.values(e).some(Boolean)));
     const faltan=Object.values(e).filter(Boolean).length;
