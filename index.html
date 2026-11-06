@@ -253,6 +253,15 @@ footer.pie dd,footer.pie dd *{-webkit-text-fill-color:currentColor}
 .pg-ok{display:flex;flex-direction:column;gap:6px}
 .pg-ok h3{margin:0;font-weight:300;font-size:1.5rem;line-height:1.2;color:var(--canela);text-wrap:balance}
 .pg-ok p{margin:0;color:var(--tinta);font-size:.95rem;line-height:1.6}
+.comp-btn{display:block;text-align:center;padding:13px 16px;border:1.5px dashed var(--canela);border-radius:12px;color:var(--canela);font-weight:600;cursor:pointer;letter-spacing:normal;text-transform:none;font-size:.95rem}
+.comp-btn:hover{background:var(--crema)}
+#ds-comp-file:focus-visible+.comp-est,.comp-btn:focus-within{outline:2px solid var(--canela)}
+.comp-btn.ok{border-style:solid;background:var(--crema)}
+.comp-btn.cargando{opacity:.6;pointer-events:none}
+.comp-est{margin:0;font-size:.88rem;color:var(--tinta)}
+.comp-est.mal{color:#B5523B}
+.comp-sin{font:inherit;font-size:.82rem;background:none;border:0;padding:4px 0;color:var(--tinta-suave);text-decoration:underline;text-underline-offset:3px;cursor:pointer;align-self:flex-start}
+.co-foot a.wa[hidden]{display:none}
 .pg-local{margin:0;color:var(--tinta);line-height:1.6}
 .cuenta{padding:16px 18px;border-radius:14px;background:var(--blanco);border:1px solid var(--linea);display:flex;flex-direction:column;gap:10px}
 .cuenta-tit{margin:0;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--canela)}
@@ -810,6 +819,13 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
           <div><dt>Desde otro banco</dt><dd><span class="num">0005000000932302</span> <button type="button" class="copiar" data-c="0005000000932302">Copiar</button><small>BROU, Itaú, BBVA, Scotiabank y demás</small></dd></div>
         </dl>
           </div>
+      <div class="cuenta" id="ds-comp">
+        <p class="cuenta-tit">Comprobante de la transferencia</p>
+        <label class="comp-btn" for="ds-comp-file" id="ds-comp-lbl">Subir foto o PDF del comprobante</label>
+        <input type="file" id="ds-comp-file" accept="image/*,application/pdf" class="vh">
+        <p class="comp-est" id="ds-comp-est" aria-live="polite" hidden></p>
+        <button type="button" class="comp-sin" id="ds-comp-sin" hidden>No puedo subirlo, lo mando por WhatsApp</button>
+      </div>
       <div class="cuenta" id="ds-local"><p class="cuenta-tit">Pago en el local</p><p class="pg-local">Solano García 2405<br>Martes a sábado, de 9 a 19 h</p></div>
       <p class="co-aviso" id="ds-pg-aviso"></p>
     </div>
@@ -1177,7 +1193,7 @@ wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores()){e.pre
   function actualizar(){
     const v=vals(),e=errs(),n=palabras(v.msj);
     const c=$("ds-cont");c.textContent=`${n} / 35 palabras`;c.classList.toggle("mal",n>35);
-    const msg=`¡Hola Gusto Casero! ${extraWA?"Confirmo mi pedido de desayuno a domicilio":"Quiero pedir un desayuno a domicilio"}:\n\n• Desayuno: ${radio("opcion")}${$("ds-vegchk").checked?" vegetariano":""}\n• Total: ${(f.querySelector('input[name="opcion"]:checked')?.closest("label").querySelector("em")?.textContent)||""}\n• Día de entrega: ${fechaTxt()}\n• Hora de entrega: ${hora!==null?HS[hora]+" h":""}\n• Dirección: ${v.dir}${v.dir2?" – "+v.dir2:""}\n• Zona: ${zonaP?zonaP.z+" ("+zonaP.b+")":""}\n• Ubicación: ${punto?"https://maps.google.com/?q="+punto[0]+","+punto[1]:""}\n\nEnvía: ${v.en} – ${v.ec}\nRecibe: ${v.rn} – ${v.rc}\n\nMensaje para la tarjeta: ${v.msj||"(sin mensaje)"}\n\nForma de pago: ${radio("pago")}${extraWA}`;
+    const msg=`¡Hola Gusto Casero! ${confirmado?"Confirmo mi pedido de desayuno a domicilio":"Quiero pedir un desayuno a domicilio"}:\n\n• Desayuno: ${radio("opcion")}${$("ds-vegchk").checked?" vegetariano":""}\n• Total: ${(f.querySelector('input[name="opcion"]:checked')?.closest("label").querySelector("em")?.textContent)||""}\n• Día de entrega: ${fechaTxt()}\n• Hora de entrega: ${hora!==null?HS[hora]+" h":""}\n• Dirección: ${v.dir}${v.dir2?" – "+v.dir2:""}\n• Zona: ${zonaP?zonaP.z+" ("+zonaP.b+")":""}\n• Ubicación: ${punto?"https://maps.google.com/?q="+punto[0]+","+punto[1]:""}\n\nEnvía: ${v.en} – ${v.ec}\nRecibe: ${v.rn} – ${v.rc}\n\nMensaje para la tarjeta: ${v.msj||"(sin mensaje)"}\n\nForma de pago: ${radio("pago")}${extraWA}`;
     wa2.href=`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
     $("ds-confirmar").setAttribute("aria-disabled",String(Object.values(e).some(Boolean)));
     const faltan=Object.values(e).filter(Boolean).length;
@@ -1192,7 +1208,7 @@ wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores()){e.pre
   function abrir(){if(!confirmado){cal();horas();actualizar()}pan.hidden=false;document.body.style.overflow="hidden";requestAnimationFrame(iniciarMapa)}
   function cerrar(){pan.hidden=true;pan.classList.remove("listo");document.body.style.overflow=""}
   pan.addEventListener("cerrar-gracias",cerrar);
-  function limpiarDes(){f.reset();confirmado=false;extraWA="";$("ds-nota-pago").hidden=true;pasoPago(false);fecha=null;hora=null;punto=null;zonaP=null;intento=false;idDes=null;if(pin){pin.remove();pin=null}estado("");$("ds-res").hidden=true;mesCal=null;f.querySelectorAll(".err").forEach(p=>p.hidden=true);f.querySelectorAll("[aria-invalid]").forEach(x=>x.setAttribute("aria-invalid","false"));cal();horas();actualizar()}
+  function limpiarDes(){f.reset();confirmado=false;extraWA="";const cl=$("ds-comp-lbl");cl.classList.remove("ok");cl.textContent="Subir foto o PDF del comprobante";compEstado("");$("ds-comp-sin").hidden=true;$("ds-nota-pago").hidden=true;pasoPago(false);fecha=null;hora=null;punto=null;zonaP=null;intento=false;idDes=null;if(pin){pin.remove();pin=null}estado("");$("ds-res").hidden=true;mesCal=null;f.querySelectorAll(".err").forEach(p=>p.hidden=true);f.querySelectorAll("[aria-invalid]").forEach(x=>x.setAttribute("aria-invalid","false"));cal();horas();actualizar()}
   document.addEventListener("click",e=>{const b=e.target.closest(".des-pedir");if(!b)return;if(confirmado){abrir();return}const r=f.querySelector(`input[name="opcion"][value="${b.dataset.op}"]`);if(!r)return;r.checked=true;const l=r.closest("label");$("ds-elegido").innerHTML=`<strong>Desayuno ${esc(r.value)}</strong><small>${l.querySelector("small").textContent}</small><em>${l.querySelector("em").textContent}</em>`;abrir()});
   $("ds-cerrar").addEventListener("click",cerrar);
   const TRANSF="Transferencia a cuenta Santander";
@@ -1221,16 +1237,44 @@ wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores()){e.pre
     const pg=radio("pago"),tr=pg===TRANSF,op=f.querySelector('input[name="opcion"]:checked');
     const total=op?op.closest("label").querySelector("em").textContent:"";
     regDes("Pago: pendiente (todavía no confirmado)");
-    confirmado=true;extraWA=tr?"\n\nYa hice la transferencia.":"";actualizar();
+    confirmado=true;extraWA="";actualizar();
     $("ds-pg-tit").textContent=tr?`Transferí ${total} para agendarlo`:"Pasá por el local a pagarlo";
     $("ds-pg-res").textContent=`Desayuno ${radio("opcion")}${$("ds-vegchk").checked?" vegetariano":""} · ${fechaTxt()}, ${HS[hora]} h`;
-    $("ds-cuenta").hidden=!tr;$("ds-local").hidden=tr;
-    $("ds-pg-aviso").textContent=tr?"Cuando hagas la transferencia, tocá el botón de abajo y envianos el mensaje por WhatsApp. Con eso tu pedido queda agendado.":"Tu pedido queda agendado una vez que pases por el local a pagarlo. Tocá el botón de abajo para avisarnos por WhatsApp.";
+    $("ds-cuenta").hidden=!tr;$("ds-comp").hidden=!tr;$("ds-local").hidden=tr;
+    compListo(!tr);
+    $("ds-pg-aviso").textContent=tr?"Hacé la transferencia, subí el comprobante y envianos el mensaje por WhatsApp. Con eso tu pedido queda agendado.":"Tu pedido queda agendado una vez que pases por el local a pagarlo. Tocá el botón de abajo para avisarnos por WhatsApp.";
     wa2.textContent=tr?"Ya transferí · Enviar por WhatsApp":"Enviar pedido por WhatsApp";
     pasoPago(true);$("ds-pagar").scrollTop=0;
   });
+  /* Comprobante de transferencia: se sube a la carpeta de Drive y queda en la fila del pedido */
+  function compListo(ok){wa2.setAttribute("aria-disabled",String(!ok))}
+  function compEstado(t,mal){const e=$("ds-comp-est");e.textContent=t;e.hidden=!t;e.classList.toggle("mal",!!mal)}
+  function achicar(file){return new Promise(res=>{const u=URL.createObjectURL(file),im=new Image();
+    im.onload=()=>{const k=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res({tipo:"image/jpeg",datos:c.toDataURL("image/jpeg",.82).split(",")[1]})};
+    im.onerror=()=>{URL.revokeObjectURL(u);res(null)};im.src=u})}
+  function base64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(file)})}
+  $("ds-comp-file").addEventListener("change",async e=>{const file=e.target.files[0];e.target.value="";if(!file)return;
+    const lbl=$("ds-comp-lbl"),pdf=file.type==="application/pdf";
+    if(!pdf&&!/^image\//.test(file.type)){compEstado("Subí una foto o un PDF del comprobante.",true);return}
+    if(file.size>15*1024*1024){compEstado("El archivo es muy pesado. Probá con una captura de pantalla del comprobante.",true);return}
+    lbl.classList.add("cargando");lbl.textContent="Subiendo…";compEstado("");
+    try{
+      let d=pdf?{tipo:"application/pdf",datos:await base64(file)}:await achicar(file);
+      if(!d){if(!/^image\/(jpeg|png|webp|heic|heif)$/.test(file.type))throw new Error("formato");d={tipo:file.type,datos:await base64(file)}}
+      if(d.datos.length>11*1024*1024)throw new Error("tamaño");
+      const body=JSON.stringify({accion:"comprobante",id:idDes,tipo:d.tipo,datos:d.datos});
+      let ok=false;
+      try{const r=await fetch(REGISTRO,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body});ok=!!(await r.json()).ok}
+      catch(err){await fetch(REGISTRO,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body});ok=true}
+      if(!ok)throw new Error("servidor");
+      lbl.classList.add("ok");lbl.textContent="Cambiar comprobante";
+      compEstado(`✓ Recibimos tu comprobante (${file.name}).`);
+      extraWA="\n\nYa hice la transferencia. El comprobante quedó subido en la web.";actualizar();compListo(true);$("ds-comp-sin").hidden=true;
+    }catch(err){compEstado("No pudimos subir el comprobante. Probá de nuevo o, si no podés, mandalo por WhatsApp.",true);$("ds-comp-sin").hidden=false;if(!lbl.classList.contains("ok"))lbl.textContent="Subir foto o PDF del comprobante"}
+    finally{lbl.classList.remove("cargando")}});
+  $("ds-comp-sin").addEventListener("click",()=>{extraWA="\n\nYa hice la transferencia. Les mando el comprobante por acá.";actualizar();compListo(true);compEstado("Mandanos el comprobante en el chat de WhatsApp junto con el mensaje.");$("ds-comp-sin").hidden=true});
   /* Paso 2: el WhatsApp es solo la confirmación */
-  wa2.addEventListener("click",()=>{const tr=radio("pago")===TRANSF;
+  wa2.addEventListener("click",e=>{if(wa2.getAttribute("aria-disabled")==="true"){e.preventDefault();compEstado("Primero subí el comprobante de la transferencia.",true);return}const tr=radio("pago")===TRANSF;
     mostrarGracias(pan.querySelector(".co-panel"),wa2.href,limpiarDes,tr?"¡Gracias! Tu desayuno quedó agendado :)":"¡Gracias! Tu desayuno queda agendado cuando pases a pagarlo por el local.")});
   function regDes(aviso){
     const v=vals(),op=f.querySelector('input[name="opcion"]:checked'),precio=op?+(op.closest("label").querySelector("em")?.textContent||"").replace(/\D/g,""):0;
