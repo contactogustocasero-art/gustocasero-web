@@ -797,7 +797,7 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
               <div><dt>Desde otro banco</dt><dd><span class="num">0005000000932302</span> <button type="button" class="copiar" data-c="0005000000932302">Copiar</button><small>BROU, Itaú, BBVA, Scotiabank y demás</small></dd></div>
             </dl>
           </div>
-          <p class="ayuda nota-pago">El pedido queda confirmado cuando coordinamos el pago por WhatsApp y nos enviás el comprobante.</p>
+          <p class="co-aviso nota-pago" id="ds-nota-pago" hidden></p>
         </section>
       </form>
     </div>
@@ -1015,13 +1015,14 @@ document.getElementById("catalogo").addEventListener("click",e=>{
 
 
 /* Pantalla de gracias: después de tocar "Enviar pedido por WhatsApp" */
-function mostrarGracias(panel,href,limpiar){
+function mostrarGracias(panel,href,limpiar,titulo){
   let g=panel.querySelector(".gracias");
   if(!g){g=document.createElement("div");g.className="co-body gracias";g.setAttribute("role","status");
     g.innerHTML='<h3>¡Gracias! Te confirmamos tu pedido por WhatsApp :)</h3><div class="acciones"><button type="button" class="volver">Volver a la carta</button><a class="otra" target="_blank" rel="noopener">¿No se abrió WhatsApp? Abrilo de nuevo</a></div>';
     panel.querySelector(".co-head").after(g);
     g.querySelector(".volver").addEventListener("click",()=>panel.closest(".checkout").dispatchEvent(new CustomEvent("cerrar-gracias")))}
   g.querySelector("a.otra").href=href;
+  g.querySelector("h3").textContent=titulo||"¡Gracias! Te confirmamos tu pedido por WhatsApp :)";
   setTimeout(()=>{panel.closest(".checkout").classList.add("listo");limpiar();g.querySelector(".volver").focus()},400);
 }
 /* ── Datos del pedido ── */
@@ -1178,10 +1179,12 @@ wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores()){e.pre
   function abrir(){cal();horas();actualizar();pan.hidden=false;document.body.style.overflow="hidden";requestAnimationFrame(iniciarMapa)}
   function cerrar(){pan.hidden=true;pan.classList.remove("listo");document.body.style.overflow=""}
   pan.addEventListener("cerrar-gracias",cerrar);
-  function limpiarDes(){f.reset();fecha=null;hora=null;punto=null;zonaP=null;intento=false;idDes=null;if(pin){pin.remove();pin=null}estado("");$("ds-res").hidden=true;mesCal=null;f.querySelectorAll(".err").forEach(p=>p.hidden=true);f.querySelectorAll("[aria-invalid]").forEach(x=>x.setAttribute("aria-invalid","false"));cal();horas();actualizar()}
+  function limpiarDes(){f.reset();anticipado=false;clearTimeout(tAnt);$("ds-cuenta").hidden=true;$("ds-nota-pago").hidden=true;fecha=null;hora=null;punto=null;zonaP=null;intento=false;idDes=null;if(pin){pin.remove();pin=null}estado("");$("ds-res").hidden=true;mesCal=null;f.querySelectorAll(".err").forEach(p=>p.hidden=true);f.querySelectorAll("[aria-invalid]").forEach(x=>x.setAttribute("aria-invalid","false"));cal();horas();actualizar()}
   document.addEventListener("click",e=>{const b=e.target.closest(".des-pedir");if(!b)return;const r=f.querySelector(`input[name="opcion"][value="${b.dataset.op}"]`);if(!r)return;r.checked=true;const l=r.closest("label");$("ds-elegido").innerHTML=`<strong>Desayuno ${esc(r.value)}</strong><small>${l.querySelector("small").textContent}</small><em>${l.querySelector("em").textContent}</em>`;abrir()});
   $("ds-cerrar").addEventListener("click",cerrar);
-  const verCuenta=()=>{$("ds-cuenta").hidden=radio("pago")!=="Transferencia a cuenta Santander"};
+  const TRANSF="Transferencia a cuenta Santander";
+  const NOTA={[TRANSF]:"Hacé la transferencia y enviá el mensaje por WhatsApp: con eso tu pedido queda agendado.","En el local (previo pago)":"Pasá por el local a pagarlo (Solano García 2405, de martes a sábado de 9 a 19 h). Una vez que lo pagues, tu pedido queda agendado."};
+  const verCuenta=()=>{const pg=radio("pago");$("ds-cuenta").hidden=pg!==TRANSF;const n=$("ds-nota-pago");n.textContent=NOTA[pg]||"";n.hidden=!NOTA[pg]};
   f.addEventListener("change",verCuenta);pan.addEventListener("click",()=>setTimeout(verCuenta,0));
   $("ds-cuenta").addEventListener("click",e=>{const b=e.target.closest(".copiar");if(!b)return;const ok=()=>{b.textContent="Copiado";setTimeout(()=>b.textContent="Copiar",1600)};
     const sel=()=>{const r=document.createRange();r.selectNodeContents(b.previousElementSibling);const s=getSelection();s.removeAllRanges();s.addRange(r)};
@@ -1198,12 +1201,23 @@ wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores()){e.pre
   $("ds-res").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const ul=$("ds-res");ul.hidden=true;elegir(ul._l[+b.dataset.i],/\d/.test($("ds-dir").value))});
   let idDes=null;
   wa2.addEventListener("click",e=>{intento=true;actualizar();if(!marcar(true)){e.preventDefault();return}
+    clearTimeout(tAnt);
+    const pg=radio("pago");
+    mostrarGracias(pan.querySelector(".co-panel"),wa2.href,limpiarDes,pg===TRANSF?"¡Gracias! Tu desayuno quedó agendado :)":"¡Gracias! Tu desayuno queda agendado cuando pases a pagarlo por el local.");
+    if(!anticipado)regDes("");
+  });
+  /* Si elige transferencia, el pedido entra al registro apenas completa todo, aunque después no envíe el WhatsApp */
+  let tAnt=null,anticipado=false;
+  function anticipar(){clearTimeout(tAnt);if(anticipado||radio("pago")!==TRANSF||Object.values(errs()).some(Boolean))return;
+    tAnt=setTimeout(()=>{if(anticipado||radio("pago")!==TRANSF||Object.values(errs()).some(Boolean)||pan.hidden)return;anticipado=true;regDes("Entró al completar el formulario con transferencia: revisá si llegó el WhatsApp y el pago.")},6000)}
+  f.addEventListener("change",anticipar);f.addEventListener("input",anticipar);
+  $("ds-cal").addEventListener("click",()=>setTimeout(anticipar,0));$("ds-horas").addEventListener("click",()=>setTimeout(anticipar,0));
+  function regDes(aviso){
     const v=vals(),op=f.querySelector('input[name="opcion"]:checked'),precio=op?+(op.closest("label").querySelector("em")?.textContent||"").replace(/\D/g,""):0;
     if(!idDes)idDes=nuevoId("d");
-    const notas=[`Entrega a domicilio: ${v.dir}${v.dir2?" – "+v.dir2:""}`,zonaP?`Zona: ${zonaP.z} (${zonaP.b})`:"",punto?`Ubicación: https://maps.google.com/?q=${punto[0]},${punto[1]}`:"",`Recibe: ${v.rn} – ${v.rc}`,`Tarjeta: ${v.msj||"(sin mensaje)"}`,`Pago elegido: ${radio("pago")}`].filter(Boolean).join("\n");
-    mostrarGracias(pan.querySelector(".co-panel"),wa2.href,limpiarDes);
+    const notas=[`Entrega a domicilio: ${v.dir}${v.dir2?" – "+v.dir2:""}`,zonaP?`Zona: ${zonaP.z} (${zonaP.b})`:"",punto?`Ubicación: https://maps.google.com/?q=${punto[0]},${punto[1]}`:"",`Recibe: ${v.rn} – ${v.rc}`,`Tarjeta: ${v.msj||"(sin mensaje)"}`,`Pago elegido: ${radio("pago")}`,aviso].filter(Boolean).join("\n");
     registrar({id:idDes,tipo:"Desayuno a domicilio",fecha,hora:HS[hora],cliente:v.en,celular:v.ec,pedido:`1 desayuno ${radio("opcion").toLowerCase()}${$("ds-vegchk").checked?" vegetariano":""}`,total:precio||null,notas,mensaje:textoWA(wa2)});
-  });
+  }
 })();
 
 document.getElementById("p-vaciar").addEventListener("click",()=>{pedido.clear();render()});
