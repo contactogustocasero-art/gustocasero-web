@@ -1212,7 +1212,7 @@ wa.addEventListener("click",e=>{actualizarCheckout();if(!mostrarErrores()){e.pre
   document.addEventListener("click",e=>{const b=e.target.closest(".des-pedir");if(!b)return;if(confirmado){abrir();return}const r=f.querySelector(`input[name="opcion"][value="${b.dataset.op}"]`);if(!r)return;r.checked=true;const l=r.closest("label");$("ds-elegido").innerHTML=`<strong>Desayuno ${esc(r.value)}</strong><small>${l.querySelector("small").textContent}</small><em>${l.querySelector("em").textContent}</em>`;abrir()});
   $("ds-cerrar").addEventListener("click",cerrar);
   const TRANSF="Transferencia a cuenta Santander";
-  const NOTA={[TRANSF]:"Al confirmar el pedido te mostramos los datos de la cuenta para transferir.","En el local (previo pago)":"Al confirmar el pedido te indicamos dónde y cuándo pasar a pagarlo."};
+  const NOTA={[TRANSF]:"Al confirmar el pedido te mostramos los datos de la cuenta para transferir.","En el local (previo pago)":"Lo pagás en el local: Solano García 2405, de martes a sábado de 9 a 19 h."};
   const verCuenta=()=>{const pg=radio("pago");const n=$("ds-nota-pago");n.textContent=NOTA[pg]||"";n.hidden=!NOTA[pg]};
   let confirmado=false,extraWA="";
   const cuerpo=f.closest(".co-body");
