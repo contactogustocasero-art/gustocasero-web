@@ -518,6 +518,7 @@ body.modo-fiestas .fiestas-portada{display:block}
 body.modo-fiestas .portada,body.modo-fiestas .como,body.modo-fiestas .fiestas-cartel{display:none}
 .fiestas-portada .eyebrow{color:var(--crema)}
 .fiestas-portada h1{margin:10px 0 14px;font-weight:200;font-size:clamp(2.6rem,7vw,4.6rem);line-height:1;letter-spacing:-.01em}
+.fiestas-portada p+p{margin-top:10px}
 .fiestas-portada p{margin:0 auto;max-width:46ch;color:var(--crema);font-size:.98rem;line-height:1.55}
 .fiestas-portada .derivado{margin-top:16px;display:inline-block;background:var(--blanco);color:var(--tinta);padding:10px 16px;font-size:.9rem}
 .fiestas-portada .volver-carta{margin-top:22px;border-color:var(--blanco);background:transparent;color:var(--blanco)}
@@ -1051,6 +1052,7 @@ const C=[
    Desde "desde" hasta "hasta" (sin incluir) aparece el cartel de fiestas arriba de la carta.
    Cada día de fiestas: fecha, nombre, hasta cuándo se puede pedir (cierre) y franjas de retiro (9 = de 9 a 10 h).
    En el calendario de siempre esos días no se pueden elegir: llevan al menú de fiestas.
+   Si se agota la disponibilidad antes, agregar agotado:true en ese día y se dejan de tomar pedidos.
    Link directo al menú de fiestas: https://gustocasero.com.uy/#fiestas */
 const FIESTAS={
  desde:"2026-12-01",
@@ -1069,7 +1071,7 @@ FIESTAS.carta=[
  {id:"f-pitas",base:"panaderia",nombre:"Pitas",ilus:"croissant",intro:"",items:[tomar("panaderia","Pitas")]},
  {id:"f-dulces",base:"tortas",nombre:"Para el postre",ilus:"torta",intro:"",items:[{...tomar("tortas","Pavlova",["28 cm"]),lado:0,n:"Pavlova",u:"Grande · 28 cm"},
    /* PRECIOS A CONFIRMAR: cambiar el número por el precio real y borrar la nota */
-   {n:"Panettone",nota:"Precio a confirmar",v:[["Panettone",1000]]},
+   {n:"Panettone",v:[["Panettone",750]]},
    {n:"Budín inglés",nota:"Precio a confirmar",v:[["Budín inglés",1000]]}]},
  {id:"f-indiv",base:"dulces",nombre:"Postres individuales",ilus:"tarta",intro:"Versiones individuales de nuestras tartas y tortas.",items:[...C.find(x=>x.id==="dulces").items]}
 ].map(c=>({...c,items:c.items.filter(Boolean)}));
@@ -1167,7 +1169,7 @@ let modo="carta",guardC=new Map(),guardF=new Map();
 const DIASL=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
 const aFecha=k=>{const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d,12)};
 const diaF=k=>FIESTAS.dias.find(x=>x.f===k);
-const abierta=x=>new Date()<new Date(x.cierre);
+const abierta=x=>!x.agotado&&new Date()<new Date(x.cierre);
 const fiestasActivas=()=>{const t=new Date();return t>=new Date(FIESTAS.desde+"T00:00")&&t<new Date(FIESTAS.hasta+"T00:00")&&FIESTAS.dias.some(abierta)};
 const diasAbiertos=()=>FIESTAS.dias.filter(abierta);
 const txtDia=k=>{const x=aFecha(k);return `${DIASL[x.getDay()]} ${x.getDate()}`};
@@ -1183,7 +1185,7 @@ function pintarCartel(){const el=document.getElementById("fiestas-cartel");el.se
   el.hidden=false}
 function pintarPortadaFiestas(derivado){
   const ds=diasAbiertos(),k=derivado&&diaF(derivado),h=ds.length?rangoHoras(ds[0]):"";
-  document.getElementById("fiestas-portada").innerHTML=`<span class="eyebrow">Gusto Casero</span><h1>Menú de fiestas</h1><p>${ds.map(x=>x.nombre).join(" y ")}: retirás en el local el ${ds.map(x=>txtDia(x.f)).join(" o el ")} de diciembre, de ${h}. Para confirmar el pedido tiene que quedar pago antes del retiro.</p>${k?`<p class="derivado">Los pedidos para el ${txtDia(k.f)} de diciembre se hacen desde este menú.${guardC.size?" Lo que elegiste de la carta quedó guardado.":""}</p>`:""}<br><button type="button" class="volver-carta" data-volver-carta>← Volver a la carta</button>`}
+  document.getElementById("fiestas-portada").innerHTML=`<span class="eyebrow">Gusto Casero</span><h1>Menú de fiestas</h1><p>${ds.map(x=>x.nombre).join(" y ")}: retirás en el local el ${ds.map(x=>txtDia(x.f)).join(" o el ")} de diciembre, de ${h}.</p><p>Tomamos pedidos ${ds.length>1?ds.map(x=>`hasta el ${txtCierre(x).replace(/ a las.*/,"")} para ${x.nombre}`).join(" y "):`hasta el ${txtCierre(ds[0]).replace(/ a las.*/,"")}`}, o hasta agotar disponibilidad. Para confirmar el pedido tiene que quedar pago antes del retiro.</p>${k?`<p class="derivado">Los pedidos para el ${txtDia(k.f)} de diciembre se hacen desde este menú.${guardC.size?" Lo que elegiste de la carta quedó guardado.":""}</p>`:""}<br><button type="button" class="volver-carta" data-volver-carta>← Volver a la carta</button>`}
 function entrarFiestas(f){
   if(!fiestasActivas())return;
   if(modo!=="fiestas"){guardC=new Map(pedido);pedido.clear();guardF.forEach((v,k)=>pedido.set(k,v));modo="fiestas"}
