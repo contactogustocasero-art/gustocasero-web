@@ -501,17 +501,17 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 #desayuno .gracias .volver{border-radius:14px}
 
 /* ── Fiestas ── */
-/* Cartel de fiestas (debajo de "Cómo hacer tu pedido"): fondo de hojas y bayas, aclarado suave al centro (sin recuadro) */
-.fiestas-cartel{position:relative;display:flex;align-items:center;justify-content:center;width:100%;margin-top:clamp(20px,3vw,28px);font:inherit;border:0;cursor:pointer;background:radial-gradient(ellipse 46% 62% at 50% 50%,rgba(250,242,228,.97) 0%,rgba(250,242,228,.9) 45%,rgba(250,242,228,.55) 72%,rgba(250,242,228,0) 100%),#F3E3C4 url("recursos/fiestas-hojas.jpg") center/cover no-repeat;padding:clamp(48px,7vw,80px) clamp(18px,5vw,64px);text-align:center}
+/* Cartel de fiestas (debajo de "Cómo hacer tu pedido"): fondo de hojas y bayas con etiqueta ovalada beige al centro */
+.fiestas-cartel{position:relative;display:flex;align-items:center;justify-content:center;width:100%;margin-top:clamp(20px,3vw,28px);font:inherit;border:0;cursor:pointer;background:#F3E3C4 url("recursos/fiestas-hojas.jpg") center/cover no-repeat;padding:clamp(36px,6vw,64px) clamp(14px,4vw,64px);text-align:center}
 .fiestas-cartel[hidden]{display:none}
-.fiestas-cartel .caja{display:flex;flex-direction:column;align-items:center;gap:10px;transition:transform .25s}
+.fiestas-cartel .caja{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:#EFE1C8;border-radius:clamp(70px,12vw,140px)/clamp(64px,9vw,100px);padding:clamp(26px,3.5vw,36px) clamp(36px,6vw,80px);box-shadow:inset 0 0 0 7px #EFE1C8,inset 0 0 0 8px rgba(122,82,67,.45),0 8px 24px rgba(74,58,51,.22);transition:transform .25s}
 .fiestas-cartel:hover .caja{transform:translateY(-2px)}
-.fiestas-cartel .eyebrow{color:#9E4A3A}
-.fiestas-cartel strong{font-weight:300;font-size:clamp(1.7rem,3.6vw,2.5rem);line-height:1.1;color:var(--tinta);text-wrap:balance}
-.fiestas-cartel em{font-style:normal;margin-top:8px;padding:10px 22px;border-radius:999px;background:var(--salvia);color:var(--blanco);font-size:.88rem;font-weight:500;transition:background .2s}
+.fiestas-cartel .eyebrow{color:#9E4A3A;white-space:nowrap}
+@media (max-width:420px){.fiestas-cartel .eyebrow{letter-spacing:.2em;font-size:.66rem}}
+.fiestas-cartel strong{font-weight:300;font-size:clamp(1.5rem,3.2vw,2.2rem);line-height:1.1;color:var(--tinta);text-wrap:balance}
+.fiestas-cartel em{font-style:normal;margin-top:6px;padding:9px 20px;border-radius:999px;background:var(--salvia);color:var(--blanco);font-size:.86rem;font-weight:500;transition:background .2s}
 .fiestas-cartel:hover em{background:#6F826F}
 .fiestas-cartel:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
-@media (max-width:520px){.fiestas-cartel{background:radial-gradient(ellipse 70% 58% at 50% 50%,rgba(250,242,228,.97) 0%,rgba(250,242,228,.9) 50%,rgba(250,242,228,.5) 78%,rgba(250,242,228,0) 100%),#F3E3C4 url("recursos/fiestas-hojas.jpg") center/cover no-repeat}}
 /* Modo fiestas: la página se transforma en el menú de fiestas */
 .fiestas-portada{display:none;background:var(--salvia);color:var(--blanco);text-align:center;padding:clamp(48px,9vw,96px) 20px clamp(40px,7vw,72px)}
 body.modo-fiestas .fiestas-portada{display:block}
