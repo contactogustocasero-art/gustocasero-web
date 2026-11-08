@@ -501,17 +501,16 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 #desayuno .gracias .volver{border-radius:14px}
 
 /* ── Fiestas ── */
-/* Cartel de fiestas (debajo de "Cómo hacer tu pedido") — diseño provisorio hasta tener las hojitas */
-.fiestas-cartel{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;width:100%;margin-top:clamp(20px,3vw,28px);font:inherit;border:0;cursor:pointer;background:var(--salvia);color:var(--blanco);text-align:center;padding:clamp(30px,5vw,48px) clamp(64px,10vw,140px)}
+/* Cartel de fiestas (debajo de "Cómo hacer tu pedido"): fondo de hojas y bayas, recuadro crema al centro */
+.fiestas-cartel{position:relative;display:flex;align-items:center;justify-content:center;width:100%;margin-top:clamp(20px,3vw,28px);font:inherit;border:0;cursor:pointer;background:#F3E3C4 url("recursos/fiestas-hojas.jpg") center/cover no-repeat;padding:clamp(34px,6vw,64px) clamp(18px,5vw,64px);text-align:center}
 .fiestas-cartel[hidden]{display:none}
-.fiestas-cartel .eyebrow{color:var(--crema)}
-.fiestas-cartel strong{font-weight:300;font-size:clamp(1.6rem,3.4vw,2.4rem);line-height:1.1;letter-spacing:-.005em;text-wrap:balance}
-.fiestas-cartel em{font-style:normal;margin-top:6px;padding:9px 20px;border-radius:999px;background:var(--blanco);color:var(--tinta);font-size:.88rem;font-weight:500;transition:background .2s}
-.fiestas-cartel:hover em{background:var(--crema)}
+.fiestas-cartel .caja{display:flex;flex-direction:column;align-items:center;gap:10px;background:rgba(248,239,228,.94);border:1px solid rgba(122,82,67,.25);outline:1px solid rgba(248,239,228,.94);outline-offset:5px;padding:clamp(22px,3.5vw,32px) clamp(24px,5vw,56px);max-width:520px;box-shadow:0 10px 30px rgba(74,58,51,.18);transition:transform .25s}
+.fiestas-cartel:hover .caja{transform:translateY(-2px)}
+.fiestas-cartel .eyebrow{color:#9E4A3A}
+.fiestas-cartel strong{font-weight:300;font-size:clamp(1.6rem,3.4vw,2.3rem);line-height:1.1;color:var(--canela);text-wrap:balance}
+.fiestas-cartel em{font-style:normal;margin-top:6px;padding:10px 22px;border-radius:999px;background:var(--salvia);color:var(--blanco);font-size:.88rem;font-weight:500;transition:background .2s}
+.fiestas-cartel:hover em{background:#6F826F}
 .fiestas-cartel:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
-.fiestas-cartel .hojas{position:absolute;top:50%;width:clamp(56px,9vw,110px);height:auto;color:var(--crema);opacity:.85;transform:translateY(-50%)}
-.fiestas-cartel .hojas.izq{left:clamp(8px,2vw,28px)}
-.fiestas-cartel .hojas.der{right:clamp(8px,2vw,28px);transform:translateY(-50%) scaleX(-1)}
 /* Modo fiestas: la página se transforma en el menú de fiestas */
 .fiestas-portada{display:none;background:var(--salvia);color:var(--blanco);text-align:center;padding:clamp(48px,9vw,96px) 20px clamp(40px,7vw,72px)}
 body.modo-fiestas .fiestas-portada{display:block}
@@ -1174,14 +1173,12 @@ const fiestasActivas=()=>{const t=new Date();return t>=new Date(FIESTAS.desde+"T
 const diasAbiertos=()=>FIESTAS.dias.filter(abierta);
 const txtDia=k=>{const x=aFecha(k);return `${DIASL[x.getDay()]} ${x.getDate()}`};
 const txtCierre=x=>{const c=new Date(x.cierre);return `${DIASL[c.getDay()]} ${c.getDate()} a las ${c.getHours()} h`};
-/* Ramito provisorio (se reemplaza por el diseño de hojitas navideñas) */
-const HOJAS=`<svg class="hojas" aria-hidden="true" viewBox="0 0 80 120" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M40 112C38 80 42 50 52 10"/><path d="M41 92c-12-4-20-14-22-26 12 2 20 12 22 26z"/><path d="M42 72c12-6 18-16 18-28-12 4-18 14-18 28z"/><path d="M44 52c-10-6-15-16-14-27 10 5 15 15 14 27z"/><path d="M48 30c8-6 12-14 11-22-8 4-12 12-11 22z"/><circle cx="30" cy="104" r="3.2"/><circle cx="24" cy="98" r="3.2"/><circle cx="33" cy="96" r="3.2"/></svg>`;
 function rangoHoras(x){return `${x.horas[0]} a ${x.horas[x.horas.length-1]+1} h`}
 function resumenFiestas(){return diasAbiertos().map(x=>`${x.nombre}: retiro el ${txtDia(x.f)} de diciembre, de ${rangoHoras(x)} (pedidos hasta el ${txtCierre(x)}).`)}
 function pintarCartel(){const el=document.getElementById("fiestas-cartel");el.setAttribute("data-ir-fiestas","");el.setAttribute("role","button");el.tabIndex=0;
   if(!fiestasActivas()||modo==="fiestas"){el.hidden=true;return}
   const ds=diasAbiertos();
-  el.innerHTML=`${HOJAS.replace("hojas","hojas izq")}<span class="eyebrow">${ds.map(x=>x.nombre).join(" · ")}</span><strong>Hacé tu pedido para las fiestas</strong><em>Ver menú de fiestas</em>${HOJAS.replace("hojas","hojas der")}`;
+  el.innerHTML=`<span class="caja"><span class="eyebrow">${ds.map(x=>x.nombre).join(" · ")}</span><strong>Hacé tu pedido para las fiestas</strong><em>Ver menú de fiestas</em></span>`;
   el.hidden=false}
 function pintarPortadaFiestas(derivado){
   const ds=diasAbiertos(),k=derivado&&diaF(derivado),h=ds.length?rangoHoras(ds[0]):"";
