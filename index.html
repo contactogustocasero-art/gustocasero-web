@@ -501,31 +501,46 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 #desayuno .gracias .volver{border-radius:14px}
 
 /* ── Fiestas ── */
-.fiestas-cartel{display:block;width:100%;font:inherit;border:0;cursor:pointer;background:var(--salvia);color:var(--blanco);text-align:center;padding:12px 16px;padding-top:max(12px,env(safe-area-inset-top,0px));line-height:1.35}
+/* Cartel de fiestas (debajo de "Cómo hacer tu pedido") — diseño provisorio hasta tener las hojitas */
+.fiestas-cartel{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;width:100%;margin-top:clamp(20px,3vw,28px);font:inherit;border:0;cursor:pointer;background:var(--salvia);color:var(--blanco);text-align:center;padding:clamp(30px,5vw,48px) clamp(64px,10vw,140px)}
 .fiestas-cartel[hidden]{display:none}
-.fiestas-cartel strong{font-weight:500;font-size:1rem;letter-spacing:.02em}
-.fiestas-cartel span{display:inline-block;margin-left:10px;font-size:.85rem;color:var(--crema)}
-.fiestas-cartel em{font-style:normal;display:inline-block;margin-left:12px;padding:4px 12px;border-radius:999px;background:var(--blanco);color:var(--tinta);font-size:.82rem;font-weight:500}
+.fiestas-cartel .eyebrow{color:var(--crema)}
+.fiestas-cartel strong{font-weight:300;font-size:clamp(1.6rem,3.4vw,2.4rem);line-height:1.1;letter-spacing:-.005em;text-wrap:balance}
+.fiestas-cartel em{font-style:normal;margin-top:6px;padding:9px 20px;border-radius:999px;background:var(--blanco);color:var(--tinta);font-size:.88rem;font-weight:500;transition:background .2s}
 .fiestas-cartel:hover em{background:var(--crema)}
-.fiestas-cartel:focus-visible{outline:2px solid var(--tinta);outline-offset:-4px}
-@media (max-width:520px){.fiestas-cartel span{display:block;margin:2px 0 0}.fiestas-cartel em{margin:8px 0 0}}
-.fiestas-head{margin-top:clamp(32px,5vw,56px);border:1px solid var(--salvia);padding:clamp(22px,3.5vw,34px) clamp(20px,4vw,48px);display:flex;flex-direction:column;gap:10px;align-items:flex-start}
-.fiestas-head .eyebrow{color:var(--salvia)}
-.fiestas-head h2{margin:0;font-weight:200;font-size:clamp(2rem,4.5vw,3.2rem);line-height:1.05;color:var(--canela)}
-.fiestas-head p{margin:0;color:var(--tinta-suave);font-size:.95rem;max-width:60ch}
-.fiestas-head .derivado{color:var(--tinta);background:var(--crema);padding:12px 16px;font-size:.92rem}
+.fiestas-cartel:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
+.fiestas-cartel .hojas{position:absolute;top:50%;width:clamp(56px,9vw,110px);height:auto;color:var(--crema);opacity:.85;transform:translateY(-50%)}
+.fiestas-cartel .hojas.izq{left:clamp(8px,2vw,28px)}
+.fiestas-cartel .hojas.der{right:clamp(8px,2vw,28px);transform:translateY(-50%) scaleX(-1)}
+/* Modo fiestas: la página se transforma en el menú de fiestas */
+.fiestas-portada{display:none;background:var(--salvia);color:var(--blanco);text-align:center;padding:clamp(48px,9vw,96px) 20px clamp(40px,7vw,72px)}
+body.modo-fiestas .fiestas-portada{display:block}
+body.modo-fiestas .portada,body.modo-fiestas .como,body.modo-fiestas .fiestas-cartel{display:none}
+.fiestas-portada .eyebrow{color:var(--crema)}
+.fiestas-portada h1{margin:10px 0 14px;font-weight:200;font-size:clamp(2.6rem,7vw,4.6rem);line-height:1;letter-spacing:-.01em}
+.fiestas-portada p{margin:0 auto;max-width:46ch;color:var(--crema);font-size:.98rem;line-height:1.55}
+.fiestas-portada .derivado{margin-top:16px;display:inline-block;background:var(--blanco);color:var(--tinta);padding:10px 16px;font-size:.9rem}
+.fiestas-portada .volver-carta{margin-top:22px;border-color:var(--blanco);background:transparent;color:var(--blanco)}
+.fiestas-portada .volver-carta:hover{background:var(--blanco);color:var(--salvia)}
+.nav-fiestas{display:none}
+body.modo-fiestas .nav-fiestas{display:flex;align-items:center;gap:8px;flex:none;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--salvia)}
+body.modo-fiestas .nav-fiestas button{font:inherit;letter-spacing:normal;text-transform:none;font-weight:400;font-size:.82rem;border:1px solid var(--salvia);border-radius:999px;background:transparent;color:var(--salvia);padding:5px 12px;cursor:pointer}
+body.modo-fiestas nav.indice .mini{display:none}
+body.modo-fiestas nav.indice{border-bottom:2px solid var(--salvia)}
+body.modo-fiestas nav.indice a.activa,body.modo-fiestas nav.indice a:hover{color:var(--salvia);border-bottom-color:var(--salvia)}
+body.modo-fiestas .cat-aside h2{color:var(--salvia)}
+body.modo-fiestas .cat-aside .ilus{color:var(--salvia)}
+@media (max-width:700px){body.modo-fiestas nav.indice .wrap{flex-wrap:wrap;gap:0 16px}body.modo-fiestas .nav-fiestas{width:100%;justify-content:space-between;padding-top:10px}}
 .volver-carta{font:inherit;font-size:.9rem;padding:9px 16px;border:1px solid var(--canela);border-radius:999px;background:var(--blanco);color:var(--canela);cursor:pointer;margin-top:6px}
 .volver-carta:hover{background:var(--crema)}
 .chips button.fiesta{border-color:var(--salvia);color:var(--salvia)}
 .chips button.fiesta small{color:var(--salvia)}
-.co-sugerencia{margin:0;font-size:.85rem;color:var(--tinta);background:var(--crema);padding:10px 14px}
-.fiestas-head .sugerencia{color:var(--tinta);border-left:3px solid var(--salvia);padding-left:12px}
 .co-foot button.wa{font:inherit;border:0;cursor:pointer;display:block;width:100%;text-align:center;background:var(--salvia);color:var(--blanco);font-weight:500;letter-spacing:.04em;padding:15px 22px}
 .co-foot button.wa[aria-disabled="true"]{background:#B7C2B7}
 .co-foot [hidden]{display:none!important}
 </style>
 
-<div class="fiestas-cartel" id="fiestas-cartel" hidden></div>
+<div class="fiestas-portada" id="fiestas-portada"></div>
 <header class="portada">
   <h1 class="solo-lector">Gusto Casero · Panadería y pastelería artesanal en Montevideo</h1>
   <div class="wrap">
@@ -566,6 +581,7 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
       <div class="paso"><div><h3>Enviá</h3><p>Se abre WhatsApp con tu pedido listo: solo tenés que enviarlo.</p></div></div>
     </div>
   </div>
+  <div class="fiestas-cartel" id="fiestas-cartel" hidden></div>
 </div>
 
 <nav class="indice" aria-label="Categorías">
@@ -655,6 +671,7 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 <use xlink:href="#l1-glyph-8-5" x="613.142965" y="284.711422" />
 </g>
 </svg></div>
+    <span class="nav-fiestas">Menú de fiestas <button type="button" data-volver-carta>Volver a la carta</button></span>
     <ul id="indice"></ul>
   </div>
 </nav>
@@ -710,7 +727,6 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
           <legend>Fecha de retiro <small id="co-fechas-ayuda">martes a sábado · pedidos hasta las 19 h del día anterior</small></legend>
           <div class="chips" id="co-fechas"></div>
           <p class="para-hoy" data-parahoy></p>
-          <p class="co-sugerencia" id="co-sugerencia" hidden></p>
           <p class="err" id="e-fecha" hidden>Elegí una fecha.</p>
         </fieldset>
         <fieldset class="campo">
@@ -1032,12 +1048,13 @@ const C=[
 ];
 
 /* ── FIESTAS ──────────────────────────────────────────────
-   Desde "desde" aparece el cartel de fiestas arriba de la carta.
+   Desde "desde" hasta "hasta" (sin incluir) aparece el cartel de fiestas arriba de la carta.
    Cada día de fiestas: fecha, nombre, hasta cuándo se puede pedir (cierre) y franjas de retiro (9 = de 9 a 10 h).
    En el calendario de siempre esos días no se pueden elegir: llevan al menú de fiestas.
    Link directo al menú de fiestas: https://gustocasero.com.uy/#fiestas */
 const FIESTAS={
  desde:"2026-12-01",
+ hasta:"2027-01-01",
  dias:[
   {f:"2026-12-24",nombre:"Nochebuena",cierre:"2026-12-22T19:00",horas:[11,12,13,14,15]},
   {f:"2026-12-31",nombre:"Fin de Año",cierre:"2026-12-29T19:00",horas:[11,12,13,14,15]}
@@ -1108,7 +1125,7 @@ const bar=document.getElementById("pedido");
 function render(){
   let cant=0,total=0;const lin=[];
   pedido.forEach(it=>{cant++;total+=it.q*it.p;lin.push(`${it.q} × ${it.l}`)});
-  bar.hidden=cant===0;
+  bar.hidden=cant===0;bar.querySelector(".eyebrow").textContent=(typeof modo!=="undefined"&&modo==="fiestas")?"Tu pedido de fiestas":"Tu pedido";
   document.getElementById("p-cant").textContent=cant;document.getElementById("p-word").textContent=cant===1?"producto":"productos";
   document.getElementById("p-total").textContent=fmt(total);
   document.getElementById("p-lista").textContent=lin.join(" · ");
@@ -1151,33 +1168,33 @@ const DIASL=["domingo","lunes","martes","miércoles","jueves","viernes","sábado
 const aFecha=k=>{const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d,12)};
 const diaF=k=>FIESTAS.dias.find(x=>x.f===k);
 const abierta=x=>new Date()<new Date(x.cierre);
-const fiestasActivas=()=>new Date()>=new Date(FIESTAS.desde+"T00:00")&&FIESTAS.dias.some(abierta);
+const fiestasActivas=()=>{const t=new Date();return t>=new Date(FIESTAS.desde+"T00:00")&&t<new Date(FIESTAS.hasta+"T00:00")&&FIESTAS.dias.some(abierta)};
 const diasAbiertos=()=>FIESTAS.dias.filter(abierta);
 const txtDia=k=>{const x=aFecha(k);return `${DIASL[x.getDay()]} ${x.getDate()}`};
 const txtCierre=x=>{const c=new Date(x.cierre);return `${DIASL[c.getDay()]} ${c.getDate()} a las ${c.getHours()} h`};
-const SUGERENCIA="Te sugerimos retirar el pedido el mismo día en que lo vas a disfrutar: el 24 lo de Nochebuena y el 31 lo de Fin de Año. Nuestros productos están hechos para comerse en el día; de un día para el otro no quedan igual.";
+/* Ramito provisorio (se reemplaza por el diseño de hojitas navideñas) */
+const HOJAS=`<svg class="hojas" aria-hidden="true" viewBox="0 0 80 120" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M40 112C38 80 42 50 52 10"/><path d="M41 92c-12-4-20-14-22-26 12 2 20 12 22 26z"/><path d="M42 72c12-6 18-16 18-28-12 4-18 14-18 28z"/><path d="M44 52c-10-6-15-16-14-27 10 5 15 15 14 27z"/><path d="M48 30c8-6 12-14 11-22-8 4-12 12-11 22z"/><circle cx="30" cy="104" r="3.2"/><circle cx="24" cy="98" r="3.2"/><circle cx="33" cy="96" r="3.2"/></svg>`;
 function rangoHoras(x){return `${x.horas[0]} a ${x.horas[x.horas.length-1]+1} h`}
 function resumenFiestas(){return diasAbiertos().map(x=>`${x.nombre}: retiro el ${txtDia(x.f)} de diciembre, de ${rangoHoras(x)} (pedidos hasta el ${txtCierre(x)}).`)}
 function pintarCartel(){const el=document.getElementById("fiestas-cartel");el.setAttribute("data-ir-fiestas","");el.setAttribute("role","button");el.tabIndex=0;
   if(!fiestasActivas()||modo==="fiestas"){el.hidden=true;return}
   const ds=diasAbiertos();
-  el.innerHTML=`<strong>Hacé tu pedido para las fiestas</strong><span>Menú especial · ${ds.map(x=>x.nombre).join(" y ")}</span><em>Ver menú</em>`;
+  el.innerHTML=`${HOJAS.replace("hojas","hojas izq")}<span class="eyebrow">${ds.map(x=>x.nombre).join(" · ")}</span><strong>Hacé tu pedido para las fiestas</strong><em>Ver menú de fiestas</em>${HOJAS.replace("hojas","hojas der")}`;
   el.hidden=false}
-function cabFiestas(derivado){
-  const ds=diasAbiertos(),cerr=FIESTAS.dias.filter(x=>!abierta(x));
-  const k=derivado&&diaF(derivado);
-  return `<section class="fiestas-head" id="fiestas"><span class="eyebrow">Menú de fiestas</span><h2>${FIESTAS.dias.map(x=>x.nombre).join(" y ")}</h2>${k?`<p class="derivado">Los pedidos para el ${txtDia(k.f)} de diciembre se hacen desde este menú especial.${guardC.size?" Lo que tenías elegido de la carta quedó guardado: lo vas a encontrar al volver a la carta.":""}</p>`:""}${resumenFiestas().map(t=>`<p>${t}</p>`).join("")}${cerr.map(x=>`<p>Los pedidos para ${x.nombre} ya cerraron.</p>`).join("")}<p>Retiro en Solano García 2405. Para confirmar el pedido tiene que quedar pago antes del retiro.</p><p class="sugerencia">${SUGERENCIA}</p><button type="button" class="volver-carta" data-volver-carta>← Volver a la carta</button></section>`}
+function pintarPortadaFiestas(derivado){
+  const ds=diasAbiertos(),k=derivado&&diaF(derivado),h=ds.length?rangoHoras(ds[0]):"";
+  document.getElementById("fiestas-portada").innerHTML=`<span class="eyebrow">Gusto Casero</span><h1>Menú de fiestas</h1><p>${ds.map(x=>x.nombre).join(" y ")}: retirás en el local el ${ds.map(x=>txtDia(x.f)).join(" o el ")} de diciembre, de ${h}. Para confirmar el pedido tiene que quedar pago antes del retiro.</p>${k?`<p class="derivado">Los pedidos para el ${txtDia(k.f)} de diciembre se hacen desde este menú.${guardC.size?" Lo que elegiste de la carta quedó guardado.":""}</p>`:""}<br><button type="button" class="volver-carta" data-volver-carta>← Volver a la carta</button>`}
 function entrarFiestas(f){
   if(!fiestasActivas())return;
   if(modo!=="fiestas"){guardC=new Map(pedido);pedido.clear();guardF.forEach((v,k)=>pedido.set(k,v));modo="fiestas"}
   fechaSel=(f&&diaF(f)&&abierta(diaF(f)))?f:null;horaSel=null;
-  armarCarta(FIESTAS.carta,cabFiestas(f));pintarCartel();render();if(window.reobservar)reobservar();
+  armarCarta(FIESTAS.carta);pintarPortadaFiestas(f);document.body.classList.add("modo-fiestas");pintarCartel();render();if(window.reobservar)reobservar();
   try{history.replaceState(null,"","#fiestas")}catch(err){}
-  document.getElementById("fiestas").scrollIntoView({block:"start"})}
+  scrollTo(0,0)}
 function salirFiestas(){
   if(modo!=="fiestas")return;
   guardF=new Map(pedido);pedido.clear();guardC.forEach((v,k)=>pedido.set(k,v));modo="carta";fechaSel=null;horaSel=null;
-  armarCarta(C);pintarCartel();render();if(window.reobservar)reobservar();
+  armarCarta(C);document.body.classList.remove("modo-fiestas");pintarCartel();render();if(window.reobservar)reobservar();
   try{history.replaceState(null,"",location.pathname+location.search)}catch(err){}
   document.getElementById("catalogo").scrollIntoView({block:"start"})}
 document.getElementById("fiestas-cartel").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();entrarFiestas()}});
@@ -1195,9 +1212,9 @@ function pintarFechas(){
   const box=document.getElementById("co-fechas");let html="",n=0;const d=new Date();d.setHours(12,0,0,0);
   if(fechaSel&&!fechaOk(fechaSel))fechaSel=null;
   const ayuda=document.getElementById("co-fechas-ayuda");document.querySelectorAll("[data-parahoy]").forEach(p=>p.hidden=modo==="fiestas");
-  if(modo==="fiestas"){ayuda.textContent="24 o 31 de diciembre";const sg=document.getElementById("co-sugerencia");sg.textContent=SUGERENCIA;sg.hidden=false;
+  if(modo==="fiestas"){ayuda.textContent="24 o 31 de diciembre";
     box.innerHTML=diasAbiertos().map(x=>{const d2=aFecha(x.f);return `<button type="button" data-f="${x.f}" aria-pressed="${fechaSel===x.f}"><small>${x.nombre}</small>${DC[d2.getDay()]} ${d2.getDate()} ${MES[d2.getMonth()]}</button>`}).join("");return}
-  ayuda.textContent="martes a sábado · pedidos hasta las 19 h del día anterior";document.getElementById("co-sugerencia").hidden=true;
+  ayuda.textContent="martes a sábado · pedidos hasta las 19 h del día anterior";
   for(let i=1;i<24&&n<10;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay();if(w<2||w>6)continue;
     const xf=diaF(iso(x));if(xf){if(fiestasActivas()&&abierta(xf)&&x>=minRetiro()){html+=`<button type="button" class="fiesta" data-fiesta="${xf.f}" aria-pressed="false" aria-label="${DIAS[w]} ${x.getDate()} de diciembre: ${xf.nombre}, se pide desde el menú de fiestas"><small>${xf.nombre}</small>${x.getDate()} ${MES[x.getMonth()]}</button>`;n++}continue}
     if(!fechaOk(iso(x)))continue;
@@ -1262,7 +1279,7 @@ let fConf=null,fExtra="",fMsg="";
 const coWa2=document.getElementById("co-wa2"),coConf=document.getElementById("co-confirmar");
 function firmaPedido(){return [...pedido].map(([k,v])=>k+":"+v.q).join(",")+"|"+fechaSel+"|"+horaSel+"|"+pagoSel+"|"+datos().nombre+"|"+datos().cel}
 function fiestasPaso(on){const body=co.querySelector(".co-body:not(#co-pagar):not(.gracias)");body.hidden=on;document.getElementById("co-pagar").hidden=!on;coConf.hidden=on||modo!=="fiestas";coWa2.hidden=!on;wa.hidden=modo==="fiestas";
-  document.getElementById("co-foot-nota").hidden=on;document.getElementById("co-tit").textContent=on?"Pagá para confirmar":"Datos para tu pedido"}
+  document.getElementById("co-foot-nota").hidden=on;document.getElementById("co-tit").textContent=on?"Pagá para confirmar":"Datos para tu pedido";co.querySelector(".co-head .eyebrow").textContent=modo==="fiestas"?"Menú de fiestas":"Último paso"}
 function fiestasAbrir(){if(fConf&&fConf.firma!==firmaPedido())fiestasReset();fiestasPaso(!!fConf);
   document.getElementById("co-foot-nota").textContent=modo==="fiestas"?"Al confirmar te mostramos cómo pagar. El pedido queda confirmado cuando está pago.":"Se abre WhatsApp con tu pedido armado. Te respondemos por ahí."}
 function fiestasReset(){fConf=null;fExtra="";const l=document.getElementById("co-comp-lbl");l.classList.remove("ok");l.textContent="Subir foto o PDF del comprobante";fCompEst("");document.getElementById("co-comp-sin").hidden=true;fiestasPaso(false)}
