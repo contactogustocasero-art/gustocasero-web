@@ -219,6 +219,12 @@ footer.pie dd,footer.pie dd *{-webkit-text-fill-color:currentColor}
 .co-foot{border-top:1px solid var(--linea);padding:16px 24px max(16px,env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px}
 .co-foot a.wa{display:block;text-align:center;text-decoration:none;background:var(--salvia);color:var(--blanco);font-weight:500;letter-spacing:.04em;padding:15px 22px}
 .co-foot a.wa[aria-disabled="true"]{background:#B7C2B7}
+.co-foot button.wa{display:block;width:100%;font:inherit;border:0;cursor:pointer;text-align:center;background:var(--salvia);color:var(--blanco);font-weight:500;letter-spacing:.04em;padding:15px 22px}
+.co-foot button.wa[aria-disabled="true"]{background:#B7C2B7}
+.co-foot button.wa[disabled]{opacity:.7;cursor:wait}
+#presupuesto .co-foot button.wa{border-radius:14px}
+#presupuesto .co-foot a.wa{margin-top:8px}
+#presupuesto .co-nota.mal{color:#B5523B}
 .co-nota{margin:0;font-size:.8rem;color:var(--tinta-suave);text-align:center}
 #desayuno .co-body{padding:28px 28px 36px;gap:28px}
 #desayuno .co-panel{width:min(560px,100%)}
@@ -888,7 +894,7 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
       <button type="button" class="co-cerrar" id="pr-cerrar" aria-label="Volver a la carta">×</button>
     </div>
     <div class="co-body">
-      <p class="co-intro">Contanos sobre tu evento y te respondemos por WhatsApp con una propuesta. Los pasos con * son obligatorios.</p>
+      <p class="co-intro">Contanos sobre tu evento y te escribimos por WhatsApp con una propuesta. Los pasos con * son obligatorios.</p>
       <p class="co-aviso">Preparamos solo la comida: no ofrecemos armado de mesas ni servicio de mozos.</p>
       <form id="pr-form" novalidate>
         <section class="ds-paso">
@@ -916,9 +922,8 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
         </section>
         <section class="ds-paso">
           <h3><span>4</span>¿Qué tenés en mente? <small class="opc">opcional, podés elegir varias</small></h3>
-          <div class="chips" id="pr-ideas">
-            <button type="button" aria-pressed="false">Desayuno</button><button type="button" aria-pressed="false">Coffee break</button><button type="button" aria-pressed="false">Merienda / hora del té</button><button type="button" aria-pressed="false">Sándwiches y panadería</button><button type="button" aria-pressed="false">Picada</button><button type="button" aria-pressed="false">Tortas y postres</button>
-          </div>
+          <p class="ayuda" id="pr-ideas-ayuda">Elegí primero para qué es (paso 1) y te mostramos las opciones.</p>
+          <div class="chips" id="pr-ideas"></div>
         </section>
         <section class="ds-paso">
           <h3><span>5</span>¿Entrega o retiro?<b class="req" aria-hidden="true">*</b></h3>
@@ -939,13 +944,14 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
           </div>
         </section>
         <section class="ds-paso">
-          <h3><span>7</span>Algo más <small class="opc">opcional</small></h3>
-          <div class="campo"><label for="pr-com" class="vh">Comentarios</label><textarea id="pr-com" rows="3" placeholder="Presupuesto aproximado, alergias, si hay opciones vegetarianas, lo que quieras contarnos…"></textarea></div>
+          <h3><span>7</span>Contanos más de tu evento <small class="opc">opcional</small></h3>
+          <div class="campo"><label for="pr-com" class="vh">Contanos más de tu evento</label><textarea id="pr-com" rows="6" placeholder="Qué festejan o de qué es la reunión, productos que te gustaría que haya, si hay vegetarianos o alergias, presupuesto aproximado… todo lo que nos ayude a armarte la propuesta."></textarea></div>
         </section>
       </form>
     </div>
     <div class="co-foot">
-      <a class="wa" id="pr-wa" href="https://wa.me/59898747114" target="_blank" rel="noopener" aria-disabled="true">Enviar consulta por WhatsApp</a>
+      <button type="button" class="wa" id="pr-enviar" aria-disabled="true">Enviar pedido de presupuesto</button>
+      <a class="wa" id="pr-wa" href="https://wa.me/59898747114" target="_blank" rel="noopener" hidden>Mandar la consulta por WhatsApp</a>
       <p class="co-nota" id="pr-falta">Completá los pasos para enviar tu consulta.</p>
     </div>
   </div>
@@ -1167,7 +1173,7 @@ function mostrarGracias(panel,href,limpiar,titulo){
     g.innerHTML='<h3>¡Gracias! Te confirmamos tu pedido por WhatsApp :)</h3><div class="acciones"><button type="button" class="volver">Volver a la carta</button><a class="otra" target="_blank" rel="noopener">¿No se abrió WhatsApp? Abrilo de nuevo</a></div>';
     panel.querySelector(".co-head").after(g);
     g.querySelector(".volver").addEventListener("click",()=>panel.closest(".checkout").dispatchEvent(new CustomEvent("cerrar-gracias")))}
-  g.querySelector("a.otra").href=href;
+  const ao=g.querySelector("a.otra");ao.hidden=!href;if(href)ao.href=href;
   g.querySelector("h3").textContent=titulo||"¡Gracias! Te confirmamos tu pedido por WhatsApp :)";
   setTimeout(()=>{panel.closest(".checkout").classList.add("listo");limpiar();g.querySelector(".volver").focus()},400);
 }
@@ -1443,22 +1449,24 @@ document.querySelectorAll("section.cat").forEach(s=>io.observe(s));
 document.querySelectorAll(".ilus-lado[data-ilus]").forEach(el=>{const t=document.getElementById("ilus").content;el.innerHTML=el.dataset.ilus.split(" ").map(n=>`<div>${t.querySelector(`[data-ilus="${n}"]`).innerHTML}</div>`).join("")});
 </script>
 <script>
-/* ── Pedir presupuesto (eventos y reuniones): arma la consulta y la manda por WhatsApp ── */
+/* ── Pedir presupuesto (eventos y reuniones): se manda directo al Sistema (planilla "Pedidos web", ID que empieza con "p").
+   Las opciones de "¿Qué tenés en mente?" son las mismas ideas que usa el Sistema en Presupuestos. Si no se puede enviar,
+   aparece el botón para mandar la consulta por WhatsApp. ── */
 (function(){
-  const $=id=>document.getElementById(id),pan=$("presupuesto"),f=$("pr-form"),wa3=$("pr-wa");
+  const $=id=>document.getElementById(id),pan=$("presupuesto"),f=$("pr-form"),env=$("pr-enviar"),wa3=$("pr-wa");
   const ev=document.querySelector("[data-ilus-ev]");if(ev){const t=document.getElementById("ilus").content.querySelector(`[data-ilus="${ev.dataset.ilusEv}"]`);if(t)ev.innerHTML=t.innerHTML}
+  const IDEAS={"Empresa u oficina":["Desayuno","Merienda","Coffee break","Almuerzo","After office"],"Particular":["Brunch","Almuerzo o cena","Picada","Té en casa"]};
   const radio=n=>(f.querySelector(`input[name="${n}"]:checked`)||{}).value||"";
-  let intento=false;
+  let intento=false,enviando=false,tipoChips="";
   const manana=new Date();manana.setDate(manana.getDate()+1);
   $("pr-fecha").min=`${manana.getFullYear()}-${String(manana.getMonth()+1).padStart(2,"0")}-${String(manana.getDate()).padStart(2,"0")}`;
   const MESES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],DS=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
   function fechaTxt(v){if(!v)return"";const [y,m,d]=v.split("-").map(Number);const x=new Date(y,m-1,d);return `${DS[x.getDay()]} ${d} de ${MESES[m-1]}`}
+  function chips(tipo){if(tipo===tipoChips)return;tipoChips=tipo;const L=IDEAS[tipo]||[];
+    $("pr-ideas").innerHTML=L.map(t=>`<button type="button" aria-pressed="false">${t}</button>`).join("");$("pr-ideas-ayuda").hidden=!!L.length}
   function vals(){return{tipo:radio("tipo"),emp:$("pr-emp").value.trim(),pers:parseInt($("pr-pers").value,10),fecha:$("pr-fecha").value,hora:$("pr-hora").value,ideas:[...$("pr-ideas").querySelectorAll('[aria-pressed="true"]')].map(b=>b.textContent),entrega:radio("entrega"),dir:$("pr-dir").value.trim(),nom:$("pr-nom").value.trim(),cel:$("pr-cel").value.trim(),com:$("pr-com").value.trim()}}
   function errs(){const v=vals();return{tipo:!v.tipo,pers:!(v.pers>=1),fecha:!v.fecha,hora:!v.hora,entrega:!v.entrega,dir:v.entrega==="Entrega"&&!v.dir,nom:v.nom.length<2,cel:v.cel.replace(/\D/g,"").length<8}}
-  function actualizar(){
-    const v=vals(),e=errs();
-    $("pr-emp-c").hidden=v.tipo!=="Empresa u oficina";
-    $("pr-dir-c").hidden=v.entrega!=="Entrega";
+  function texto(v){
     const l=["¡Hola Gusto Casero! Quiero pedir un presupuesto para un evento:",""];
     l.push(`• Para: ${v.tipo}${v.tipo==="Empresa u oficina"&&v.emp?` (${v.emp})`:""}`);
     l.push(`• Personas: ${v.pers>=1?v.pers:""}`);
@@ -1467,11 +1475,16 @@ document.querySelectorAll(".ilus-lado[data-ilus]").forEach(el=>{const t=document
     if(v.ideas.length)l.push(`• Qué tenemos en mente: ${v.ideas.join(", ")}`);
     l.push(`• ${v.entrega==="Entrega"?`Entrega en: ${v.dir}`:(v.entrega||"Entrega o retiro:")}`);
     l.push(`• Nombre: ${v.nom}`,`• Celular: ${v.cel}`);
-    if(v.com)l.push(`• Comentarios: ${v.com}`);
-    wa3.href=`https://wa.me/${WA}?text=${encodeURIComponent(l.join("\n"))}`;
+    if(v.com)l.push("",`Sobre el evento: ${v.com}`);
+    return l.join("\n")}
+  function actualizar(){
+    const v=vals(),e=errs();chips(v.tipo);
+    $("pr-emp-c").hidden=v.tipo!=="Empresa u oficina";
+    $("pr-dir-c").hidden=v.entrega!=="Entrega";
+    wa3.href=`https://wa.me/${WA}?text=${encodeURIComponent(texto(v))}`;
     const faltan=Object.values(e).filter(Boolean).length;
-    wa3.setAttribute("aria-disabled",String(faltan>0));
-    $("pr-falta").textContent=faltan?(faltan===1?"Te falta 1 dato.":`Te faltan ${faltan} datos.`):"¡Listo! Tocá el botón para enviarnos la consulta.";
+    env.setAttribute("aria-disabled",String(faltan>0));
+    if(!enviando){$("pr-falta").classList.remove("mal");$("pr-falta").textContent=faltan?(faltan===1?"Te falta 1 dato.":`Te faltan ${faltan} datos.`):"¡Listo! Tocá el botón para enviarnos el pedido."}
     if(intento)marcar(false)}
   function marcar(foco){const e=errs();let primero=null;
     f.querySelectorAll(".err").forEach(p=>{const k=p.dataset.e;p.hidden=!e[k];if(e[k]&&!primero)primero=p.closest(".ds-paso")});
@@ -1479,7 +1492,20 @@ document.querySelectorAll(".ilus-lado[data-ilus]").forEach(el=>{const t=document
     if(foco&&primero)primero.scrollIntoView({block:"center",behavior:"smooth"});return !primero}
   function abrir(){actualizar();pan.hidden=false;document.body.style.overflow="hidden"}
   function cerrar(){pan.hidden=true;pan.classList.remove("listo");document.body.style.overflow=""}
-  function limpiar(){f.reset();$("pr-ideas").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed","false"));intento=false;f.querySelectorAll(".err").forEach(p=>p.hidden=true);f.querySelectorAll("[aria-invalid]").forEach(x=>x.removeAttribute("aria-invalid"));actualizar()}
+  function limpiar(){f.reset();tipoChips="-";chips("");intento=false;wa3.hidden=true;f.querySelectorAll(".err").forEach(p=>p.hidden=true);f.querySelectorAll("[aria-invalid]").forEach(x=>x.removeAttribute("aria-invalid"));actualizar()}
+  async function enviar(){
+    if(enviando)return;actualizar();intento=true;if(!marcar(true))return;
+    const v=vals(),id=nuevoId("p");
+    const pedido=[`Para: ${v.tipo}`,v.tipo==="Empresa u oficina"&&v.emp?`Empresa: ${v.emp}`:"",`Personas: ${v.pers}`,v.ideas.length?`Ideas: ${v.ideas.join(", ")}`:"",
+      `Entrega: ${v.entrega}`,v.entrega==="Entrega"?`Dirección: ${v.dir}`:""].filter(Boolean).join("\n");
+    const body=JSON.stringify({id,tipo:"Pedido de presupuesto",fecha:v.fecha,hora:v.hora,cliente:v.nom,celular:v.cel,pedido,total:null,notas:v.com,mensaje:texto(v)});
+    enviando=true;env.disabled=true;env.textContent="Enviando…";$("pr-falta").textContent="";
+    let ok=false;
+    try{const r=await fetch(REGISTRO,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body});ok=!!(await r.json()).ok}
+    catch(err){try{await fetch(REGISTRO,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body});ok=true}catch(err2){ok=false}}
+    enviando=false;env.disabled=false;env.textContent="Enviar pedido de presupuesto";
+    if(ok){mostrarGracias(pan.querySelector(".co-panel"),"",limpiar,"¡Listo! Recibimos tu pedido. Te escribimos por WhatsApp con la propuesta :)");return}
+    $("pr-falta").classList.add("mal");$("pr-falta").textContent="No pudimos enviar el pedido. Probá de nuevo o mandanos la consulta por WhatsApp.";wa3.hidden=false}
   $("pr-abrir").addEventListener("click",abrir);
   $("pr-cerrar").addEventListener("click",cerrar);
   pan.addEventListener("cerrar-gracias",cerrar);
@@ -1487,8 +1513,8 @@ document.querySelectorAll(".ilus-lado[data-ilus]").forEach(el=>{const t=document
   addEventListener("keydown",e=>{if(e.key==="Escape"&&!pan.hidden)cerrar()});
   $("pr-ideas").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;b.setAttribute("aria-pressed",String(b.getAttribute("aria-pressed")!=="true"));actualizar()});
   f.addEventListener("input",actualizar);f.addEventListener("change",actualizar);
-  wa3.addEventListener("click",e=>{actualizar();intento=true;if(!marcar(true)){e.preventDefault();return}
-    mostrarGracias(pan.querySelector(".co-panel"),wa3.href,limpiar,"¡Gracias! Te respondemos por WhatsApp con el presupuesto :)")});
+  env.addEventListener("click",enviar);
+  wa3.addEventListener("click",()=>mostrarGracias(pan.querySelector(".co-panel"),wa3.href,limpiar,"¡Gracias! Te respondemos por WhatsApp con el presupuesto :)"));
   actualizar();
 })();
 </script>
