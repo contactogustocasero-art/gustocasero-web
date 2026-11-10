@@ -499,6 +499,32 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 .gracias .volver{font:inherit;font-weight:500;letter-spacing:.04em;padding:15px 22px;border:0;background:var(--salvia);color:var(--blanco);cursor:pointer}
 .gracias a.otra{color:var(--tinta-suave);font-size:.88rem}
 #desayuno .gracias .volver{border-radius:14px}
+
+/* ── Eventos y presupuestos ── */
+.ev{display:flex;flex-direction:column;align-items:center;text-align:center;gap:22px}
+.ev-lista{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:14px;width:100%;max-width:640px}
+.ev-lista li{background:var(--blanco);border-radius:18px;padding:20px 18px;display:flex;flex-direction:column;gap:4px}
+.ev-lista strong{font-weight:500;font-size:1.05rem;color:var(--tinta)}
+.ev-lista span{font-size:.9rem;color:var(--tinta-suave);line-height:1.5}
+.ev .des-pedir{align-self:center;padding:15px 30px}
+.ev-aviso{margin:0;max-width:640px;font-size:.92rem;font-weight:500;color:var(--salvia)}
+@media (max-width:720px){.ev-lista{grid-template-columns:1fr}.ev .des-pedir{align-self:stretch}}
+#presupuesto .co-panel{width:min(560px,100%)}
+#presupuesto .co-body{background:var(--crema);padding:18px 16px 28px;gap:16px}
+#presupuesto .co-body.gracias{background:var(--blanco)}
+#presupuesto .co-intro{margin:0;font-size:.95rem;color:var(--tinta)}
+#pr-form{display:flex;flex-direction:column;gap:14px}
+#pr-form input[type=text],#pr-form input[type=tel],#pr-form input[type=number],#pr-form input[type=date],#pr-form input[type=time],#pr-form textarea{font:inherit;font-size:16px;padding:13px 14px;border:1px solid var(--linea);border-radius:12px;width:100%;background:var(--blanco);color:var(--tinta);min-height:50px}
+#pr-form input:focus,#pr-form textarea:focus{outline:none;border-color:var(--canela);box-shadow:0 0 0 3px rgba(180,128,105,.18)}
+#pr-form [aria-invalid="true"]{border-color:#B5523B}
+#pr-form .chips{gap:8px}
+#pr-form .dos{gap:12px}
+#pr-form .dos>div{gap:6px}
+#presupuesto .co-foot{background:var(--blanco);box-shadow:0 -6px 20px rgba(74,58,51,.06)}
+#presupuesto .co-foot a.wa{border-radius:14px}
+#pr-falta{font-weight:500;color:var(--canela)}
+#presupuesto .co-aviso{background:var(--blanco);border-radius:0 12px 12px 0}
+@media (max-width:420px){#pr-form .dos{grid-template-columns:1fr}}
 </style>
 
 <header class="portada">
@@ -635,6 +661,20 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 </nav>
 
 <main class="wrap" id="catalogo"></main>
+
+<div class="wrap">
+<section class="cat" id="eventos">
+  <div class="cat-aside"><div class="ilus" aria-hidden="true" data-ilus-ev="flores"></div><div class="txt"><h2>Eventos y reuniones</h2></div></div>
+  <div class="carta ev">
+    <ul class="ev-lista">
+      <li><strong>Para tu oficina</strong><span>Desayunos de trabajo, coffee breaks, reuniones y fin de año.</span></li>
+      <li><strong>Para tu festejo o juntada</strong><span>Cumpleaños, bautismos, festejos y reuniones en casa.</span></li>
+    </ul>
+    <p class="ev-aviso">Preparamos solo la comida: no ofrecemos armado de mesas ni servicio de mozos.</p>
+    <button type="button" class="wa des-pedir" id="pr-abrir">Pedir presupuesto</button>
+  </div>
+</section>
+</div>
 
 <footer class="pie">
   <div class="wrap">
@@ -841,6 +881,76 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
   </div>
 </div>
 
+<div class="checkout" id="presupuesto" hidden role="dialog" aria-modal="true" aria-labelledby="pr-tit">
+  <div class="co-panel">
+    <div class="co-head">
+      <div><span class="eyebrow">Eventos y reuniones</span><h2 id="pr-tit">Pedir presupuesto</h2></div>
+      <button type="button" class="co-cerrar" id="pr-cerrar" aria-label="Volver a la carta">×</button>
+    </div>
+    <div class="co-body">
+      <p class="co-intro">Contanos sobre tu evento y te respondemos por WhatsApp con una propuesta. Los pasos con * son obligatorios.</p>
+      <p class="co-aviso">Preparamos solo la comida: no ofrecemos armado de mesas ni servicio de mozos.</p>
+      <form id="pr-form" novalidate>
+        <section class="ds-paso">
+          <h3><span>1</span>¿Para qué es?<b class="req" aria-hidden="true">*</b></h3>
+          <fieldset class="campo"><legend class="vh">Tipo de evento</legend>
+            <div class="tiles">
+              <label><input type="radio" name="tipo" value="Empresa u oficina"><strong>Empresa u oficina</strong><small>Reuniones, coffee breaks, eventos de trabajo</small></label>
+              <label><input type="radio" name="tipo" value="Particular"><strong>Particular</strong><small>Cumpleaños, festejos, reuniones familiares</small></label>
+            </div>
+            <p class="err" hidden data-e="tipo">Elegí una opción.</p>
+          </fieldset>
+          <div class="campo" id="pr-emp-c" hidden><label for="pr-emp" class="ds-sub">Nombre de la empresa <small class="opc">opcional</small></label><input id="pr-emp" type="text" autocomplete="organization"></div>
+        </section>
+        <section class="ds-paso">
+          <h3><span>2</span>¿Para cuántas personas?<b class="req" aria-hidden="true">*</b></h3>
+          <div class="campo"><label for="pr-pers" class="vh">Cantidad de personas</label><input id="pr-pers" type="number" inputmode="numeric" min="1" step="1" placeholder="Ej.: 20">
+            <p class="err" hidden data-e="pers">Escribí cuántas personas son.</p></div>
+        </section>
+        <section class="ds-paso">
+          <h3><span>3</span>¿Cuándo es?<b class="req" aria-hidden="true">*</b></h3>
+          <div class="dos">
+            <div class="campo"><label for="pr-fecha" class="ds-sub">Fecha</label><input id="pr-fecha" type="date"><p class="err" hidden data-e="fecha">Elegí la fecha.</p></div>
+            <div class="campo"><label for="pr-hora" class="ds-sub">Hora de la reunión</label><input id="pr-hora" type="time" step="900"><p class="err" hidden data-e="hora">Elegí la hora.</p></div>
+          </div>
+        </section>
+        <section class="ds-paso">
+          <h3><span>4</span>¿Qué tenés en mente? <small class="opc">opcional, podés elegir varias</small></h3>
+          <div class="chips" id="pr-ideas">
+            <button type="button" aria-pressed="false">Desayuno</button><button type="button" aria-pressed="false">Coffee break</button><button type="button" aria-pressed="false">Merienda / hora del té</button><button type="button" aria-pressed="false">Sándwiches y panadería</button><button type="button" aria-pressed="false">Picada</button><button type="button" aria-pressed="false">Tortas y postres</button>
+          </div>
+        </section>
+        <section class="ds-paso">
+          <h3><span>5</span>¿Entrega o retiro?<b class="req" aria-hidden="true">*</b></h3>
+          <fieldset class="campo"><legend class="vh">Entrega o retiro</legend>
+            <div class="tiles">
+              <label><input type="radio" name="entrega" value="Entrega"><strong>Entrega</strong><small>Te lo llevamos</small></label>
+              <label><input type="radio" name="entrega" value="Retiro en el local"><strong>Retiro en el local</strong><small>Solano García 2405</small></label>
+            </div>
+            <p class="err" hidden data-e="entrega">Elegí una opción.</p>
+          </fieldset>
+          <div class="campo" id="pr-dir-c" hidden><label for="pr-dir" class="ds-sub">Dirección o barrio</label><input id="pr-dir" type="text" autocomplete="street-address" placeholder="Calle y número, o barrio"><p class="err" hidden data-e="dir">Escribí la dirección o el barrio.</p></div>
+        </section>
+        <section class="ds-paso">
+          <h3><span>6</span>Tus datos<b class="req" aria-hidden="true">*</b></h3>
+          <div class="dos">
+            <div class="campo"><label for="pr-nom" class="vh">Nombre</label><input id="pr-nom" type="text" autocomplete="name" placeholder="Nombre y apellido"><p class="err" hidden data-e="nom">Escribí tu nombre.</p></div>
+            <div class="campo"><label for="pr-cel" class="vh">Celular</label><input id="pr-cel" type="tel" inputmode="tel" autocomplete="tel" placeholder="Celular"><p class="err" hidden data-e="cel">Escribí un celular válido.</p></div>
+          </div>
+        </section>
+        <section class="ds-paso">
+          <h3><span>7</span>Algo más <small class="opc">opcional</small></h3>
+          <div class="campo"><label for="pr-com" class="vh">Comentarios</label><textarea id="pr-com" rows="3" placeholder="Presupuesto aproximado, alergias, si hay opciones vegetarianas, lo que quieras contarnos…"></textarea></div>
+        </section>
+      </form>
+    </div>
+    <div class="co-foot">
+      <a class="wa" id="pr-wa" href="https://wa.me/59898747114" target="_blank" rel="noopener" aria-disabled="true">Enviar consulta por WhatsApp</a>
+      <p class="co-nota" id="pr-falta">Completá los pasos para enviar tu consulta.</p>
+    </div>
+  </div>
+</div>
+
 <div class="visor" id="visor" hidden><figure style="margin:0"><img id="visor-img" alt=""><p id="visor-txt"></p></figure><button type="button" id="visor-cerrar" aria-label="Cerrar">×</button></div>
 
 <template id="ilus"><div data-ilus="croissant"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="312.0 448.0 158.0 104.0"><defs /><path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="1" stroke-miterlimit="10" d="M -0.00173384 -0.000628543 C -0.00173384 -0.000628543 -19.818776 6.057512 -9.724482 -23.857734 C 0.3659 -53.765159 20.789147 -40.338692 20.37067 -15.5977 C 19.963926 8.106876 14.621499 21.842312 7.706849 18.533605 C 0.00999917 14.849442 24.445933 -51.473312 50.829545 -44.777678 C 77.627724 -37.976448 62.034563 50.858028 24.958274 35.78503 C 8.2583 28.995532 8.833217 19.002925 8.833217 19.002925 " transform="matrix(0.998785, 0, 0, -0.998785, 335.532982, 496.983747)" />
@@ -1024,7 +1134,7 @@ C.forEach(c=>{
   });
   html+=`</div></section>`;
 });
-document.getElementById("indice").innerHTML=idx;
+document.getElementById("indice").innerHTML=idx+'<li><a href="#eventos">Eventos</a></li>';
 document.getElementById("catalogo").innerHTML=html;
 
 const bar=document.getElementById("pedido");
@@ -1331,6 +1441,56 @@ document.querySelectorAll("section.cat").forEach(s=>io.observe(s));
 </script>
 <script>
 document.querySelectorAll(".ilus-lado[data-ilus]").forEach(el=>{const t=document.getElementById("ilus").content;el.innerHTML=el.dataset.ilus.split(" ").map(n=>`<div>${t.querySelector(`[data-ilus="${n}"]`).innerHTML}</div>`).join("")});
+</script>
+<script>
+/* ── Pedir presupuesto (eventos y reuniones): arma la consulta y la manda por WhatsApp ── */
+(function(){
+  const $=id=>document.getElementById(id),pan=$("presupuesto"),f=$("pr-form"),wa3=$("pr-wa");
+  const ev=document.querySelector("[data-ilus-ev]");if(ev){const t=document.getElementById("ilus").content.querySelector(`[data-ilus="${ev.dataset.ilusEv}"]`);if(t)ev.innerHTML=t.innerHTML}
+  const radio=n=>(f.querySelector(`input[name="${n}"]:checked`)||{}).value||"";
+  let intento=false;
+  const manana=new Date();manana.setDate(manana.getDate()+1);
+  $("pr-fecha").min=`${manana.getFullYear()}-${String(manana.getMonth()+1).padStart(2,"0")}-${String(manana.getDate()).padStart(2,"0")}`;
+  const MESES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],DS=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+  function fechaTxt(v){if(!v)return"";const [y,m,d]=v.split("-").map(Number);const x=new Date(y,m-1,d);return `${DS[x.getDay()]} ${d} de ${MESES[m-1]}`}
+  function vals(){return{tipo:radio("tipo"),emp:$("pr-emp").value.trim(),pers:parseInt($("pr-pers").value,10),fecha:$("pr-fecha").value,hora:$("pr-hora").value,ideas:[...$("pr-ideas").querySelectorAll('[aria-pressed="true"]')].map(b=>b.textContent),entrega:radio("entrega"),dir:$("pr-dir").value.trim(),nom:$("pr-nom").value.trim(),cel:$("pr-cel").value.trim(),com:$("pr-com").value.trim()}}
+  function errs(){const v=vals();return{tipo:!v.tipo,pers:!(v.pers>=1),fecha:!v.fecha,hora:!v.hora,entrega:!v.entrega,dir:v.entrega==="Entrega"&&!v.dir,nom:v.nom.length<2,cel:v.cel.replace(/\D/g,"").length<8}}
+  function actualizar(){
+    const v=vals(),e=errs();
+    $("pr-emp-c").hidden=v.tipo!=="Empresa u oficina";
+    $("pr-dir-c").hidden=v.entrega!=="Entrega";
+    const l=["¡Hola Gusto Casero! Quiero pedir un presupuesto para un evento:",""];
+    l.push(`• Para: ${v.tipo}${v.tipo==="Empresa u oficina"&&v.emp?` (${v.emp})`:""}`);
+    l.push(`• Personas: ${v.pers>=1?v.pers:""}`);
+    l.push(`• Fecha: ${fechaTxt(v.fecha)}`);
+    l.push(`• Hora de la reunión: ${v.hora?v.hora+" h":""}`);
+    if(v.ideas.length)l.push(`• Qué tenemos en mente: ${v.ideas.join(", ")}`);
+    l.push(`• ${v.entrega==="Entrega"?`Entrega en: ${v.dir}`:(v.entrega||"Entrega o retiro:")}`);
+    l.push(`• Nombre: ${v.nom}`,`• Celular: ${v.cel}`);
+    if(v.com)l.push(`• Comentarios: ${v.com}`);
+    wa3.href=`https://wa.me/${WA}?text=${encodeURIComponent(l.join("\n"))}`;
+    const faltan=Object.values(e).filter(Boolean).length;
+    wa3.setAttribute("aria-disabled",String(faltan>0));
+    $("pr-falta").textContent=faltan?(faltan===1?"Te falta 1 dato.":`Te faltan ${faltan} datos.`):"¡Listo! Tocá el botón para enviarnos la consulta.";
+    if(intento)marcar(false)}
+  function marcar(foco){const e=errs();let primero=null;
+    f.querySelectorAll(".err").forEach(p=>{const k=p.dataset.e;p.hidden=!e[k];if(e[k]&&!primero)primero=p.closest(".ds-paso")});
+    [["pers","pr-pers"],["fecha","pr-fecha"],["hora","pr-hora"],["dir","pr-dir"],["nom","pr-nom"],["cel","pr-cel"]].forEach(([k,id])=>$(id).setAttribute("aria-invalid",String(e[k])));
+    if(foco&&primero)primero.scrollIntoView({block:"center",behavior:"smooth"});return !primero}
+  function abrir(){actualizar();pan.hidden=false;document.body.style.overflow="hidden"}
+  function cerrar(){pan.hidden=true;pan.classList.remove("listo");document.body.style.overflow=""}
+  function limpiar(){f.reset();$("pr-ideas").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed","false"));intento=false;f.querySelectorAll(".err").forEach(p=>p.hidden=true);f.querySelectorAll("[aria-invalid]").forEach(x=>x.removeAttribute("aria-invalid"));actualizar()}
+  $("pr-abrir").addEventListener("click",abrir);
+  $("pr-cerrar").addEventListener("click",cerrar);
+  pan.addEventListener("cerrar-gracias",cerrar);
+  pan.addEventListener("click",e=>{if(e.target===pan)cerrar()});
+  addEventListener("keydown",e=>{if(e.key==="Escape"&&!pan.hidden)cerrar()});
+  $("pr-ideas").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;b.setAttribute("aria-pressed",String(b.getAttribute("aria-pressed")!=="true"));actualizar()});
+  f.addEventListener("input",actualizar);f.addEventListener("change",actualizar);
+  wa3.addEventListener("click",e=>{actualizar();intento=true;if(!marcar(true)){e.preventDefault();return}
+    mostrarGracias(pan.querySelector(".co-panel"),wa3.href,limpiar,"¡Gracias! Te respondemos por WhatsApp con el presupuesto :)")});
+  actualizar();
+})();
 </script>
 
 </body></html>
