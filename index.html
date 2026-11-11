@@ -742,7 +742,7 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
           <div class="chips" id="co-fechas"></div>
           <div class="co-hoy" id="co-hoy" hidden role="status">
             <strong id="co-hoy-tit">¿Lo necesitás para hoy?</strong>
-            <p>Los pedidos para el mismo día se coordinan <b>por WhatsApp</b>, según disponibilidad. Tocá el botón: se abre WhatsApp con tu pedido ya escrito y te confirmamos si llegamos.</p>
+            <p>Los pedidos para el mismo día se coordinan <b>por WhatsApp</b>, según disponibilidad. Tocá el botón: se abre WhatsApp con tu pedido ya escrito y te confirmamos si es posible agendarlo para <span id="co-hoy-dia">hoy</span>.</p>
             <a id="co-hoy-wa" href="https://wa.me/59898747114" target="_blank" rel="noopener">Consultar disponibilidad por WhatsApp</a>
           </div>
           <p class="err" id="e-fecha" hidden>Elegí una fecha.</p>
@@ -1237,7 +1237,7 @@ function actualizarCheckout(){
   const c=consultaSel&&diasConsulta().find(x=>x.k===consultaSel),hoyBox=document.getElementById("co-hoy");
   hoyBox.hidden=!c;wa.textContent=c?`Consultar disponibilidad para ${c.t}`:"Enviar pedido por WhatsApp";
   if(c){document.getElementById("co-aviso").hidden=true;
-    document.getElementById("co-hoy-tit").textContent=`¿Lo necesitás para ${c.t}?`;
+    document.getElementById("co-hoy-tit").textContent=`¿Lo necesitás para ${c.t}?`;document.getElementById("co-hoy-dia").textContent=c.t;
     const mc=`¡Hola Gusto Casero! Quería consultar si tienen disponibilidad para este pedido para ${c.t} (${DIAS[c.x.getDay()].toLowerCase()} ${c.x.getDate()}):\n\n${lin.join("\n")}\n\nTotal estimado: ${fmt(total)}${nombre?`\n\nNombre: ${nombre}`:""}${cel?`\nCelular: ${cel}`:""}${horaSel!==null?`\nRetiro: de ${horaSel} a ${horaSel+1} h`:""}${pagoSel?`\nForma de pago: ${pagoSel}`:""}`;
     const hc=`https://wa.me/${WA}?text=${encodeURIComponent(mc)}`;document.getElementById("co-hoy-wa").href=hc;wa.href=hc;wa.setAttribute("aria-disabled","false")}
   if(!pedido.size&&!co.hidden&&!co.classList.contains("listo"))cerrarCo();
