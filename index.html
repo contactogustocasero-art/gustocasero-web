@@ -214,6 +214,16 @@ footer.pie dd,footer.pie dd *{-webkit-text-fill-color:currentColor}
 .chips button:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
 .horas{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}
 .err{margin:0;color:#B5523B;font-size:.84rem}
+.chips button.consulta{border:1px dashed var(--salvia)}
+.chips button.consulta small{color:var(--salvia);font-weight:600}
+.chips button.consulta[aria-pressed="true"]{background:var(--salvia);border-color:var(--salvia);border-style:solid}
+.chips button.consulta[aria-pressed="true"] small{color:var(--crema)}
+.co-hoy{margin:4px 0 0;padding:18px;background:var(--crema);border:2px solid var(--canela);border-radius:14px;display:flex;flex-direction:column;gap:10px}
+.co-hoy strong{font-size:1.25rem;font-weight:600;color:var(--canela);line-height:1.2}
+.co-hoy p{margin:0;font-size:1rem;color:var(--tinta);line-height:1.4}
+.co-hoy a{display:block;text-align:center;text-decoration:none;background:var(--salvia);color:var(--blanco);font-weight:600;letter-spacing:.03em;padding:14px 18px;border-radius:10px}
+.co-hoy.llamar{animation:llamar .6s ease 2}
+@keyframes llamar{50%{box-shadow:0 0 0 6px rgba(180,128,105,.35)}}
 .co-local{margin:0;font-size:.88rem;color:var(--tinta-suave)}
 .co-aviso{margin:0;padding:12px 14px;background:var(--crema);border-left:3px solid var(--canela);font-size:.9rem;color:var(--tinta)}
 .co-foot{border-top:1px solid var(--linea);padding:16px 24px max(16px,env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px}
@@ -730,7 +740,11 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
         <fieldset class="campo">
           <legend>Fecha de retiro <small>martes a sábado · pedidos hasta las 19 h del día anterior</small></legend>
           <div class="chips" id="co-fechas"></div>
-          <p class="para-hoy" data-parahoy></p>
+          <div class="co-hoy" id="co-hoy" hidden role="status">
+            <strong id="co-hoy-tit">¿Lo necesitás para hoy?</strong>
+            <p>Los pedidos para el mismo día se coordinan <b>por WhatsApp</b>, según disponibilidad. Tocá el botón: se abre WhatsApp con tu pedido ya escrito y te confirmamos si llegamos.</p>
+            <a id="co-hoy-wa" href="https://wa.me/59898747114" target="_blank" rel="noopener">Consultar disponibilidad por WhatsApp</a>
+          </div>
           <p class="err" id="e-fecha" hidden>Elegí una fecha.</p>
         </fieldset>
         <fieldset class="campo">
@@ -1181,7 +1195,7 @@ function mostrarGracias(panel,href,limpiar,titulo){
 const co=document.getElementById("checkout"),wa=document.getElementById("p-wa");
 const DIAS=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"],DC=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"],MES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
 const FR=[9,10,11,12,13,14,15,16,17,18];
-let fechaSel=null,horaSel=null,pagoSel=null;
+let fechaSel=null,horaSel=null,pagoSel=null,consultaSel=null;
 const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 /* Sin pedidos para el mismo día: se encarga hasta las 19 h del día anterior */
 function minRetiro(){const t=new Date(),h=t.getHours();t.setHours(0,0,0,0);t.setDate(t.getDate()+(h>=19?2:1));return t}
@@ -1189,9 +1203,15 @@ function fechaOk(k){const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1
 function franjasLibres(d){return FR}
 function pintarParaHoy(){const tarde=new Date().getHours()>=19;const q=tarde?"¿Lo necesitás para hoy o para mañana?":"¿Lo necesitás para hoy?";const t=encodeURIComponent(tarde?"¡Hola Gusto Casero! Quería consultar disponibilidad para un pedido para hoy o mañana.":"¡Hola Gusto Casero! Quería consultar disponibilidad para un pedido para hoy.");document.querySelectorAll("[data-parahoy]").forEach(p=>{p.innerHTML=`${q} <a href="https://wa.me/${WA}?text=${t}" target="_blank" rel="noopener">Comunicate por WhatsApp</a> para chequear disponibilidad.`})}
 pintarParaHoy();setInterval(pintarParaHoy,60000);
+/* Hoy (y mañana después de las 19 h) no se encargan por la web: el botón lleva a consultar por WhatsApp */
+function diasConsulta(){const d=new Date(),r=[];d.setHours(12,0,0,0);
+  for(let i=0;i<2;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay();if(w<2||w>6||fechaOk(iso(x)))continue;r.push({k:iso(x),t:i===0?"hoy":"mañana",x})}
+  return r}
 function pintarFechas(){
   const box=document.getElementById("co-fechas");let html="",n=0;const d=new Date();d.setHours(12,0,0,0);
   if(fechaSel&&!fechaOk(fechaSel))fechaSel=null;
+  const cons=diasConsulta();if(consultaSel&&!cons.some(c=>c.k===consultaSel))consultaSel=null;
+  cons.forEach(c=>{html+=`<button type="button" class="consulta" data-c="${c.k}" aria-pressed="${consultaSel===c.k}"><small>${c.t==="hoy"?"Hoy":"Mañana"}</small>${c.x.getDate()} ${MES[c.x.getMonth()]}</button>`});
   for(let i=1;i<24&&n<10;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay();if(w<2||w>6)continue;if(!fechaOk(iso(x)))continue;
     const k=iso(x);html+=`<button type="button" data-f="${k}" aria-pressed="${fechaSel===k}"><small>${i===0?"Hoy":i===1?"Mañana":DC[w]}</small>${x.getDate()} ${MES[x.getMonth()]}</button>`;n++}
   box.innerHTML=html}
@@ -1214,6 +1234,12 @@ function actualizarCheckout(){
   const msg=`¡Hola Gusto Casero! Quiero hacer este pedido:\n\n${lin.join("\n")}\n\nTotal estimado: ${fmt(total)}\n\nNombre: ${nombre}\nCelular: ${cel}\nRetiro: ${fechaTexto()}${horaSel!==null?`, de ${horaSel} a ${horaSel+1} h`:""}\nForma de pago: ${pagoSel||""}${corto?"\n\n(Pedido con 24 horas de anticipación o menos: quedo a la espera de su confirmación.)":""}`;
   wa.href=`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
   const e=errores();wa.setAttribute("aria-disabled",String(Object.values(e).some(Boolean)));
+  const c=consultaSel&&diasConsulta().find(x=>x.k===consultaSel),hoyBox=document.getElementById("co-hoy");
+  hoyBox.hidden=!c;wa.textContent=c?`Consultar disponibilidad para ${c.t}`:"Enviar pedido por WhatsApp";
+  if(c){document.getElementById("co-aviso").hidden=true;
+    document.getElementById("co-hoy-tit").textContent=`¿Lo necesitás para ${c.t}?`;
+    const mc=`¡Hola Gusto Casero! Quería consultar si tienen disponibilidad para este pedido para ${c.t} (${DIAS[c.x.getDay()].toLowerCase()} ${c.x.getDate()}):\n\n${lin.join("\n")}\n\nTotal estimado: ${fmt(total)}${nombre?`\n\nNombre: ${nombre}`:""}${cel?`\nCelular: ${cel}`:""}${horaSel!==null?`\nRetiro: de ${horaSel} a ${horaSel+1} h`:""}${pagoSel?`\nForma de pago: ${pagoSel}`:""}`;
+    const hc=`https://wa.me/${WA}?text=${encodeURIComponent(mc)}`;document.getElementById("co-hoy-wa").href=hc;wa.href=hc;wa.setAttribute("aria-disabled","false")}
   if(!pedido.size&&!co.hidden&&!co.classList.contains("listo"))cerrarCo();
 }
 function mostrarErrores(){const e=errores();
@@ -1229,19 +1255,21 @@ document.getElementById("p-seguir").addEventListener("click",abrirCo);
 document.getElementById("co-cerrar").addEventListener("click",cerrarCo);
 co.addEventListener("click",e=>{if(e.target===co)cerrarCo()});
 addEventListener("keydown",e=>{if(e.key==="Escape"&&!co.hidden)cerrarCo()});
-document.getElementById("co-fechas").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;fechaSel=b.dataset.f;pintarFechas();pintarHoras();document.getElementById("e-fecha").hidden=true;actualizarCheckout()});
+document.getElementById("co-fechas").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+  if(b.dataset.c){consultaSel=b.dataset.c;fechaSel=null;pintarFechas();document.getElementById("e-fecha").hidden=true;actualizarCheckout();const h=document.getElementById("co-hoy");h.scrollIntoView({block:"nearest",behavior:"smooth"});return}
+  consultaSel=null;fechaSel=b.dataset.f;pintarFechas();pintarHoras();document.getElementById("e-fecha").hidden=true;actualizarCheckout()});
 document.getElementById("co-horas").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.disabled)return;horaSel=+b.dataset.h;pintarHoras();document.getElementById("e-hora").hidden=true;actualizarCheckout()});
 function pintarPago(){document.querySelectorAll("#co-pago button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.p===pagoSel)))}
 document.getElementById("co-pago").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;pagoSel=b.dataset.p;pintarPago();document.getElementById("e-pago").hidden=true;actualizarCheckout()});
 document.getElementById("co-form").addEventListener("input",e=>{const k=e.target.id==="co-nombre"?"nombre":"cel";if(e.target.getAttribute("aria-invalid")==="true"&&!errores()[k]){e.target.setAttribute("aria-invalid","false");document.getElementById("e-"+k).hidden=true}actualizarCheckout()});
 document.getElementById("co-form").addEventListener("submit",e=>e.preventDefault());
 let idTienda=null;
-wa.addEventListener("click",e=>{if(fechaSel&&!fechaOk(fechaSel)){pintarFechas();pintarHoras()}actualizarCheckout();if(!mostrarErrores()){e.preventDefault();return}
+wa.addEventListener("click",e=>{if(fechaSel&&!fechaOk(fechaSel)){pintarFechas();pintarHoras()}actualizarCheckout();if(consultaSel&&!document.getElementById("co-hoy").hidden)return;if(!mostrarErrores()){e.preventDefault();return}
   let total=0;const lin=[];pedido.forEach(it=>{total+=it.q*it.p;lin.push(`${it.q} × ${it.l}`)});
   if(!idTienda)idTienda=nuevoId("w");const {nombre,cel}=datos();
   registrar({id:idTienda,tipo:"Retiro en el local",fecha:fechaSel,hora:`${horaSel} a ${horaSel+1} h`,cliente:nombre,celular:cel,pedido:lin.join("\n"),total,notas:[`Pago elegido: ${pagoSel}`,document.getElementById("co-aviso").hidden?"":"Pedido con 24 h o menos de anticipación"].filter(Boolean).join("\n"),mensaje:textoWA(wa)});
   const hrefT=wa.href;
-  mostrarGracias(co.querySelector(".co-panel"),hrefT,()=>{pedido.clear();fechaSel=null;horaSel=null;pagoSel=null;pintarPago();idTienda=null;render()});
+  mostrarGracias(co.querySelector(".co-panel"),hrefT,()=>{pedido.clear();fechaSel=null;horaSel=null;pagoSel=null;consultaSel=null;pintarPago();idTienda=null;render()});
 });
 
 /* ── Desayunos a domicilio ── */
