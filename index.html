@@ -558,7 +558,8 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 @media (max-width:720px){.portada{background-image:url("recursos/portada-movil.webp")}.portada .wrap{min-height:72vh;padding-block:64px}}
 
 /* Los más pedidos: fila de tarjetas grandes con foto que se desliza */
-.destacados{padding-block:clamp(56px,8vw,96px) 0}
+.destacados{padding-block:clamp(56px,8vw,96px);background:var(--blanco)}
+.destacados+.wrap .como{margin-top:clamp(48px,7vw,80px)}
 .dest-head{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;margin-bottom:clamp(28px,4vw,40px)}
 .dest-head h2{margin:0;font-weight:200;font-size:clamp(2.4rem,5vw,3.4rem);line-height:1.05;color:var(--canela)}
 .dest-lista{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,2vw,20px)}
@@ -573,10 +574,13 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 .dest-txt strong{font-weight:500;font-size:1.08rem;line-height:1.25}
 .dest-ver{flex:none;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600;opacity:.85}
 @media (max-width:820px){.dest-lista{grid-template-columns:repeat(2,minmax(0,1fr))}.dest-foto{aspect-ratio:1}.dest-txt{padding:12px 14px}.dest-txt strong{font-size:.98rem}.dest-ver{display:none}}
-.tono-canela a .dest-txt{background:var(--canela);color:var(--blanco)}
-.tono-rosado a .dest-txt{background:var(--rosado);color:var(--blanco)}
-.tono-salvia a .dest-txt{background:var(--salvia);color:var(--blanco)}
-.tono-crema a .dest-txt{background:var(--blanco);color:var(--canela)}
+/* Dos variantes, en damero: canela con blanco y crema con canela */
+.dest-lista .dest-txt{background:var(--canela);color:var(--blanco)}
+.dest-lista li:is(:nth-child(2),:nth-child(4),:nth-child(5),:nth-child(7)) .dest-txt{background:var(--crema);color:var(--canela)}
+@media (max-width:820px){
+  .dest-lista li .dest-txt{background:var(--canela);color:var(--blanco)}
+  .dest-lista li:is(:nth-child(2),:nth-child(3),:nth-child(6),:nth-child(7)) .dest-txt{background:var(--crema);color:var(--canela)}
+}
 
 .como{border-radius:24px}
 
@@ -1348,9 +1352,8 @@ document.getElementById("pie-nav").innerHTML=C.map(c=>`<a href="#${c.id}">${c.no
 /* Categorías con foto: cada tarjeta lleva directo a su sección de la carta */
 (function(){
   const F={panaderia:"panaderia-croissants.jpg",picada:"picada-tabla-grande.jpg",te:"te-rolls.jpg",dulces:"dulce-frutos-rojos.webp",tartas:"tartas-lemon-pie.jpg",tortas:"tortas-torta-alfajor-de-chocolate-y-nuez.jpg",desayunos:"desayunos-desayuno-compartir.jpg",eventos:"panaderia-sandwiches-romero.jpg"};
-  const tonos=["canela","crema","salvia","rosado","crema","canela","rosado","salvia"];
   const cats=C.map(c=>[c.id,c.nombre]).concat([["eventos","Eventos y reuniones"]]);
-  document.getElementById("dest-lista").innerHTML=cats.map(([id,nombre],i)=>`<li class="tono-${tonos[i%8]}"><a href="#${id}"><span class="dest-foto${F[id].endsWith(".webp")?" recorte":""}"><img src="fotos/${F[id]}" alt="" loading="lazy"></span><span class="dest-txt"><strong>${nombre}</strong><span class="dest-ver" aria-hidden="true">Ver &#8594;</span></span></a></li>`).join("");
+  document.getElementById("dest-lista").innerHTML=cats.map(([id,nombre],i)=>`<li><a href="#${id}"><span class="dest-foto${F[id].endsWith(".webp")?" recorte":""}"><img src="fotos/${F[id]}" alt="" loading="lazy"></span><span class="dest-txt"><strong>${nombre}</strong><span class="dest-ver" aria-hidden="true">Ver &#8594;</span></span></a></li>`).join("");
 })();
 
 const bar=document.getElementById("pedido");
