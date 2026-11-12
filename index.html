@@ -541,10 +541,328 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 #pr-falta{font-weight:500;color:var(--canela)}
 #presupuesto .co-aviso{background:var(--blanco);border-radius:0 12px 12px 0}
 @media (max-width:420px){#pr-form .dos{grid-template-columns:1fr}}
+
+/* ══ Elevación de diseño ══
+   Portada como la tapa del manual: foto de croissants desenfocada y logo a una tinta en blanco (B.2: fondos con más de 15 % de saturación).
+   Paleta, Urbanist, logo, ilustraciones y pattern sin cambios: solo cambia la puesta en página. */
+.portada{background:var(--tinta) url("recursos/portada.webp") center/cover no-repeat;color:var(--blanco)}
+.portada::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(122,82,67,.18),rgba(122,82,67,.34))}
+.portada .wrap{position:relative;z-index:1;display:flex;justify-content:center;align-items:center;min-height:clamp(480px,78vh,760px);padding-block:clamp(72px,10vw,120px)}
+.portada .ilus-lado{display:none}
+.portada .etiqueta{gap:22px}
+.portada .etiqueta .logo{color:var(--blanco);width:clamp(240px,40vw,420px)}
+.portada .etiqueta .eyebrow{color:var(--blanco);opacity:.95}
+.cta{margin-top:18px;display:inline-block;text-decoration:none;color:var(--blanco);border:1px solid rgba(255,255,255,.85);border-radius:999px;padding:12px 30px;font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;font-weight:500;transition:background .3s,color .3s}
+.cta:hover{background:var(--blanco);color:var(--canela)}
+.cta:focus-visible{outline:2px solid var(--blanco);outline-offset:3px}
+@media (max-width:720px){.portada{background-image:url("recursos/portada-movil.webp")}.portada .wrap{min-height:72vh;padding-block:64px}}
+
+/* Los más pedidos: fila de tarjetas grandes con foto que se desliza */
+.destacados{padding-block:clamp(56px,8vw,96px) 0}
+.dest-head{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;margin-bottom:clamp(28px,4vw,40px)}
+.dest-head h2{margin:0;font-weight:200;font-size:clamp(2.4rem,5vw,3.4rem);line-height:1.05;color:var(--canela)}
+.dest-lista{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,2vw,20px)}
+.dest-lista a{display:flex;flex-direction:column;height:100%;text-decoration:none;color:inherit;border-radius:22px;overflow:hidden;background:var(--crema);transition:transform .35s ease,box-shadow .35s ease}
+.dest-lista a:hover{transform:translateY(-4px);box-shadow:0 18px 40px -18px rgba(122,82,67,.45)}
+.dest-lista a:focus-visible{outline:2px solid var(--canela);outline-offset:3px}
+.dest-foto{display:block;aspect-ratio:4/5;overflow:hidden;background:var(--linea)}
+.dest-foto img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
+.dest-foto.recorte img{object-fit:contain;padding:14%}
+.dest-lista a:hover .dest-foto img{transform:scale(1.05)}
+.dest-txt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px;flex:1}
+.dest-txt strong{font-weight:500;font-size:1.08rem;line-height:1.25}
+.dest-ver{flex:none;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600;opacity:.85}
+@media (max-width:820px){.dest-lista{grid-template-columns:repeat(2,minmax(0,1fr))}.dest-foto{aspect-ratio:1}.dest-txt{padding:12px 14px}.dest-txt strong{font-size:.98rem}.dest-ver{display:none}}
+/* Dos variantes, en damero: canela con blanco y crema con canela */
+.dest-lista .dest-txt{background:var(--canela);color:var(--blanco)}
+@media (min-width:821px){.dest-lista li:is(:nth-child(2),:nth-child(4),:nth-child(5),:nth-child(7)) .dest-txt{background:var(--crema);color:var(--canela);border:1px solid var(--rosado);border-top:0;border-radius:0 0 22px 22px}}
+@media (max-width:820px){
+  .dest-lista li .dest-txt{background:var(--canela);color:var(--blanco);border:0}
+  .dest-lista li:is(:nth-child(2),:nth-child(3),:nth-child(6),:nth-child(7)) .dest-txt{background:var(--crema);color:var(--canela);border:1px solid var(--rosado);border-top:0;border-radius:0 0 22px 22px}
+}
+
+.como{border-radius:24px}
+
+/* Carta: cada producto en su tarjeta blanca, fotos más grandes */
+.carta{gap:0}
+.prod,.prod:first-child,.sub+.prod{background:transparent;border:0;border-top:1px solid var(--linea);border-radius:0;padding:clamp(28px,4vw,40px) 0}
+.carta>.prod:first-child{border-top:0;padding-top:0}
+.prod{grid-template-columns:180px 1fr;gap:28px}
+.prod .foto{width:180px;border-radius:16px}
+.prod.ancho>.fotos .foto{width:210px}
+.prod.grande>.fotos .foto{border-radius:18px}
+.porfila .prod-head,.porfila>.prod-body>.desc{padding-left:0}
+.porfila ul.vars li{grid-template-columns:96px 1fr}
+.porfila ul.vars li .foto{width:96px;border-radius:12px}
+.foto,.dmini{background:var(--crema)}
+section.cat{border-bottom:0}
+.sub{border-bottom-color:var(--linea)}
+
+/* Dulces individuales: grilla de tarjetas con foto */
+#dulces ul.vars{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px;margin-top:14px}
+#dulces ul.vars li{flex-direction:column;align-items:stretch;gap:8px;padding:12px 12px 14px;background:transparent;border:1px solid var(--linea);border-radius:18px;min-height:0;text-align:center}
+#dulces .dmini{width:100%;height:auto;aspect-ratio:1;border-radius:14px;padding:6px;background:transparent!important}
+#dulces .vn{font-size:.92rem;line-height:1.35;flex:1}
+#dulces .lead{display:none}
+#dulces .ctrl{justify-content:center}
+#dulces .vp{align-self:center;margin:0 auto;text-align:center}
+#dulces ul.vars li{padding:10px 10px 14px}
+
+/* Tortas y tartas: dos columnas, foto grande arriba */
+#tortas .carta,#tartas .carta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(28px,4vw,48px)}
+#tortas .carta>.prod:nth-child(2),#tartas .carta>.prod:nth-child(2){border-top:0;padding-top:0}
+#tortas .prod,#tartas .prod{grid-template-columns:1fr;gap:18px;align-content:start}
+#tortas .prod>.fotos,#tartas .prod>.fotos{flex-direction:row;gap:10px;align-self:stretch}
+#tortas .prod .foto,#tartas .prod .foto{width:100%;aspect-ratio:1;border-radius:16px}
+#tortas .prod>.foto.vacia,#tartas .prod>.foto.vacia{display:none}
+
+@media (max-width:820px){
+  .prod{grid-template-columns:140px 1fr;gap:20px}.prod .foto{width:140px}
+}
+@media (max-width:640px){
+  #tortas .carta,#tartas .carta{grid-template-columns:1fr}
+  #dulces ul.vars{grid-template-columns:repeat(2,1fr);gap:10px}
+}
+@media (max-width:520px){
+  .carta{gap:12px}
+  .prod,.prod:first-child,.sub+.prod{border-radius:20px;padding:18px}
+  .prod{grid-template-columns:1fr;gap:16px}
+  .prod>.fotos .foto{width:calc((100% - 10px) / 2)}
+  .prod>.fotos .foto:only-child{width:100%;max-width:380px;aspect-ratio:1}
+  .prod.ancho>.fotos .foto{width:calc((100% - 20px) / 3)}
+  .prod.lado{grid-template-columns:1fr}
+  .prod.lado>.fotos .foto{width:100%;max-width:380px;aspect-ratio:1}
+  .prod.lado>.foto.vacia{display:none}
+  .porfila ul.vars li{grid-template-columns:64px 1fr}.porfila ul.vars li .foto{width:64px}
+}
+@media (prefers-reduced-motion:reduce){.dest-lista a,.dest-foto img,.foto img{transition:none}}
+
+/* Encabezado sobre la portada: se va con el scroll; después queda el índice fijo de categorías */
+.barra-top{position:absolute;inset:0 0 auto;z-index:2;padding-top:env(safe-area-inset-top,0px)}
+.barra-top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:22px;min-height:0}
+.barra-top nav{display:flex;gap:30px}
+.barra-top a{color:var(--blanco);text-decoration:none;font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;font-weight:500}
+.barra-top nav a{padding:6px 0;border-bottom:1px solid transparent}
+.barra-top nav a:hover{border-bottom-color:rgba(255,255,255,.8)}
+.barra-der{display:flex;align-items:center;gap:18px}
+.barra-ig{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;transition:background .3s}
+.barra-ig:hover{background:rgba(255,255,255,.18)}
+.barra-cta{border:1px solid rgba(255,255,255,.85);border-radius:999px;padding:10px 22px;transition:background .3s,color .3s}
+.barra-cta:hover{background:var(--blanco);color:var(--canela)}
+.barra-top a:focus-visible{outline:2px solid var(--blanco);outline-offset:3px}
+@media (max-width:720px){.barra-top nav{display:none}.barra-top .wrap{justify-content:flex-end}.barra-top .wrap{padding-block:14px}.barra-cta{padding:9px 16px}}
+
+/* Firma del manual (Nurhalifa Script), coloreada con la paleta */
+.firma{display:block;width:clamp(170px,22vw,230px);aspect-ratio:632/123;background:var(--canela);-webkit-mask:url("recursos/firma.png") center/contain no-repeat;mask:url("recursos/firma.png") center/contain no-repeat}
+
+/* Nuestra historia: texto del manual + foto del recetario (A.10: blanco y negro, 70 % de opacidad) */
+.historia{position:fixed;inset:0;z-index:28;background:rgba(62,46,39,.55);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) 16px max(16px,env(safe-area-inset-bottom,0px));overflow-y:auto}
+.historia[hidden]{display:none}
+.con-historia,.con-historia body{overflow:hidden}
+.hist-panel{position:relative;background:var(--crema);border-radius:28px;width:min(1120px,100%);max-height:100%;overflow-y:auto;padding:clamp(48px,6vw,80px) clamp(8px,3vw,40px)}
+.hist-cerrar{position:absolute;top:16px;right:16px;font:inherit;font-size:1.5rem;line-height:1;width:44px;height:44px;border-radius:50%;border:1px solid var(--canela);background:var(--crema);color:var(--canela);cursor:pointer;z-index:1}
+.hist-cerrar:hover{background:var(--canela);color:var(--blanco)}
+.pie-historia{font:inherit;cursor:pointer;background:transparent;color:var(--blanco);border:1px solid rgba(255,255,255,.85);border-radius:999px;padding:12px 28px;font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;font-weight:500;transition:background .3s,color .3s}
+.pie-historia:hover{background:var(--blanco);color:var(--canela)}
+.pie-historia:focus-visible{outline:2px solid var(--blanco);outline-offset:3px}
+.hist-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(36px,7vw,96px);align-items:center}
+.hist-foto{position:relative;aspect-ratio:3/4;border-radius:24px;overflow:hidden;background:var(--crema)}
+.hist-foto img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1);opacity:.7}
+.hist-txt{display:flex;flex-direction:column;gap:18px}
+.hist-txt h2{margin:0;font-weight:200;font-size:clamp(2.3rem,4.6vw,3.4rem);line-height:1.05;color:var(--canela);text-wrap:balance}
+.hist-txt p{margin:0;color:var(--tinta-suave);font-weight:300;font-size:1rem;line-height:1.75;max-width:52ch}
+.hist-txt .hist-lead{font-size:clamp(1.12rem,1.6vw,1.28rem);line-height:1.6;color:var(--tinta);font-weight:300}
+.hist-txt .firma{margin-top:8px}
+@media (max-width:820px){.hist-grid{grid-template-columns:1fr}.hist-foto{aspect-ratio:4/3;max-height:300px}.hist-panel{border-radius:22px;padding-top:68px}}
+
+/* Pie editorial */
+footer.pie .wrap{gap:clamp(40px,6vw,64px)}
+.pie-logo{width:clamp(220px,34vw,360px);color:var(--blanco)}
+.pie-logo svg{width:100%;height:auto}
+.pie-cierre{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.pie-lema{font-size:.78rem;letter-spacing:.42em;margin-right:-.42em;text-transform:uppercase;color:var(--blanco);font-weight:500;line-height:2}
+.pie-cierre .firma{background:var(--blanco);width:clamp(160px,20vw,210px)}
+.pie-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 26px;padding-top:28px;border-top:1px solid rgba(255,255,255,.35);width:100%}
+.pie-nav a{color:var(--crema);text-decoration:none;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;font-weight:500}
+.pie-nav a:hover{color:var(--blanco);text-decoration:underline;text-underline-offset:4px}
+
+/* Sin blanco en el recorrido de la página: todo sobre crema */
+.foto,.dmini{background:var(--linea)}
+.dmini,.foto.dmini{background:transparent!important}
+.ctrl button{background:transparent}
+.ctrl.on .mas,.ctrl button:hover{background:var(--canela)}
+.ev-lista li{background:transparent;border:1px solid var(--linea)}
+
+/* ── Pantallas ── */
+html[data-vista="inicio"] .solo-carta{display:none!important}
+html[data-vista="carta"] .solo-inicio{display:none!important}
+section.cat[hidden]{display:none!important}
+html[data-vista="carta"] nav.indice{margin-top:0}
+html[data-vista="carta"] #catalogo section.cat{padding-top:clamp(40px,6vw,72px)}
+nav.indice a.volver{flex:none;display:grid;place-items:center;width:38px;height:38px;padding:0;border-radius:50%;border:1px solid var(--canela);color:var(--canela);text-decoration:none}
+nav.indice a.volver:hover{border-color:var(--canela)}
+nav.indice a.mini{padding:0;border:0}
+nav.indice a.volver:hover{background:var(--canela);color:var(--blanco)}
+nav.indice .wrap{gap:18px}
+@media (min-width:821px){html[data-vista="carta"] nav.indice ul{gap:18px}html[data-vista="carta"] nav.indice ul a{letter-spacing:.12em;font-size:.7rem}html[data-vista="carta"] nav.indice a.mini{width:104px}}
+@media (min-width:821px) and (max-width:1180px){html[data-vista="carta"] nav.indice a.mini{display:none}}
+nav.indice a.mini{display:block}
+@media (max-width:820px){nav.indice a.mini{display:none}}
+.vista-sig{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding-block:8px clamp(56px,8vw,88px)}
+.vista-sig a{text-decoration:none;color:var(--canela)}
+.vista-sig .ant,.vista-sig .sig{display:flex;flex-direction:column;gap:4px;padding:18px 0;border-top:1px solid var(--linea)}
+.vista-sig .sig{text-align:right}
+.vista-sig small{font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;font-weight:600;color:var(--tinta-suave)}
+.vista-sig span{font-weight:300;font-size:clamp(1.15rem,2vw,1.5rem)}
+.vista-sig .ant:hover span,.vista-sig .sig:hover span{text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1px}
+.vista-sig .ini{border:1px solid var(--canela);border-radius:999px;padding:11px 22px;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;font-weight:500;white-space:nowrap}
+.vista-sig .ini:hover{background:var(--canela);color:var(--blanco)}
+@media (max-width:640px){.vista-sig{grid-template-columns:1fr 1fr}.vista-sig .ini{grid-column:1/-1;grid-row:2;justify-self:center;margin-top:12px}}
+
+/* Cómo pedir: franja corta arriba de cada categoría (no en Desayunos ni Eventos, que se piden con su propio botón) */
+.pasos-wrap{padding-top:clamp(20px,3vw,28px)}
+html[data-cat="desayunos"] .pasos-wrap{display:none!important}
+.pasos-barra{display:flex;align-items:center;gap:clamp(16px,3vw,36px);background:var(--canela);color:var(--blanco);border-radius:18px;padding:14px clamp(16px,3vw,28px)}
+.pasos-tit{flex:none;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;font-weight:600;color:var(--crema)}
+.pasos-barra ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,2.5vw,32px);flex:1}
+.pasos-barra li{display:flex;align-items:center;gap:10px;font-size:.88rem;line-height:1.3;font-weight:300}
+.pasos-barra b{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.7);font-weight:400;font-size:.8rem}
+.pasos-barra strong{font-weight:600;margin-right:4px}
+html[data-vista="carta"] #catalogo section.cat{padding-top:clamp(28px,4vw,48px)}
+@media (max-width:720px){
+  .pasos-barra{flex-direction:column;align-items:stretch;gap:10px;padding:12px 14px 14px}
+  .pasos-tit{text-align:center}
+  .pasos-barra ol{gap:8px}
+  .pasos-barra li{flex-direction:column;text-align:center;gap:6px;font-size:.76rem}
+  .pasos-barra strong{display:block;margin:0}
+}
+
+/* Menú: disponible en todas las pantallas */
+.menu-btn{font:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:10px;background:transparent;border:0;padding:8px 0;color:inherit;font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;font-weight:500}
+.barra-top .menu-btn{color:var(--blanco)}
+.barra-top .menu-btn:focus-visible,.menu-btn:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+.barra-top .wrap{justify-content:space-between!important}
+nav.indice .menu-btn{flex:none;display:grid;place-items:center;width:38px;height:38px;padding:0;border:1px solid var(--canela);border-radius:50%;color:var(--canela)}
+nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
+.con-menu,.con-menu body{overflow:hidden}
+.menu{position:fixed;inset:0;z-index:29;background:rgba(62,46,39,.45);display:flex;justify-content:flex-start}
+.menu[hidden]{display:none}
+.menu-panel{background:var(--canela);color:var(--blanco);width:min(440px,100%);height:100%;overflow-y:auto;display:flex;flex-direction:column;gap:clamp(28px,5vh,44px);padding:max(20px,env(safe-area-inset-top,0px)) 28px max(28px,env(safe-area-inset-bottom,0px));animation:menuEntra .3s ease}
+@keyframes menuEntra{from{transform:translateX(-24px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.menu-panel{animation:none}}
+.menu-head{display:flex;align-items:center;justify-content:space-between}
+.menu-logo{display:block;width:150px;color:var(--blanco)}
+.menu-logo svg{width:100%;height:auto}
+.menu-cerrar{font:inherit;font-size:1.6rem;line-height:1;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.7);background:transparent;color:var(--blanco);cursor:pointer}
+.menu-cerrar:hover{background:var(--blanco);color:var(--canela)}
+.menu-nav{display:flex;flex-direction:column;gap:22px}
+.menu-nav a{color:var(--blanco);text-decoration:none}
+.menu-grande{font-weight:200;font-size:clamp(1.7rem,6vw,2.1rem);line-height:1.1}
+.menu-nav a:hover{text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:1px}
+.menu-grupo{display:flex;flex-direction:column;gap:10px;padding:18px 0;border-top:1px solid rgba(255,255,255,.35);border-bottom:1px solid rgba(255,255,255,.35)}
+.menu-eti{font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;font-weight:600;color:var(--crema)}
+#menu-carta{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
+#menu-carta a{font-size:1rem;font-weight:400}
+.menu-datos{margin-top:auto;display:flex;flex-direction:column;gap:6px;font-size:.86rem;color:var(--crema)}
+.menu-datos a{color:var(--blanco)}
+
+/* Inicio: 7 categorías centradas y aire antes del pie */
+.destacados{padding-bottom:clamp(40px,6vw,64px)}
+.dest-lista{display:flex!important;flex-wrap:wrap;justify-content:center}
+.dest-lista li{flex:0 0 calc((100% - 3 * clamp(12px,2vw,20px)) / 4)}
+@media (max-width:820px){.dest-lista li{flex-basis:calc((100% - clamp(12px,2vw,20px)) / 2)}.dest-lista li:last-child:nth-child(odd){flex-basis:100%}.dest-lista li:last-child:nth-child(odd) a{flex-direction:row}.dest-lista li:last-child:nth-child(odd) .dest-foto{flex:0 0 50%;aspect-ratio:1}.dest-lista li:last-child:nth-child(odd) .dest-foto img{object-position:center 40%}.dest-lista li:last-child:nth-child(odd) .dest-txt{justify-content:center;text-align:center;padding:16px}.dest-lista li:last-child:nth-child(odd) .dest-txt strong{font-size:1.15rem}.dest-lista li:last-child:nth-child(odd):nth-child(7) .dest-txt{border-top:1px solid var(--rosado);border-left:0;border-radius:0 22px 22px 0}}
+/* Invitación a Eventos */
+.invita{padding-bottom:clamp(64px,9vw,112px)}
+.invita-card{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);border-radius:24px;overflow:hidden;background:var(--canela);color:var(--blanco);text-decoration:none;transition:transform .35s ease,box-shadow .35s ease}
+.invita-card:hover{transform:translateY(-3px);box-shadow:0 18px 40px -18px rgba(122,82,67,.5)}
+.invita-card:focus-visible{outline:2px solid var(--canela);outline-offset:4px}
+.invita-foto{display:block;min-height:260px}
+.invita-foto img{width:100%;height:100%;object-fit:cover;display:block}
+.invita-txt{display:flex;flex-direction:column;justify-content:center;gap:12px;padding:clamp(28px,4vw,52px)}
+.invita-txt .eyebrow{color:var(--crema)}
+.invita-txt strong{font-weight:200;font-size:clamp(1.6rem,3vw,2.3rem);line-height:1.15;text-wrap:balance}
+.invita-sub{font-weight:300;font-size:1rem;color:var(--crema)}
+.invita-btn{align-self:flex-start;margin-top:8px;border:1px solid rgba(255,255,255,.85);border-radius:999px;padding:11px 24px;font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;font-weight:500;transition:background .3s,color .3s}
+.invita-card:hover .invita-btn{background:var(--blanco);color:var(--canela)}
+@media (max-width:720px){.invita-card{grid-template-columns:1fr}.invita-foto{min-height:0;aspect-ratio:16/10}}
+
+.ev-modal .hist-foto img{filter:none;opacity:1}
+.ev-modal .hist-foto{aspect-ratio:4/5}
+.hist-txt.ev .ev-lista{grid-template-columns:1fr;gap:12px}
+.hist-txt.ev .ev-lista li{border-color:var(--rosado);padding:16px 18px}
+.hist-txt.ev .des-pedir{align-self:center}
+@media (max-width:820px){.ev-modal .hist-foto{aspect-ratio:4/3}.hist-txt.ev .des-pedir{align-self:stretch}}
+
+/* ══ Carta tipo tienda: tarjetas con foto y nombre; cada producto se abre en su ficha ══ */
+#catalogo .carta{display:block}
+.pgrid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,2vw,22px)}
+@media (max-width:1100px){.pgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:820px){.pgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.pcard{position:relative;display:flex;flex-direction:column;width:100%;height:100%;padding:0;font:inherit;text-align:left;color:var(--canela);background:var(--crema);border:1px solid var(--rosado);border-radius:20px;overflow:hidden;cursor:pointer;transition:transform .35s ease,box-shadow .35s ease}
+.pcard:hover{transform:translateY(-3px);box-shadow:0 16px 34px -18px rgba(122,82,67,.45)}
+.pcard:focus-visible{outline:2px solid var(--canela);outline-offset:3px}
+.pcard-foto{display:block;aspect-ratio:1;background:var(--linea);overflow:hidden}
+.pcard-foto img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
+.pcard:hover .pcard-foto img{transform:scale(1.04)}
+.pcard-foto.vacia{display:grid;place-items:center;color:var(--canela)}
+.pcard-foto.vacia svg{width:52%;height:auto;opacity:.5}
+.pcard-txt{display:flex;flex-direction:column;gap:4px;padding:12px 14px 14px;flex:1}
+.pcard-txt strong{font-weight:500;font-size:1rem;line-height:1.3;color:var(--canela)}
+.pcard-precio{font-size:.85rem;color:var(--tinta-suave);font-variant-numeric:tabular-nums}
+.pcard-cant{position:absolute;top:10px;left:10px;padding:5px 11px;border-radius:999px;background:var(--canela);color:var(--blanco);font-size:.74rem;font-weight:600;letter-spacing:.02em}
+.pcard-cant[hidden]{display:none}
+@media (max-width:520px){.pcard-txt{padding:10px 12px 12px}.pcard-txt strong{font-size:.95rem}.pcard-cant{top:8px;left:8px;font-size:.68rem;padding:4px 9px}}
+@media (prefers-reduced-motion:reduce){.pcard,.pcard-foto img{transition:none}}
+.ficha{position:fixed;inset:0;z-index:26;background:rgba(62,46,39,.55);display:flex;align-items:center;justify-content:center;padding:max(24px,env(safe-area-inset-top,0px)) 24px max(24px,env(safe-area-inset-bottom,0px))}
+.ficha[hidden]{display:none}
+.con-ficha,.con-ficha body{overflow:hidden}
+.ficha-panel{position:relative;background:var(--crema);border-radius:28px;width:min(1000px,100%);max-height:100%;overflow-y:auto;overscroll-behavior:contain}
+.ficha-cerrar{position:absolute;top:14px;right:14px;z-index:2;font:inherit;font-size:1.5rem;line-height:1;width:44px;height:44px;border-radius:50%;border:1px solid var(--canela);background:var(--crema);color:var(--canela);cursor:pointer}
+.ficha-cerrar:hover{background:var(--canela);color:var(--blanco)}
+#catalogo .ficha .prod{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,48px);padding:clamp(28px,4vw,44px);margin:0;border:0;border-radius:0;background:transparent;align-items:start}
+#catalogo .ficha .prod.porfila,#catalogo .ficha .prod.sinfoto{grid-template-columns:1fr;padding-top:64px}
+#catalogo .ficha .prod>.fotos{display:flex;flex-direction:row;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px;width:100%;align-self:start;align-items:stretch;scrollbar-width:none}
+#catalogo .ficha .prod>.fotos::-webkit-scrollbar{display:none}
+#catalogo .ficha .prod>.fotos .foto{flex:0 0 100%;width:100%;max-width:none;aspect-ratio:1;border-radius:20px;scroll-snap-align:start}
+#catalogo .ficha .prod>.fotos:has(.foto+.foto) .foto{flex-basis:88%}
+#catalogo .ficha .prod>.foto.vacia{display:grid;width:100%;aspect-ratio:1;border-radius:20px}
+#catalogo .ficha .prod-body{padding-right:36px;gap:12px}
+#catalogo .ficha .prod h3{font-size:clamp(1.6rem,2.8vw,2.1rem);font-weight:300;line-height:1.15;color:var(--canela)}
+#catalogo .ficha .desc{font-size:.95rem;line-height:1.7}
+#catalogo .ficha ul.vars{margin-top:10px}
+#catalogo .ficha .des-pedir{align-self:stretch;margin-top:12px}
+.ficha-pie{position:sticky;bottom:0;z-index:1;background:var(--crema);padding:14px clamp(20px,4vw,44px) max(14px,env(safe-area-inset-bottom,0px));border-top:1px solid var(--rosado);display:flex;justify-content:flex-end}
+.ficha-listo{font:inherit;border:0;border-radius:14px;background:var(--canela);color:var(--blanco);padding:14px 28px;font-weight:500;letter-spacing:.02em;cursor:pointer}
+.ficha-listo:hover{background:var(--tinta)}
+@media (max-width:820px){
+  .ficha{align-items:flex-end;padding:env(safe-area-inset-top,0px) 0 0}
+  .ficha-panel{width:100%;max-height:92vh;border-radius:24px 24px 0 0}
+  #catalogo .ficha .prod{grid-template-columns:1fr;gap:18px;padding:18px 18px 22px}
+  #catalogo .ficha .prod>.fotos .foto,#catalogo .ficha .prod>.foto.vacia{aspect-ratio:4/3;border-radius:18px}
+  #catalogo .ficha .prod>.fotos:has(.foto+.foto) .foto{flex-basis:86%}
+  #catalogo .ficha .prod.porfila,#catalogo .ficha .prod.sinfoto{padding-top:76px}
+  #catalogo #desayunos .ficha .prod>.fotos .foto{aspect-ratio:1}
+  #catalogo .ficha .prod-body{padding-right:0}
+  .ficha-cerrar{top:28px;right:28px;width:40px;height:40px;background:rgba(248,239,228,.92)}
+  .ficha-listo{width:100%}
+}
+/* ══ Ventanas del pedido, desayuno y presupuesto: todo sobre crema, sin fondos blancos ══ */
+.checkout .co-panel,.checkout .co-body,.checkout .co-body.gracias,.checkout .co-foot,#desayuno .co-foot,#presupuesto .co-foot{background:var(--crema)}
+:where(.checkout) .co-aviso,:where(.checkout) .cuenta,:where(.checkout) .ds-elegido,:where(.checkout) .cal,:where(.checkout) .co-cerrar,:where(.checkout) .cal-head button,:where(.checkout) .ds-res button,:where(.checkout) .tiles label,:where(.checkout) .chips button,:where(.checkout) .ctrl button,:where(.checkout) input,:where(.checkout) textarea,:where(.checkout) select{background:var(--crema)}
+:where(.checkout) .ds-res button:hover,:where(.checkout) .ds-res button:focus-visible{background:var(--linea)}
+.checkout .ds-paso{background:var(--crema);border:1px solid var(--rosado)}
+.checkout .cuenta{border-color:var(--rosado)}
+.checkout .co-foot{box-shadow:none;border-top:1px solid var(--rosado)}
 </style>
 
-<header class="portada">
+<header class="portada solo-inicio">
   <h1 class="solo-lector">Gusto Casero · Panadería y pastelería artesanal en Montevideo</h1>
+  <div class="barra-top">
+    <div class="wrap">
+      <button type="button" class="menu-btn" aria-controls="menu" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Menú</span></button>
+      <div class="barra-der"><a class="barra-ig" href="https://instagram.com/gusto_casero" target="_blank" rel="noopener" aria-label="Instagram de Gusto Casero"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r=".9" fill="currentColor" stroke="none"/></svg></a><a class="barra-cta" href="#destacados">Hacer pedido</a></div>
+    </div>
+  </div>
   <div class="wrap">
     <div class="ilus-lado" aria-hidden="true" data-ilus="croissant torta flores jarra"></div>
     <div class="etiqueta">
@@ -573,21 +891,31 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
   </div>
 </header>
 
-<div class="wrap">
-
-  <div class="como">
-    <div class="como-tit"><span class="eyebrow">Pedidos</span><h2>Cómo hacer tu pedido</h2></div>
-    <div class="pasos">
-      <div class="paso"><div><h3>Elegí</h3><p>Tocá + en cada producto de la carta.</p></div></div>
-      <div class="paso"><div><h3>Completá</h3><p>Abajo aparece tu pedido con el total. Tocá «Continuar pedido» y elegí día y horario de retiro.</p></div></div>
-      <div class="paso"><div><h3>Enviá</h3><p>Se abre WhatsApp con tu pedido listo: solo tenés que enviarlo.</p></div></div>
-    </div>
-  </div>
-</div>
-
-<nav class="indice" aria-label="Categorías">
+<section class="destacados solo-inicio" id="destacados" aria-labelledby="dest-tit">
   <div class="wrap">
-    <div class="mini" aria-hidden="true"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="383 268 377 90"><defs><g id="l1-glyph-7-0">
+    <div class="dest-head"><span class="eyebrow">Elegí una categoría</span><h2 id="dest-tit">Nuestra carta</h2></div>
+    <ul class="dest-lista" id="dest-lista"></ul>
+  </div>
+</section>
+
+<section class="invita solo-inicio" aria-labelledby="inv-tit">
+  <div class="wrap">
+    <a class="invita-card" href="#eventos" data-modal="eventos">
+      <span class="invita-foto" aria-hidden="true"><img src="fotos/panaderia-sandwiches-romero.jpg" alt="" loading="lazy"></span>
+      <span class="invita-txt">
+        <span class="eyebrow">Propuesta para tu evento</span>
+        <strong id="inv-tit">¿Tenés un cumple, una juntada o una reunión en la ofi?</strong>
+        <span class="invita-sub">Consultá por propuestas para tu evento.</span>
+        <span class="invita-btn">Ver propuestas <span aria-hidden="true">&#8594;</span></span>
+      </span>
+    </a>
+  </div>
+</section>
+
+<nav class="indice solo-carta" aria-label="Categorías">
+  <div class="wrap">
+    <a class="volver" href="#inicio" aria-label="Volver al inicio"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></a>
+    <a class="mini" href="#inicio" aria-label="Volver al inicio"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="383 268 377 90"><defs><g id="l1-glyph-7-0">
 <path d="M 1.875 -19.046875 C 1.875 -10.578125 9.359375 -4.21875 17.5625 -4.359375 C 11.984375 -1.359375 3.75 0.421875 3.75 5.203125 C 3.75 7.765625 6.03125 9.453125 9.078125 9.453125 C 16.671875 9.453125 23.359375 2.203125 29.578125 2.203125 C 31.546875 2.203125 32.34375 3.46875 32.34375 4.59375 C 32.34375 10.765625 11.1875 8.796875 11.1875 17.1875 C 11.1875 18.015625 11.796875 18.578125 12.5 18.578125 C 13.90625 18.578125 13.53125 16.625 14.046875 15.359375 C 16.484375 9.40625 34.734375 11.796875 34.734375 2.953125 C 34.734375 0.234375 32.671875 -2.015625 29.34375 -2.015625 C 21.0625 -2.015625 15.640625 5.25 9.453125 5.25 C 8.328125 5.25 7.53125 4.640625 7.53125 3.5625 C 7.53125 0.609375 14.75 -1.875 22.84375 -5.34375 C 28.65625 -7.4375 32.8125 -12.828125 32.8125 -19.046875 C 32.8125 -27.53125 25.328125 -33.84375 17.09375 -33.703125 L 27.625 -36.5625 L 27.015625 -38.484375 C 14.84375 -33.703125 1.875 -32.34375 1.875 -19.046875 Z M 5.8125 -21.859375 C 5.8125 -27.578125 8.5625 -31.921875 13.8125 -31.921875 C 21.765625 -31.921875 28.84375 -24.4375 28.84375 -16.484375 C 28.84375 -10.8125 26.125 -6.40625 20.828125 -6.40625 C 12.875 -6.40625 5.8125 -13.90625 5.8125 -21.859375 Z M 5.8125 -21.859375 " />
 </g>
 <g id="l1-glyph-7-1">
@@ -671,37 +999,92 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 <g fill="currentColor" fill-opacity="1">
 <use xlink:href="#l1-glyph-8-5" x="613.142965" y="284.711422" />
 </g>
-</svg></div>
+</svg></a>
     <ul id="indice"></ul>
+    <button type="button" class="menu-btn" aria-controls="menu" aria-expanded="false" aria-label="Menú"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
 </nav>
 
-<main class="wrap" id="catalogo"></main>
-
-<div class="wrap">
-<section class="cat" id="eventos">
-  <div class="cat-aside"><div class="ilus" aria-hidden="true" data-ilus-ev="flores"></div><div class="txt"><h2>Eventos y reuniones</h2></div></div>
-  <div class="carta ev">
-    <ul class="ev-lista">
-      <li><strong>Para tu oficina</strong><span>Desayunos de trabajo, coffee breaks, reuniones y fin de año.</span></li>
-      <li><strong>Para tu festejo o juntada</strong><span>Cumpleaños, bautismos, festejos y reuniones en casa.</span></li>
-    </ul>
-    <p class="ev-aviso">Preparamos solo la comida: no ofrecemos armado de mesas ni servicio de mozos.</p>
-    <button type="button" class="wa des-pedir" id="pr-abrir">Pedir presupuesto</button>
+<div class="wrap solo-carta pasos-wrap">
+  <div class="pasos-barra" role="note" aria-label="Cómo hacer tu pedido">
+    <span class="pasos-tit">Cómo pedir</span>
+    <ol>
+      <li><b>1</b><span><strong>Elegí</strong> tocá un producto y sumalo</span></li>
+      <li><b>2</b><span><strong>Completá</strong> día y horario</span></li>
+      <li><b>3</b><span><strong>Enviá</strong> el pedido por WhatsApp</span></li>
+    </ol>
   </div>
-</section>
 </div>
+
+<main class="wrap solo-carta" id="catalogo"></main>
+
+
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menú" hidden>
+  <div class="menu-panel">
+    <div class="menu-head"><a class="menu-logo" href="#inicio" aria-label="Inicio"></a><button type="button" class="menu-cerrar" aria-label="Cerrar menú">×</button></div>
+    <nav class="menu-nav" aria-label="Menú principal">
+      <a class="menu-grande" href="#inicio">Inicio</a>
+      <div class="menu-grupo"><span class="menu-eti">La carta</span><div id="menu-carta"></div></div>
+      <a class="menu-grande" href="#eventos" data-modal="eventos">Propuesta para tu evento</a>
+      <a class="menu-grande" href="#historia" data-modal="historia">Nuestra historia</a>
+    </nav>
+    <div class="menu-datos">
+      <span>Solano García 2405</span><span>Martes a sábado, 9 a 19 h</span>
+      <span><a href="https://wa.me/59898747114" target="_blank" rel="noopener">WhatsApp 098 747 114</a> · <a href="https://instagram.com/gusto_casero" target="_blank" rel="noopener">@gusto_casero</a></span>
+    </div>
+  </div>
+</div>
+
+<nav class="wrap vista-sig solo-carta" id="vista-sig" aria-label="Más de la carta"></nav>
 
 <footer class="pie">
   <div class="wrap">
+    <div class="pie-logo" role="img" aria-label="Atelier Gusto Casero"></div>
     <dl id="pie-datos">
       <div><dt>Dirección</dt><dd>Solano García 2405</dd></div>
       <div><dt>Horario</dt><dd><span class="largo">Martes a sábado, 9 a 19 h</span><span class="corto">Mar. a sáb., 9 a 19 h</span></dd></div>
       <div><dt>WhatsApp</dt><dd class="tel"><a href="https://wa.me/59898747114" target="_blank" rel="noopener">098 747 114</a></dd></div>
       <div><dt>Instagram</dt><dd><a href="https://instagram.com/gusto_casero" target="_blank" rel="noopener">@gusto_casero</a></dd></div>
     </dl>
+    <div class="pie-cierre"><span class="pie-lema">Todo artesanal,<br>muuuy rico</span><span class="firma" role="img" aria-label="Gusto Casero"></span></div>
+    <nav class="pie-nav" id="pie-nav" aria-label="Categorías"></nav>
   </div>
 </footer>
+
+<div class="historia ev-modal" id="eventos" role="dialog" aria-modal="true" aria-labelledby="ev-tit" hidden>
+  <div class="hist-panel">
+  <button type="button" class="hist-cerrar" aria-label="Cerrar">×</button>
+  <div class="wrap hist-grid">
+    <div class="hist-foto" aria-hidden="true"><img src="fotos/picada-tabla-grande.jpg" alt="" loading="lazy"></div>
+    <div class="hist-txt ev">
+      <span class="eyebrow">Eventos y reuniones</span>
+      <h2 id="ev-tit">Propuesta para tu evento</h2>
+      <ul class="ev-lista">
+        <li><strong>Para tu oficina</strong><span>Desayunos de trabajo, coffee breaks, reuniones y fin de año.</span></li>
+        <li><strong>Para tu festejo o juntada</strong><span>Cumpleaños, bautismos, festejos y reuniones en casa.</span></li>
+      </ul>
+      <p class="ev-aviso">Preparamos solo la comida: no ofrecemos armado de mesas ni servicio de mozos.</p>
+      <button type="button" class="wa des-pedir" id="pr-abrir">Pedir presupuesto</button>
+    </div>
+  </div>
+  </div>
+</div>
+
+<div class="historia" id="historia" role="dialog" aria-modal="true" aria-labelledby="hist-tit" hidden>
+  <div class="hist-panel">
+  <button type="button" class="hist-cerrar" aria-label="Cerrar">×</button>
+  <div class="wrap hist-grid">
+    <div class="hist-foto" aria-hidden="true"><img src="recursos/recetario.webp" alt="" width="900" height="1200"></div>
+    <div class="hist-txt">
+      <span class="eyebrow" id="hist-tit">Nuestra historia</span>
+      <p class="hist-lead">Con el aroma a pan recién horneado que danzaba por los rincones de la cocina de mamá leudó nuestro propósito: invitarte a viajar en el tiempo a través del sabor, con gustos que remitan a tu casa, a tu infancia, a las mujeres que te demostraron su amor a través de la cocina.</p>
+      <p>Somos Victoria y Josefina, hermanas, colmadas de recetas heredadas, con la misión de integrar el pasado para presentar una cocina contemporánea. Para nosotras, se trata de ofrecerte gustos que se sientan reales, familiares, elaborados de manera artesanal con productos frescos, de calidad. Porque nos importa.</p>
+      <p>Porque queremos dar el mismo amor que recibimos. Porque queremos que te puedas llevar a casa una porción de la nuestra y saborear gustos cercanos, gustos que llenan el alma, gustos caseros.</p>
+      <span class="firma" role="img" aria-label="Gusto Casero"></span>
+    </div>
+  </div>
+  </div>
+</div>
 
 <div class="pedido" id="pedido" hidden>
   <div class="wrap">
@@ -904,7 +1287,7 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 <div class="checkout" id="presupuesto" hidden role="dialog" aria-modal="true" aria-labelledby="pr-tit">
   <div class="co-panel">
     <div class="co-head">
-      <div><span class="eyebrow">Eventos y reuniones</span><h2 id="pr-tit">Pedir presupuesto</h2></div>
+      <div><span class="eyebrow">Propuesta para tu evento</span><h2 id="pr-tit">Pedir presupuesto</h2></div>
       <button type="button" class="co-cerrar" id="pr-cerrar" aria-label="Volver a la carta">×</button>
     </div>
     <div class="co-body">
@@ -1115,15 +1498,19 @@ const C=[
 const FOTOS={"panaderia|Bagels chicos": "panaderia-bagels-chicos", "panaderia|English muffins chicos": ["panaderia-english-muffins-chicos", "panaderia-english-muffins-jamon"], "panaderia|Pitas": ["panaderia-pitas", "panaderia-pitas-capresse", "panaderia-pitas-pollo"], "panaderia|Sándwiches": ["panaderia-sandwiches", "panaderia-sandwiches-calabaza", "panaderia-sandwiches-romero"], "panaderia|Scons de queso emmental": ["panaderia-scons-de-queso-emmental", "panaderia-scons-bandeja", "panaderia-scons-jamon"], "panaderia|Roll de queso emmental y tomillo": "panaderia-roll-de-queso-emmental-y-tomillo", "panaderia|Croissants": "panaderia-croissants", "panaderia|Sacramentos de queso emmental": "panaderia-sacramentos-de-queso-emmental", "picada|Dips": "picada-dips", "picada|Tabla chica": "picada-tabla-chica", "picada|Tabla grande": "picada-tabla-grande", "te|Alfajores": ["te-alfajor-maicena", "te-alfajor-marplatense"], "te|Rolls": ["te-rolls-sin", "te-rolls"], "te|Mini muffins": ["te-mini-muffins", "te-mini-muffins-carrot"], "te|Mini budines": ["te-mini-budines", "te-mini-budin-chocolate"], "te|Carrot cake 8 cm": "te-carrot-cake-8-cm", "te|Cuadrados 6 × 6 cm": ["te-cuadrados-6-6-cm", "te-cuadrados-coco"], "dulces|Variedades": "", "tartas|Lemon pie": "tartas-lemon-pie", "tartas|Crema pastelera y frutos rojos": "tartas-crema-pastelera-y-frutos-rojos", "tartas|Crema pastelera y praliné de almendras": "tartas-crema-pastelera-y-praline-de-almendras", "tartas|Crema de naranja y ganache de chocolate belga": "tartas-crema-de-naranja-y-ganache-de-chocolate-belga", "tortas|Torta alfajor de chocolate y nuez": "tortas-torta-alfajor-de-chocolate-y-nuez", "tortas|Torta brownie": "tortas-torta-brownie", "tortas|Pasión de chocolate": "tortas-pasion-de-chocolate", "tortas|Torta vasca de queso": ["tortas-torta-vasca-de-queso", "tortas-torta-vasca-de-queso-2"], "tortas|Rogel": "tortas-rogel", "tortas|New York cheesecake de maracuyá": "tortas-new-york-cheesecake-de-maracuya", "tartas|Crumble de manzana": "tartas-crumble-de-manzana", "tortas|Carrot cake": "tortas-carrot-cake", "tortas|Pavlova": "tortas-pavlova", "desayunos|Desayuno Petit": "desayunos-desayuno-petit", "desayunos|Desayuno Compartir": "desayunos-desayuno-compartir", "te|Merengón": "te-merengon", "te|Cookies": ["te-cookies", "te-cookies-brookies"]};
 const VAR={"dulces|Lemon pie": "lemon", "dulces|Crema pastelera y frutos rojos": "frutos-rojos", "dulces|Crema pastelera y praliné de almendras": "praline", "dulces|Crema de naranja y ganache de chocolate belga": "naranja", "dulces|Havannet": "havannet", "dulces|Toffee y frutos secos": "toffee", "dulces|Crumble de manzana": "crumble", "dulces|Torta alfajor de chocolate y nuez": "alfajor", "dulces|Rogel": "rogel", "dulces|Cheesecake de maracuyá": "cheesecake", "dulces|Pavlova": "pavlova"};
 const FILA={"picada|Galletones y frutos secos|Galletón de aceite de oliva y pimentón": "picada-galleton-pimenton", "picada|Galletones y frutos secos|Galletón de semillas": "picada-galleton-semillas", "picada|Galletones y frutos secos|Frutos secos escarchados": "picada-frutos-escarchados"};
+const GALERIA=["tortas","tartas"];
 const fmt=n=>"$"+n.toLocaleString("es-UY");
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ilus=document.getElementById("ilus").content;
 const pedido=new Map();
 let html="",idx="";
+const GRUPOS={dulces:1};
 C.forEach(c=>{
+  if(GRUPOS[c.id]){const g=c.items[0];c.items=g.v.map((v,j)=>{const vf=VAR[c.id+"|"+v[0]];return{n:v[0],u:g.u,v:[[v[0],v[1]]],k:`${c.id}-0-${j}`,et:`${g.n}: ${v[0]}`,foto:vf?`dulce-${vf}`:null}})}
   idx+=`<li><a href="#${c.id}">${c.nombre}</a></li>`;
   const svg=ilus.querySelector(`[data-ilus="${c.ilus}"]`).innerHTML;
-  html+=`<section class="cat" id="${c.id}"><div class="cat-aside"><div class="ilus" aria-hidden="true">${svg}</div><div class="txt"><h2>${c.nombre}</h2>${c.intro?`<p>${c.intro}</p>`:""}${c.aviso?`<p class="aviso">${c.aviso}</p>`:""}</div></div><div class="carta">`;
+  html+=`<section class="cat" id="${c.id}"><div class="cat-aside"><div class="ilus" aria-hidden="true">${svg}</div><div class="txt"><h2>${c.nombre}</h2>${c.intro?`<p>${c.intro}</p>`:""}${c.aviso?`<p class="aviso">${c.aviso}</p>`:""}</div></div><div class="carta"><ul class="pgrid">`;
+  let fichas="";
   c.items.forEach((p,i)=>{
     if(p.sub){html+=`<div class="sub"><h3>${p.sub}</h3>${p.txt?`<p>${p.txt}</p>`:""}</div>`;return}
     const solo=p.v.length===1&&p.v[0][0]===p.n;
@@ -1132,30 +1519,107 @@ C.forEach(c=>{
     const porFila=p.v.some(v=>(c.id+"|"+p.n+"|"+v[0]) in FILA);
     const fs=FOTOS[c.id+"|"+p.n];
     const lista=fs?[].concat(fs):[];
-    const foto=lista.length?`<div class="fotos">${lista.map(f=>`<button type="button" class="foto" data-big="fotos/${f}.jpg" aria-label="Ver foto de ${esc(p.n)}"><img src="fotos/${f}${p.grande?"":"-t"}.jpg" alt="${esc(p.n)}" loading="lazy" width="360" height="360"></button>`).join("")}</div>`:(fs===""?`<div aria-hidden="true"></div>`:`<div class="foto vacia" aria-hidden="true">${svg}</div>`);
-    const sinFoto=fs==="";
-    html+=`<article class="prod${p.ancho?" ancho":""}${p.grande?" grande":""}${p.lado?" lado":""}${p.medio?" medio":""}${p.cuadro?" cuadro":""}${porFila?" porfila":""}${sinFoto?" sinfoto":""}">${porFila||sinFoto?"":foto}<div class="prod-body"><div class="prod-head"><h3>${p.n}</h3>${chip&&!(solo&&mp===1)?`<span class="unidad">${chip}</span>`:""}${p.nota?`<span class="nota-item">${p.nota}</span>`:""}</div>${p.d?`<p class="desc">${p.d}</p>`:""}<ul class="vars">`;
+    const fotoF=p.foto?`<div class="fotos"><button type="button" class="foto" data-big="fotos/${p.foto}.webp" aria-label="Ver foto de ${esc(p.n)}"><img src="fotos/${p.foto}.webp" alt="${esc(p.n)}" loading="lazy" width="600" height="600"></button></div>`:lista.length?`<div class="fotos">${lista.map(f=>`<button type="button" class="foto" data-big="fotos/${f}.jpg" aria-label="Ver foto de ${esc(p.n)}"><img src="fotos/${f}.jpg" alt="${esc(p.n)}" loading="lazy" width="600" height="600"></button>`).join("")}</div>`:null;
+    const foto=fotoF||(lista.length?`<div class="fotos">${lista.map(f=>`<button type="button" class="foto" data-big="fotos/${f}.jpg" aria-label="Ver foto de ${esc(p.n)}"><img src="fotos/${f}${p.grande?"":GALERIA.includes(c.id)?"-c":"-t"}.jpg"${p.grande||GALERIA.includes(c.id)?"":` srcset="fotos/${f}-t.jpg 360w, fotos/${f}.jpg 1100w" sizes="(max-width:520px) 92vw, 210px"`} alt="${esc(p.n)}" loading="lazy" width="360" height="360"></button>`).join("")}</div>`:(fs===""?`<div aria-hidden="true"></div>`:`<div class="foto vacia" aria-hidden="true">${svg}</div>`));
+    const sinFoto=fs===""&&!p.foto;
+    const fila1=porFila&&FILA[c.id+"|"+p.n+"|"+p.v[0][0]];
+    const tarjeta=p.foto?`fotos/${p.foto}-t.webp`:lista.length?`fotos/${lista[0]}${p.grande?"":GALERIA.includes(c.id)?"-c":"-t"}.jpg`:fila1?`fotos/${fila1}-t.jpg`:"";
+    const unidades=p.v.map(v=>{const mm=v[0].match(/\s*\(x(\d+)\)$/),m=mm?+mm[1]:mp;return m>1?[Math.round(v[1]/m),1]:[v[1],0]});
+    const desde=Math.min(...unidades.map(u=>u[0])),cu=unidades.find(u=>u[0]===desde)[1];
+    const fid=`f-${c.id}-${i}`;
+    const claves=p.v.map((v,j)=>p.k&&p.v.length===1?p.k:`${c.id}-${i}-${j}`).join(" ");
+    html+=`<li><button type="button" class="pcard" data-ficha="${fid}" data-ks="${claves}"><span class="pcard-foto${tarjeta?"":" vacia"}">${tarjeta?`<img src="${tarjeta}" alt="" loading="lazy" width="360" height="360">`:svg}</span><span class="pcard-txt"><strong>${p.n}</strong><span class="pcard-precio">${p.v.length>1?"Desde ":""}${fmt(desde)}${cu?" c/u":""}</span></span><span class="pcard-cant" hidden></span></button></li>`;
+    let art="";
+    art+=`<article class="prod${p.ancho?" ancho":""}${p.grande?" grande":""}${p.lado?" lado":""}${p.medio?" medio":""}${p.cuadro?" cuadro":""}${porFila?" porfila":""}${sinFoto?" sinfoto":""}">${porFila||sinFoto?"":(fotoF||foto)}<div class="prod-body"><div class="prod-head"><h3>${p.n}</h3>${chip&&!(solo&&mp===1)?`<span class="unidad">${chip}</span>`:""}${p.nota?`<span class="nota-item">${p.nota}</span>`:""}</div>${p.d?`<p class="desc">${p.d}</p>`:""}<ul class="vars">`;
     p.v.forEach((v,j)=>{
-      const k=`${c.id}-${i}-${j}`;
+      const k=p.k&&p.v.length===1?p.k:`${c.id}-${i}-${j}`;
       let nombre=v[0],m=mp;
       const mm=nombre.match(/\s*\(x(\d+)\)$/);
       if(mm){m=+mm[1];nombre=nombre.slice(0,mm.index)}
       const unit=m>1?Math.round(v[1]/m):v[1];
-      const etiqueta=solo?p.n:`${p.n}: ${nombre}`;
+      const etiqueta=p.et||(solo?p.n:`${p.n}: ${nombre}`);
       const label=solo?(m>1?"":(p.u||"Precio")):nombre;
       const minTxt=(mm&&m>1)?`<span class="min">mín. ${m}</span>`:"";
-      const vf=VAR[c.id+"|"+v[0]];
+      const vf=p.foto?null:VAR[c.id+"|"+v[0]];
       const mini=vf?`<button type="button" class="dmini" data-big="fotos/dulce-${vf}.webp" aria-label="Ver foto de ${esc(v[0])}"><img src="fotos/dulce-${vf}-t.webp" alt="${esc(v[0])}" loading="lazy" width="128" height="128"></button>`:"";
       const ff=FILA[c.id+"|"+p.n+"|"+v[0]];
       const celda=porFila?(ff?`<button type="button" class="foto" data-big="fotos/${ff}.jpg" aria-label="Ver foto de ${esc(nombre)}"><img src="fotos/${ff}-t.jpg" alt="${esc(nombre)}" loading="lazy" width="360" height="360"></button>`:`<div class="foto vacia" aria-hidden="true">${svg}</div>`):"";
-      html+=`<li>${celda}${porFila?'<span class="frow">':""}${mini}<span class="vn">${label}${minTxt}</span>${label||minTxt?`<span class="lead" aria-hidden="true"></span>`:""}<span class="vp">${fmt(unit)}${m>1?`<small> c/u</small>`:""}</span>${c.id==="desayunos"?"":`<span class="ctrl" data-k="${k}" data-l="${esc(etiqueta)}" data-p="${unit}" data-m="${m}"><button type="button" class="menos" aria-label="Quitar de ${esc(etiqueta)}">−</button><span class="q" aria-live="polite">0</span><button type="button" class="mas" aria-label="${m>1?`Agregar ${esc(etiqueta)}, mínimo ${m}`:`Agregar ${esc(etiqueta)}`}">+</button></span>`}${porFila?"</span>":""}</li>`;
+      art+=`<li>${celda}${porFila?'<span class="frow">':""}${mini}<span class="vn">${label}${minTxt}</span>${label||minTxt?`<span class="lead" aria-hidden="true"></span>`:""}<span class="vp">${fmt(unit)}${m>1?`<small> c/u</small>`:""}</span>${c.id==="desayunos"?"":`<span class="ctrl" data-k="${k}" data-l="${esc(etiqueta)}" data-p="${unit}" data-m="${m}"><button type="button" class="menos" aria-label="Quitar de ${esc(etiqueta)}">−</button><span class="q" aria-live="polite">0</span><button type="button" class="mas" aria-label="${m>1?`Agregar ${esc(etiqueta)}, mínimo ${m}`:`Agregar ${esc(etiqueta)}`}">+</button></span>`}${porFila?"</span>":""}</li>`;
     });
-    html+=`</ul>${c.id==="desayunos"?`<button type="button" class="wa des-pedir" data-op="${esc(p.n.replace(/^Desayuno\s+/,""))}">Pedir ${esc(p.n)}</button>`:""}</div></article>`;
+    art+=`</ul>${c.id==="desayunos"?`<button type="button" class="wa des-pedir" data-op="${esc(p.n.replace(/^Desayuno\s+/,""))}">Pedir ${esc(p.n)}</button>`:""}</div></article>`;
+    fichas+=`<div class="ficha" id="${fid}" role="dialog" aria-modal="true" aria-label="${esc(p.n)}" hidden><div class="ficha-panel"><button type="button" class="ficha-cerrar" aria-label="Volver a ${esc(c.nombre)}">×</button>${art}${c.id==="desayunos"?"":`<div class="ficha-pie"><button type="button" class="ficha-listo">Listo, seguir eligiendo</button></div>`}</div></div>`;
   });
-  html+=`</div></section>`;
+  html+=`</ul></div>${fichas}</section>`;
 });
-document.getElementById("indice").innerHTML=idx+'<li><a href="#eventos">Eventos</a></li>';
+document.getElementById("indice").innerHTML=idx;
 document.getElementById("catalogo").innerHTML=html;
+/* Pantallas: inicio (portada + categorías) y una pantalla por categoría. El pedido se mantiene entre pantallas. */
+(function(){
+  const raiz=document.documentElement;
+  const vistas=C.map(c=>[c.id,c.nombre]);
+  const ids=vistas.map(v=>v[0]);
+  const titulo=document.title;
+  let yInicio=0,actual=null;
+  function ir(){
+    const h=decodeURIComponent(location.hash.slice(1));
+    if(ids.includes(h)){
+      if(actual===null)yInicio=scrollY;
+      actual=h;raiz.dataset.vista="carta";raiz.dataset.cat=h;
+      document.querySelectorAll("section.cat").forEach(sec=>sec.hidden=sec.id!==h);
+      document.querySelectorAll("nav.indice ul a").forEach(a=>{const on=a.getAttribute("href")==="#"+h;a.classList.toggle("activa",on);if(on){a.setAttribute("aria-current","page");const ul=a.closest("ul");ul.scrollTo({left:a.offsetLeft-ul.offsetLeft-(ul.clientWidth-a.offsetWidth)/2})}else a.removeAttribute("aria-current")});
+      const i=ids.indexOf(h),ant=vistas[i-1],sig=vistas[i+1];
+      document.getElementById("vista-sig").innerHTML=(ant?`<a class="ant" href="#${ant[0]}"><small>Anterior</small><span>&#8592; ${ant[1]}</span></a>`:"<span></span>")+`<a class="ini" href="#inicio">Volver al inicio</a>`+(sig?`<a class="sig" href="#${sig[0]}"><small>Siguiente</small><span>${sig[1]} &#8594;</span></a>`:"<span></span>");
+      document.title=vistas[i][1]+" · Gusto Casero";
+      scrollTo({top:0,behavior:"instant"});
+    }else{
+      const venia=actual!==null;actual=null;raiz.dataset.vista="inicio";delete raiz.dataset.cat;
+      document.querySelectorAll("section.cat").forEach(sec=>sec.hidden=false);
+      document.title=titulo;
+      if(h==="destacados")document.getElementById("destacados").scrollIntoView({behavior:"instant"});
+      else if(venia)scrollTo({top:yInicio,behavior:"instant"});
+    }
+  }
+  addEventListener("hashchange",ir);
+  if("scrollRestoration" in history)history.scrollRestoration="manual";
+  ir();
+  addEventListener("load",()=>{if(raiz.dataset.vista==="carta")scrollTo({top:0,behavior:"instant"})});
+})();
+
+/* Ventanas independientes (Nuestra historia, Propuesta para tu evento): se abren desde el menú o el inicio, no están en el recorrido de la carta */
+const ventanas={};
+["historia","eventos"].forEach(id=>{
+  const h=document.getElementById(id),cerrar=h.querySelector(".hist-cerrar");let antes=null;
+  function abrir(){antes=document.activeElement;h.hidden=false;document.documentElement.classList.add("con-historia");cerrar.focus()}
+  function salir(volver=true){h.hidden=true;document.documentElement.classList.remove("con-historia");if(location.hash==="#"+id)history.replaceState(null,"",location.pathname+location.search);if(volver&&antes&&antes.focus)antes.focus()}
+  ventanas[id]={abrir,salir};
+  document.querySelectorAll(`[data-modal="${id}"]`).forEach(b=>b.addEventListener("click",e=>{e.preventDefault();abrir()}));
+  cerrar.addEventListener("click",()=>salir());
+  h.addEventListener("click",e=>{if(e.target===h)salir()});
+  addEventListener("keydown",e=>{if(e.key==="Escape"&&!h.hidden)salir()});
+  if(location.hash==="#"+id)abrir();
+});
+document.getElementById("pr-abrir").addEventListener("click",()=>ventanas.eventos.salir(false));
+document.querySelector(".pie-logo").innerHTML=document.querySelector(".etiqueta .logo").innerHTML;
+document.getElementById("menu-carta").innerHTML=C.map(c=>`<a href="#${c.id}">${c.nombre}</a>`).join("");
+document.querySelector(".menu-logo").innerHTML=document.querySelector(".etiqueta .logo").innerHTML;
+(function(){
+  const m=document.getElementById("menu"),btns=document.querySelectorAll(".menu-btn");let antes=null;
+  function abrir(){antes=document.activeElement;m.hidden=false;document.documentElement.classList.add("con-menu");btns.forEach(b=>b.setAttribute("aria-expanded","true"));m.querySelector(".menu-cerrar").focus()}
+  function cerrar(volver){m.hidden=true;document.documentElement.classList.remove("con-menu");btns.forEach(b=>b.setAttribute("aria-expanded","false"));if(volver&&antes&&antes.focus)antes.focus()}
+  btns.forEach(b=>b.addEventListener("click",abrir));
+  m.querySelector(".menu-cerrar").addEventListener("click",()=>cerrar(true));
+  m.addEventListener("click",e=>{if(e.target===m)cerrar(true);else if(e.target.closest("a"))cerrar(false)});
+  addEventListener("keydown",e=>{if(e.key==="Escape"&&!m.hidden)cerrar(true)});
+  addEventListener("hashchange",()=>{if(!m.hidden)cerrar(false)});
+})();
+document.getElementById("pie-nav").innerHTML=C.map(c=>`<a href="#${c.id}">${c.nombre}</a>`).join("");
+
+/* Categorías con foto: cada tarjeta lleva directo a su sección de la carta */
+(function(){
+  const F={panaderia:"panaderia-croissants.jpg",picada:"picada-tabla-grande.jpg",te:"te-roll-canela.jpg",dulces:"dulces-caja.jpg",tartas:"tartas-lemon-pie-c.jpg",tortas:"tortas-torta-alfajor-de-chocolate-y-nuez-c.jpg",desayunos:"desayunos-desayuno-compartir-alto.jpg",eventos:"panaderia-sandwiches-romero.jpg"};
+  const cats=C.map(c=>[c.id,c.nombre]);
+  document.getElementById("dest-lista").innerHTML=cats.map(([id,nombre],i)=>`<li><a href="#${id}"><span class="dest-foto${F[id].endsWith(".webp")?" recorte":""}"><img src="fotos/${F[id]}" alt="" loading="lazy"></span><span class="dest-txt"><strong>${nombre}</strong><span class="dest-ver" aria-hidden="true">Ver &#8594;</span></span></a></li>`).join("");
+})();
 
 const bar=document.getElementById("pedido");
 function render(){
@@ -1165,6 +1629,7 @@ function render(){
   document.getElementById("p-cant").textContent=cant;document.getElementById("p-word").textContent=cant===1?"producto":"productos";
   document.getElementById("p-total").textContent=fmt(total);
   document.getElementById("p-lista").textContent=lin.join(" · ");
+  contarTarjetas();
   if(typeof actualizarCheckout==="function")actualizarCheckout();
   document.querySelectorAll(".ctrl").forEach(el=>{
     const it=pedido.get(el.dataset.k);el.classList.toggle("on",!!it);el.querySelector(".q").textContent=it?it.q:0;
@@ -1179,6 +1644,21 @@ document.getElementById("catalogo").addEventListener("click",e=>{
   render();
 });
 
+
+/* Fichas de producto: cada tarjeta de la carta abre su ficha para elegir variedades y cantidades */
+(function(){
+  const cat=document.getElementById("catalogo"),raiz=document.documentElement;let abierta=null,antes=null;
+  function abrir(id){const f=document.getElementById(id);if(!f)return;antes=document.activeElement;abierta=f;f.hidden=false;raiz.classList.add("con-ficha");f.querySelector(".ficha-panel").scrollTop=0;f.querySelector(".ficha-cerrar").focus();history.pushState({ficha:id},"",location.href)}
+  function cerrar(desdeAtras){if(!abierta)return;abierta.hidden=true;abierta=null;raiz.classList.remove("con-ficha");if(!desdeAtras&&history.state&&history.state.ficha)history.back();if(antes&&antes.focus)antes.focus({preventScroll:true})}
+  cat.addEventListener("click",e=>{
+    const t=e.target.closest(".pcard");if(t){abrir(t.dataset.ficha);return}
+    if(e.target.closest(".ficha-cerrar,.ficha-listo,.des-pedir")||e.target.classList.contains("ficha"))cerrar();
+  });
+  addEventListener("keydown",e=>{if(e.key==="Escape"&&abierta&&document.getElementById("visor").hidden)cerrar()});
+  addEventListener("popstate",()=>{if(abierta)cerrar(true)});
+  addEventListener("hashchange",()=>{if(abierta)cerrar(true)});
+})();
+function contarTarjetas(){document.querySelectorAll(".pcard").forEach(b=>{let n=0;b.dataset.ks.split(" ").forEach(k=>{const it=pedido.get(k);if(it)n+=it.q});const c=b.querySelector(".pcard-cant");c.hidden=!n;c.textContent=n?`${n} en tu pedido`:""})}
 
 /* Pantalla de gracias: después de tocar "Enviar pedido por WhatsApp" */
 function mostrarGracias(panel,href,limpiar,titulo){
