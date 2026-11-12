@@ -541,6 +541,103 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 #pr-falta{font-weight:500;color:var(--canela)}
 #presupuesto .co-aviso{background:var(--blanco);border-radius:0 12px 12px 0}
 @media (max-width:420px){#pr-form .dos{grid-template-columns:1fr}}
+
+/* ══ Elevación de diseño ══
+   Portada como la tapa del manual: foto de croissants desenfocada y logo a una tinta en blanco (B.2: fondos con más de 15 % de saturación).
+   Paleta, Urbanist, logo, ilustraciones y pattern sin cambios: solo cambia la puesta en página. */
+.portada{background:var(--tinta) url("recursos/portada.webp") center/cover no-repeat;color:var(--blanco);border-radius:0 0 50% 50% / 0 0 clamp(28px,5vw,64px) clamp(28px,5vw,64px)}
+.portada::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(122,82,67,.18),rgba(122,82,67,.34))}
+.portada .wrap{position:relative;z-index:1;display:flex;justify-content:center;align-items:center;min-height:clamp(480px,78vh,760px);padding-block:clamp(72px,10vw,120px)}
+.portada .ilus-lado{display:none}
+.portada .etiqueta{gap:22px}
+.portada .etiqueta .logo{color:var(--blanco);width:clamp(240px,40vw,420px)}
+.portada .etiqueta .eyebrow{color:var(--blanco);opacity:.95}
+.cta{margin-top:18px;display:inline-block;text-decoration:none;color:var(--blanco);border:1px solid rgba(255,255,255,.85);border-radius:999px;padding:12px 30px;font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;font-weight:500;transition:background .3s,color .3s}
+.cta:hover{background:var(--blanco);color:var(--canela)}
+.cta:focus-visible{outline:2px solid var(--blanco);outline-offset:3px}
+@media (max-width:720px){.portada{background-image:url("recursos/portada-movil.webp")}.portada .wrap{min-height:72vh;padding-block:64px}}
+
+/* Los más pedidos: fila de tarjetas grandes con foto que se desliza */
+.destacados{padding-block:clamp(56px,8vw,96px) 0}
+.dest-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:28px}
+.dest-head h2{margin:6px 0 0;font-weight:200;font-size:clamp(2.2rem,4.5vw,3.2rem);line-height:1.05;color:var(--canela)}
+.dest-flechas{display:flex;gap:10px}
+.dest-flechas button{font:inherit;font-size:1.1rem;width:46px;height:46px;border-radius:50%;border:1px solid var(--canela);background:transparent;color:var(--canela);cursor:pointer}
+.dest-flechas button:hover{background:var(--canela);color:var(--blanco)}
+@media (max-width:640px){.dest-flechas{display:none}}
+.dest-lista{list-style:none;margin:0;padding:4px max(16px,calc((100vw - 1120px) / 2 + 16px)) 12px;display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:max(16px,calc((100vw - 1120px) / 2 + 16px));scrollbar-width:none}
+.dest-lista::-webkit-scrollbar{display:none}
+.dest-lista li{flex:0 0 clamp(220px,24vw,270px);scroll-snap-align:start}
+.dest-lista a{display:flex;flex-direction:column;height:100%;text-decoration:none;color:inherit;border-radius:22px;overflow:hidden;background:var(--blanco);transition:transform .35s ease,box-shadow .35s ease}
+.dest-lista a:hover{transform:translateY(-4px);box-shadow:0 18px 40px -18px rgba(122,82,67,.45)}
+.dest-lista a:focus-visible{outline:2px solid var(--canela);outline-offset:3px}
+.dest-foto{display:block;aspect-ratio:4/5;overflow:hidden;background:var(--crema)}
+.dest-foto img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
+.dest-lista a:hover .dest-foto img{transform:scale(1.05)}
+.dest-txt{display:flex;flex-direction:column;gap:4px;padding:16px 18px 18px;flex:1}
+.dest-cat{font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;font-weight:600;opacity:.85}
+.dest-txt strong{font-weight:500;font-size:1.08rem;line-height:1.3}
+.dest-precio{margin-top:auto;padding-top:6px;font-variant-numeric:tabular-nums;font-size:.92rem}
+.tono-canela a .dest-txt{background:var(--canela);color:var(--blanco)}
+.tono-rosado a .dest-txt{background:var(--rosado);color:var(--blanco)}
+.tono-salvia a .dest-txt{background:var(--salvia);color:var(--blanco)}
+.tono-crema a .dest-txt{background:var(--blanco);color:var(--canela)}
+
+.como{border-radius:24px}
+
+/* Carta: cada producto en su tarjeta blanca, fotos más grandes */
+.carta{gap:18px}
+.prod,.prod:first-child,.sub+.prod{background:var(--blanco);border:0;border-radius:24px;padding:clamp(20px,3vw,32px)}
+.prod{grid-template-columns:180px 1fr;gap:28px}
+.prod .foto{width:180px;border-radius:16px}
+.prod.ancho>.fotos .foto{width:210px}
+.prod.grande>.fotos .foto{border-radius:18px}
+.porfila .prod-head,.porfila>.prod-body>.desc{padding-left:0}
+.porfila ul.vars li{grid-template-columns:96px 1fr}
+.porfila ul.vars li .foto{width:96px;border-radius:12px}
+.foto,.dmini{background:var(--crema)}
+section.cat{border-bottom:0}
+.sub{border-bottom-color:var(--linea)}
+
+/* Dulces individuales: grilla de tarjetas con foto */
+#dulces ul.vars{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px;margin-top:14px}
+#dulces ul.vars li{flex-direction:column;align-items:stretch;gap:8px;padding:12px 12px 14px;background:var(--crema);border-radius:18px;min-height:0;text-align:center}
+#dulces .dmini{width:100%;height:auto;aspect-ratio:1;border-radius:14px;padding:10px;background:var(--blanco)!important}
+#dulces .vn{font-size:.92rem;line-height:1.35;flex:1}
+#dulces .lead{display:none}
+#dulces .ctrl{justify-content:center}
+#dulces .vp{align-self:center;margin:0 auto;text-align:center}
+#dulces ul.vars li{padding:10px 10px 14px}
+
+/* Tortas y tartas: dos columnas, foto grande arriba */
+#tortas .carta,#tartas .carta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+#tortas .prod,#tartas .prod{grid-template-columns:1fr;gap:18px;align-content:start}
+#tortas .prod>.fotos,#tartas .prod>.fotos{flex-direction:row;gap:10px;align-self:stretch}
+#tortas .prod .foto,#tartas .prod .foto{width:100%;aspect-ratio:4/3;border-radius:16px}
+#tortas .prod .foto img,#tartas .prod .foto img{object-position:center 72%}
+#tortas .prod>.foto.vacia,#tartas .prod>.foto.vacia{display:none}
+
+@media (max-width:820px){
+  .prod{grid-template-columns:140px 1fr;gap:20px}.prod .foto{width:140px}
+}
+@media (max-width:640px){
+  #tortas .carta,#tartas .carta{grid-template-columns:1fr}
+  #dulces ul.vars{grid-template-columns:repeat(2,1fr);gap:10px}
+}
+@media (max-width:520px){
+  .carta{gap:12px}
+  .prod,.prod:first-child,.sub+.prod{border-radius:20px;padding:18px}
+  .prod{grid-template-columns:1fr;gap:16px}
+  .prod>.fotos .foto{width:calc((100% - 10px) / 2)}
+  .prod>.fotos .foto:only-child{width:100%;aspect-ratio:4/3}
+  .prod.ancho>.fotos .foto{width:calc((100% - 20px) / 3)}
+  .prod.lado{grid-template-columns:1fr}
+  .prod.lado>.fotos .foto{width:100%;aspect-ratio:4/3}
+  .prod.lado>.foto.vacia{display:none}
+  .porfila ul.vars li{grid-template-columns:64px 1fr}.porfila ul.vars li .foto{width:64px}
+  .dest-lista li{flex-basis:72vw}
+}
+@media (prefers-reduced-motion:reduce){.dest-lista a,.dest-foto img,.foto img{transition:none}}
 </style>
 
 <header class="portada">
@@ -568,10 +665,19 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 <path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 332.695312 320.695312 C 332.695312 313.796875 336.03125 308.542969 342.363281 308.542969 C 351.972656 308.542969 360.511719 317.585938 360.511719 327.195312 C 360.511719 334.039062 357.234375 339.351562 350.84375 339.351562 C 341.234375 339.351562 332.695312 330.304688 332.695312 320.695312 M 360.113281 345.375 C 359.308594 345.117188 358.734375 345.117188 358.101562 345.175781 C 358.058594 345.179688 358.011719 345.191406 357.96875 345.195312 C 357.402344 345.265625 356.65625 345.441406 355.964844 345.636719 C 355.925781 345.648438 355.890625 345.660156 355.851562 345.671875 C 347.875 348.082031 343.667969 353.425781 337.105469 353.425781 C 335.75 353.425781 334.789062 352.695312 334.789062 351.394531 C 334.789062 347.832031 343.496094 344.835938 353.273438 340.652344 C 360.285156 338.105469 365.316406 331.605469 365.316406 324.085938 C 365.316406 313.855469 356.269531 306.222656 346.320312 306.394531 L 359.039062 302.945312 L 358.304688 300.625 C 343.609375 306.394531 327.949219 308.03125 327.949219 324.085938 C 327.949219 334.320312 336.992188 342.007812 346.886719 341.839844 C 340.160156 345.457031 330.210938 347.605469 330.210938 353.371094 C 330.210938 356.480469 332.980469 358.515625 336.652344 358.515625 C 344.585938 358.515625 351.710938 351.953125 358.359375 350.191406 C 359.171875 349.996094 360.027344 349.859375 360.886719 349.835938 C 361.945312 349.8125 362.78125 350.023438 363.40625 350.414062 C 363.523438 349.613281 363.417969 348.773438 363.0625 348.046875 C 362.445312 346.785156 361.53125 345.824219 360.113281 345.375 " />
 </svg></div>
       <span class="eyebrow" id="bajada">Panadería y pastelería artesanal</span>
+      <a class="cta" href="#destacados">Ver la carta</a>
     </div>
     <div class="ilus-lado" aria-hidden="true" data-ilus="roll tarta bagel croissant"></div>
   </div>
 </header>
+
+<section class="destacados" id="destacados" aria-labelledby="dest-tit">
+  <div class="wrap dest-head">
+    <div><span class="eyebrow">De nuestra cocina</span><h2 id="dest-tit">Los más pedidos</h2></div>
+    <div class="dest-flechas"><button type="button" data-dir="-1" aria-label="Ver anteriores">&#8592;</button><button type="button" data-dir="1" aria-label="Ver siguientes">&#8594;</button></div>
+  </div>
+  <ul class="dest-lista" id="dest-lista"></ul>
+</section>
 
 <div class="wrap">
 
@@ -1115,6 +1221,7 @@ const C=[
 const FOTOS={"panaderia|Bagels chicos": "panaderia-bagels-chicos", "panaderia|English muffins chicos": ["panaderia-english-muffins-chicos", "panaderia-english-muffins-jamon"], "panaderia|Pitas": ["panaderia-pitas", "panaderia-pitas-capresse", "panaderia-pitas-pollo"], "panaderia|Sándwiches": ["panaderia-sandwiches", "panaderia-sandwiches-calabaza", "panaderia-sandwiches-romero"], "panaderia|Scons de queso emmental": ["panaderia-scons-de-queso-emmental", "panaderia-scons-bandeja", "panaderia-scons-jamon"], "panaderia|Roll de queso emmental y tomillo": "panaderia-roll-de-queso-emmental-y-tomillo", "panaderia|Croissants": "panaderia-croissants", "panaderia|Sacramentos de queso emmental": "panaderia-sacramentos-de-queso-emmental", "picada|Dips": "picada-dips", "picada|Tabla chica": "picada-tabla-chica", "picada|Tabla grande": "picada-tabla-grande", "te|Alfajores": ["te-alfajor-maicena", "te-alfajor-marplatense"], "te|Rolls": ["te-rolls-sin", "te-rolls"], "te|Mini muffins": ["te-mini-muffins", "te-mini-muffins-carrot"], "te|Mini budines": ["te-mini-budines", "te-mini-budin-chocolate"], "te|Carrot cake 8 cm": "te-carrot-cake-8-cm", "te|Cuadrados 6 × 6 cm": ["te-cuadrados-6-6-cm", "te-cuadrados-coco"], "dulces|Variedades": "", "tartas|Lemon pie": "tartas-lemon-pie", "tartas|Crema pastelera y frutos rojos": "tartas-crema-pastelera-y-frutos-rojos", "tartas|Crema pastelera y praliné de almendras": "tartas-crema-pastelera-y-praline-de-almendras", "tartas|Crema de naranja y ganache de chocolate belga": "tartas-crema-de-naranja-y-ganache-de-chocolate-belga", "tortas|Torta alfajor de chocolate y nuez": "tortas-torta-alfajor-de-chocolate-y-nuez", "tortas|Torta brownie": "tortas-torta-brownie", "tortas|Pasión de chocolate": "tortas-pasion-de-chocolate", "tortas|Torta vasca de queso": ["tortas-torta-vasca-de-queso", "tortas-torta-vasca-de-queso-2"], "tortas|Rogel": "tortas-rogel", "tortas|New York cheesecake de maracuyá": "tortas-new-york-cheesecake-de-maracuya", "tartas|Crumble de manzana": "tartas-crumble-de-manzana", "tortas|Carrot cake": "tortas-carrot-cake", "tortas|Pavlova": "tortas-pavlova", "desayunos|Desayuno Petit": "desayunos-desayuno-petit", "desayunos|Desayuno Compartir": "desayunos-desayuno-compartir", "te|Merengón": "te-merengon", "te|Cookies": ["te-cookies", "te-cookies-brookies"]};
 const VAR={"dulces|Lemon pie": "lemon", "dulces|Crema pastelera y frutos rojos": "frutos-rojos", "dulces|Crema pastelera y praliné de almendras": "praline", "dulces|Crema de naranja y ganache de chocolate belga": "naranja", "dulces|Havannet": "havannet", "dulces|Toffee y frutos secos": "toffee", "dulces|Crumble de manzana": "crumble", "dulces|Torta alfajor de chocolate y nuez": "alfajor", "dulces|Rogel": "rogel", "dulces|Cheesecake de maracuyá": "cheesecake", "dulces|Pavlova": "pavlova"};
 const FILA={"picada|Galletones y frutos secos|Galletón de aceite de oliva y pimentón": "picada-galleton-pimenton", "picada|Galletones y frutos secos|Galletón de semillas": "picada-galleton-semillas", "picada|Galletones y frutos secos|Frutos secos escarchados": "picada-frutos-escarchados"};
+const GALERIA=["tortas","tartas"];
 const fmt=n=>"$"+n.toLocaleString("es-UY");
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ilus=document.getElementById("ilus").content;
@@ -1132,7 +1239,7 @@ C.forEach(c=>{
     const porFila=p.v.some(v=>(c.id+"|"+p.n+"|"+v[0]) in FILA);
     const fs=FOTOS[c.id+"|"+p.n];
     const lista=fs?[].concat(fs):[];
-    const foto=lista.length?`<div class="fotos">${lista.map(f=>`<button type="button" class="foto" data-big="fotos/${f}.jpg" aria-label="Ver foto de ${esc(p.n)}"><img src="fotos/${f}${p.grande?"":"-t"}.jpg" alt="${esc(p.n)}" loading="lazy" width="360" height="360"></button>`).join("")}</div>`:(fs===""?`<div aria-hidden="true"></div>`:`<div class="foto vacia" aria-hidden="true">${svg}</div>`);
+    const foto=lista.length?`<div class="fotos">${lista.map(f=>`<button type="button" class="foto" data-big="fotos/${f}.jpg" aria-label="Ver foto de ${esc(p.n)}"><img src="fotos/${f}${p.grande||GALERIA.includes(c.id)?"":"-t"}.jpg" alt="${esc(p.n)}" loading="lazy" width="360" height="360"></button>`).join("")}</div>`:(fs===""?`<div aria-hidden="true"></div>`:`<div class="foto vacia" aria-hidden="true">${svg}</div>`);
     const sinFoto=fs==="";
     html+=`<article class="prod${p.ancho?" ancho":""}${p.grande?" grande":""}${p.lado?" lado":""}${p.medio?" medio":""}${p.cuadro?" cuadro":""}${porFila?" porfila":""}${sinFoto?" sinfoto":""}">${porFila||sinFoto?"":foto}<div class="prod-body"><div class="prod-head"><h3>${p.n}</h3>${chip&&!(solo&&mp===1)?`<span class="unidad">${chip}</span>`:""}${p.nota?`<span class="nota-item">${p.nota}</span>`:""}</div>${p.d?`<p class="desc">${p.d}</p>`:""}<ul class="vars">`;
     p.v.forEach((v,j)=>{
@@ -1156,6 +1263,23 @@ C.forEach(c=>{
 });
 document.getElementById("indice").innerHTML=idx+'<li><a href="#eventos">Eventos</a></li>';
 document.getElementById("catalogo").innerHTML=html;
+
+/* Destacados: tarjetas grandes con foto, armadas con los mismos datos y precios de la carta */
+(function(){
+  const D=[["tortas","Torta alfajor de chocolate y nuez"],["panaderia","Croissants"],["tartas","Lemon pie"],["te","Rolls","te-rolls"],["picada","Tabla grande"],["tortas","Pavlova"],["panaderia","Bagels chicos"],["desayunos","Desayuno Compartir"]];
+  const tonos=["canela","crema","salvia","rosado"];
+  document.getElementById("dest-lista").innerHTML=D.map(([cid,n,img],i)=>{
+    const c=C.find(x=>x.id===cid),p=c&&c.items.find(x=>x.n===n);if(!p)return"";
+    const f=img||[].concat(FOTOS[cid+"|"+n])[0];
+    const m=(p.u&&/^x(\d+)$/.test(p.u))?+p.u.slice(1):1;
+    const min=Math.min(...p.v.map(v=>Math.round(v[1]/m)));
+    const precio=(p.v.length>1?"desde ":"")+fmt(min)+(m>1?" c/u":"");
+    return `<li class="tono-${tonos[i%4]}"><a href="#${cid}"><span class="dest-foto"><img src="fotos/${f}.jpg" alt="" loading="lazy" width="733" height="1100"></span><span class="dest-txt"><span class="dest-cat">${c.nombre}</span><strong>${esc(n)}</strong><span class="dest-precio">${precio}</span></span></a></li>`;
+  }).join("");
+  const ul=document.getElementById("dest-lista");
+  document.querySelectorAll(".dest-flechas button").forEach(b=>b.addEventListener("click",()=>{
+    const li=ul.querySelector("li");ul.scrollBy({left:(+b.dataset.dir)*(li?li.offsetWidth+20:300)*2,behavior:"smooth"})}));
+})();
 
 const bar=document.getElementById("pedido");
 function render(){
