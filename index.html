@@ -877,6 +877,30 @@ html[data-cat="fiestas"] .cat-aside .eyebrow{color:#9E4A3A}
 #co-fechas.dias-fiesta button{border-radius:14px;padding:14px 12px;font-size:1rem}
 #co-fechas.dias-fiesta button small{margin-bottom:2px}
 .co-foot [hidden]{display:none!important}
+/* Aviso de fiestas en la carta común */
+.fc-wrap{padding-top:12px}
+.fc-wrap[hidden],.fd-wrap[hidden]{display:none!important}
+html[data-cat="fiestas"] .fc-wrap{display:none!important}
+.fc-aviso{display:flex;align-items:center;gap:clamp(12px,2.5vw,24px);text-decoration:none;color:var(--tinta);background:var(--blanco);border:1.5px solid var(--salvia);border-radius:18px;padding:10px clamp(12px,2.5vw,20px) 10px 10px;transition:box-shadow .3s}
+.fc-aviso:hover{box-shadow:0 12px 28px -16px rgba(74,58,51,.4)}
+.fc-aviso:focus-visible{outline:2px solid var(--salvia);outline-offset:3px}
+.fc-foto{flex:none;width:64px;height:64px;border-radius:12px;background:#F3E3C4 url("recursos/fiestas-hojas.jpg") center/260px no-repeat}
+.fc-txt{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.fc-txt strong{font-weight:600;font-size:.98rem;line-height:1.3;color:#9E4A3A}
+.fc-txt span{font-size:.85rem;line-height:1.4;color:var(--tinta-suave)}
+.fc-btn{flex:none;padding:10px 18px;border-radius:999px;background:var(--salvia);color:var(--blanco);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;font-weight:500;white-space:nowrap}
+@media (max-width:640px){.fc-aviso{flex-wrap:wrap}.fc-foto{width:52px;height:52px}.fc-txt{flex:1 1 calc(100% - 70px)}.fc-btn{flex:1 1 100%;text-align:center}}
+/* Aviso al pasar un pedido de la carta al menú de fiestas */
+.fd-wrap{padding-top:12px}
+.fd-aviso{position:relative;background:var(--blanco);border-left:4px solid var(--salvia);border-radius:14px;padding:16px 48px 16px 18px;font-size:.92rem;line-height:1.5;color:var(--tinta)}
+.fd-aviso p{margin:0}
+.fd-aviso p+p,.fd-aviso p+ul,.fd-aviso ul+p{margin-top:8px}
+.fd-aviso ul{margin:4px 0 0;padding-left:20px}
+.fd-aviso strong{color:#9E4A3A}
+.fd-aviso .ok strong{color:var(--salvia)}
+.fd-aviso small{display:block;margin-top:8px;color:var(--tinta-suave);font-size:.82rem}
+.fd-cerrar{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;border:1px solid var(--linea);background:var(--blanco);color:var(--tinta);font:inherit;font-size:1.2rem;line-height:1;cursor:pointer}
+#co-fechas-nota{margin:2px 0 0}
 </style>
 
 <header class="portada solo-inicio">
@@ -1043,6 +1067,12 @@ html[data-cat="fiestas"] .cat-aside .eyebrow{color:#9E4A3A}
     </ol>
   </div>
 </div>
+<div class="wrap solo-carta fc-wrap" id="fc-wrap" hidden>
+  <a class="fc-aviso" href="#fiestas"><span class="fc-foto" aria-hidden="true"></span><span class="fc-txt"><strong>¿Tu pedido es para el 24 o el 31 de diciembre?</strong><span>Para Nochebuena y Fin de Año tenemos un menú especial, más acotado. Armá tu pedido desde ahí.</span></span><span class="fc-btn">Ver menú de fiestas <span aria-hidden="true">&#8594;</span></span></a>
+</div>
+<div class="wrap solo-carta fd-wrap" id="fd-wrap" hidden>
+  <div class="fd-aviso" role="status" aria-live="polite"><div id="fd-txt"></div><button type="button" class="fd-cerrar" id="fd-cerrar" aria-label="Cerrar aviso">×</button></div>
+</div>
 
 <main class="wrap solo-carta" id="catalogo"></main>
 
@@ -1154,6 +1184,7 @@ html[data-cat="fiestas"] .cat-aside .eyebrow{color:#9E4A3A}
             <p>Los pedidos para el mismo día se coordinan <b>por WhatsApp</b>, según disponibilidad. Tocá el botón: se abre WhatsApp con tu pedido ya escrito y te confirmamos si es posible agendarlo para <span id="co-hoy-dia">hoy</span>.</p>
             <a id="co-hoy-wa" href="https://wa.me/59898747114" target="_blank" rel="noopener">Consultar disponibilidad por WhatsApp</a>
           </div>
+          <p class="ayuda" id="co-fechas-nota" hidden>El 24 y el 31 de diciembre se piden desde el menú de fiestas.</p>
           <p class="err" id="e-fecha" hidden>Elegí una fecha.</p>
         </fieldset>
         <fieldset class="campo">
@@ -1583,7 +1614,7 @@ const MENU_FIESTAS=[
  {n:"Panettone",v:[["Panettone",750]]},
  /* PRECIO A CONFIRMAR: cambiar el número por el precio real y borrar la nota */
  {n:"Budín inglés",nota:"Precio a confirmar",v:[["Budín inglés",1000]]},
- {n:"Postres individuales",b:"fiestas",u:"x6",d:"Versiones individuales de nuestras tartas y tortas.",v:C.find(x=>x.id==="dulces").items[0].v}
+ {n:"Postres individuales",b:"fiestas",org:v=>`dulces|${v}|${v}`,u:"x6",d:"Versiones individuales de nuestras tartas y tortas.",v:C.find(x=>x.id==="dulces").items[0].v}
 ].filter(Boolean);
 FOTOS["fiestas|Postres individuales"]="dulces-caja";
 Object.keys(VAR).forEach(k=>{if(k.startsWith("dulces|"))VAR["fiestas|"+k.slice(7)]=VAR[k]});
@@ -1640,7 +1671,7 @@ C.forEach(c=>{
       const mini=vf?`<button type="button" class="dmini" data-big="fotos/dulce-${vf}.webp" aria-label="Ver foto de ${esc(v[0])}"><img src="fotos/dulce-${vf}-t.webp" alt="${esc(v[0])}" loading="lazy" width="128" height="128"></button>`:"";
       const ff=FILA[(p.b||c.id)+"|"+p.n+"|"+v[0]];
       const celda=porFila?(ff?`<button type="button" class="foto" data-big="fotos/${ff}.jpg" aria-label="Ver foto de ${esc(nombre)}"><img src="fotos/${ff}-t.jpg" alt="${esc(nombre)}" loading="lazy" width="360" height="360"></button>`:`<div class="foto vacia" aria-hidden="true">${svg}</div>`):"";
-      art+=`<li>${celda}${porFila?'<span class="frow">':""}${mini}<span class="vn">${label}${minTxt}</span>${label||minTxt?`<span class="lead" aria-hidden="true"></span>`:""}<span class="vp">${fmt(unit)}${m>1?`<small> c/u</small>`:""}</span>${c.id==="desayunos"?"":`<span class="ctrl" data-k="${k}" data-l="${esc(etiqueta)}" data-p="${unit}" data-m="${m}"><button type="button" class="menos" aria-label="Quitar de ${esc(etiqueta)}">−</button><span class="q" aria-live="polite">0</span><button type="button" class="mas" aria-label="${m>1?`Agregar ${esc(etiqueta)}, mínimo ${m}`:`Agregar ${esc(etiqueta)}`}">+</button></span>`}${porFila?"</span>":""}</li>`;
+      art+=`<li>${celda}${porFila?'<span class="frow">':""}${mini}<span class="vn">${label}${minTxt}</span>${label||minTxt?`<span class="lead" aria-hidden="true"></span>`:""}<span class="vp">${fmt(unit)}${m>1?`<small> c/u</small>`:""}</span>${c.id==="desayunos"?"":`<span class="ctrl" data-k="${k}" data-o="${esc(p.org?p.org(v[0]):(p.b||c.id)+"|"+p.n+"|"+v[0])}" data-l="${esc(etiqueta)}" data-p="${unit}" data-m="${m}"><button type="button" class="menos" aria-label="Quitar de ${esc(etiqueta)}">−</button><span class="q" aria-live="polite">0</span><button type="button" class="mas" aria-label="${m>1?`Agregar ${esc(etiqueta)}, mínimo ${m}`:`Agregar ${esc(etiqueta)}`}">+</button></span>`}${porFila?"</span>":""}</li>`;
     });
     art+=`</ul>${c.id==="desayunos"?`<button type="button" class="wa des-pedir" data-op="${esc(p.n.replace(/^Desayuno\s+/,""))}">Pedir ${esc(p.n)}</button>`:""}</div></article>`;
     fichas+=`<div class="ficha" id="${fid}" role="dialog" aria-modal="true" aria-label="${esc(p.n)}" hidden><div class="ficha-panel"><button type="button" class="ficha-cerrar" aria-label="Volver a ${esc(c.nombre)}">×</button>${art}${c.id==="desayunos"?"":`<div class="ficha-pie"><button type="button" class="ficha-listo">Listo, seguir eligiendo</button></div>`}</div></div>`;
@@ -1721,7 +1752,7 @@ const bar=document.getElementById("pedido");
 function render(){
   let cant=0,total=0;const lin=[];
   pedido.forEach(it=>{cant++;total+=it.q*it.p;lin.push(`${it.q} × ${it.l}`)});
-  bar.hidden=cant===0;document.getElementById("p-eti").textContent=modo==="fiestas"?"Tu pedido de fiestas":"Tu pedido";
+  bar.hidden=cant===0;document.getElementById("p-eti").textContent=modo==="fiestas"?"Pedido de fiestas":"Tu pedido";
   document.getElementById("p-cant").textContent=cant;document.getElementById("p-word").textContent=cant===1?"producto":"productos";
   document.getElementById("p-total").textContent=fmt(total);
   document.getElementById("p-lista").textContent=lin.join(" · ");
@@ -1793,7 +1824,29 @@ function pintarCartel(){const sec=document.getElementById("fiestas-home"),el=doc
   sec.hidden=false}
 const PASOS={carta:document.getElementById("pasos-lista").innerHTML,fiestas:'<li><b>1</b><span><strong>Elegí</strong> tocá un producto y sumalo</span></li><li><b>2</b><span><strong>Completá</strong> el 24 o el 31 y el horario</span></li><li><b>3</b><span><strong>Pagá</strong> y confirmá por WhatsApp</span></li>'};
 function pintarPasos(){document.getElementById("pasos-lista").innerHTML=PASOS[modo]}
-pintarCab();pintarCartel();setInterval(()=>{pintarCab();pintarCartel()},60000);
+/* Pasar a fiestas desde el pedido común: lo que también está en el menú de fiestas se pasa con la misma cantidad;
+   lo que no, queda guardado en el pedido de la carta y se avisa. */
+function ctrlDe(o,enFiestas){return [...document.querySelectorAll("#catalogo .ctrl")].find(el=>el.dataset.o===o&&!!el.closest("#fiestas")===enFiestas)}
+function derivarFiestas(f){
+  const x=diaF(f),pasan=[],quedan=[];
+  if(modo==="carta"){
+    pedido.forEach((it,k)=>{const de=document.querySelector(`#catalogo .ctrl[data-k="${k}"]`),a=de&&ctrlDe(de.dataset.o,true);
+      if(!a){quedan.push(`${it.q} × ${it.l}`);return}
+      const fk=a.dataset.k,ya=guardado.get(fk),m=+a.dataset.m||1;
+      guardado.set(fk,{l:a.dataset.l,p:+a.dataset.p,q:Math.max(m,it.q,ya?ya.q:0)});pasan.push(`${it.q} × ${a.dataset.l}`);pedido.delete(k)});
+    if(pasan.length)render()}
+  let h="";
+  if(pasan.length||quedan.length){
+    h=`<p><strong>Los pedidos para ${x?x.nombre+" ("+txtDia(f)+")":"el 24 y el 31"} se hacen desde este menú.</strong></p>`;
+    if(pasan.length)h+=`<p class="ok"><strong>Ya pasamos a tu pedido de fiestas:</strong></p><ul>${pasan.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`;
+    if(quedan.length)h+=`<p>${quedan.length===1?"Este producto que elegiste no está disponible":"Estos productos que elegiste no están disponibles"} para ${x?x.nombre:"esta fecha"}:</p><ul>${quedan.map(t=>`<li>${esc(t)}</li>`).join("")}</ul><small>${quedan.length===1?"Queda guardado en tu pedido de la carta, por si lo querés":"Quedan guardados en tu pedido de la carta, por si los querés"} para otro día.</small>`}
+  document.getElementById("fd-txt").innerHTML=h;document.getElementById("fd-wrap").hidden=!h;
+  fechaPre=f;
+  if(location.hash==="#fiestas")cambiarModo("fiestas");else location.hash="#fiestas"}
+document.getElementById("fd-cerrar").addEventListener("click",()=>{document.getElementById("fd-wrap").hidden=true});
+addEventListener("hashchange",()=>{if(location.hash!=="#fiestas")document.getElementById("fd-wrap").hidden=true});
+function pintarAvisoCarta(){document.getElementById("fc-wrap").hidden=!fiestasActivas()}
+pintarCab();pintarCartel();pintarAvisoCarta();setInterval(()=>{pintarCab();pintarCartel();pintarAvisoCarta()},60000);
 
 /* ── Datos del pedido ── */
 const co=document.getElementById("checkout"),wa=document.getElementById("p-wa");
@@ -1815,9 +1868,10 @@ function pintarFechas(){
   const box=document.getElementById("co-fechas");let html="",n=0;const d=new Date();d.setHours(12,0,0,0);
   if(fechaSel&&!fechaOk(fechaSel))fechaSel=null;
   const ayuda=document.getElementById("co-fechas-ayuda");box.classList.toggle("dias-fiesta",modo==="fiestas");
-  if(modo==="fiestas"){ayuda.textContent="24 o 31 de diciembre · retiro en el local";
+  if(modo==="fiestas"){ayuda.textContent="24 o 31 de diciembre · retiro en el local";document.getElementById("co-fechas-nota").hidden=true;
     box.innerHTML=diasAbiertos().map(x=>{const d2=aFecha(x.f);return `<button type="button" data-f="${x.f}" aria-pressed="${fechaSel===x.f}"><small>${x.nombre}</small>${DIAS[d2.getDay()]} ${d2.getDate()} ${MES[d2.getMonth()]}</button>`}).join("");return}
   ayuda.textContent="martes a sábado · pedidos hasta las 19 h del día anterior";
+  document.getElementById("co-fechas-nota").hidden=!fiestasActivas();
   const cons=diasConsulta();if(consultaSel&&!cons.some(c=>c.k===consultaSel))consultaSel=null;
   cons.forEach(c=>{html+=`<button type="button" class="consulta" data-c="${c.k}" aria-pressed="${consultaSel===c.k}"><small>${c.t==="hoy"?"Hoy":"Mañana"}</small>${c.x.getDate()} ${MES[c.x.getMonth()]}</button>`});
   for(let i=1;i<24&&n<10;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay();if(w<2||w>6)continue;
@@ -1868,7 +1922,7 @@ document.getElementById("co-cerrar").addEventListener("click",cerrarCo);
 co.addEventListener("click",e=>{if(e.target===co)cerrarCo()});
 addEventListener("keydown",e=>{if(e.key==="Escape"&&!co.hidden)cerrarCo()});
 document.getElementById("co-fechas").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
-  if(b.dataset.fiesta){cerrarCo();fechaPre=b.dataset.fiesta;location.hash="#fiestas";return}
+  if(b.dataset.fiesta){cerrarCo();derivarFiestas(b.dataset.fiesta);return}
   if(b.dataset.c){consultaSel=b.dataset.c;fechaSel=null;pintarFechas();document.getElementById("e-fecha").hidden=true;actualizarCheckout();const h=document.getElementById("co-hoy");h.scrollIntoView({block:"nearest",behavior:"smooth"});return}
   consultaSel=null;fechaSel=b.dataset.f;pintarFechas();pintarHoras();document.getElementById("e-fecha").hidden=true;actualizarCheckout()});
 document.getElementById("co-horas").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.disabled)return;horaSel=+b.dataset.h;pintarHoras();document.getElementById("e-hora").hidden=true;actualizarCheckout()});
