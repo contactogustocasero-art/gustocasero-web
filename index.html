@@ -863,7 +863,7 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
 .f-fechas{display:flex;gap:clamp(16px,3vw,28px)}
 .f-fecha{display:flex;align-items:center;gap:10px}
 .f-fecha b{font-weight:200;font-size:clamp(2.4rem,5vw,3.2rem);line-height:.9;font-variant-numeric:tabular-nums}
-.f-fecha span{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;line-height:1.35;font-weight:500}
+.f-fecha span{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;line-height:1.35;font-weight:500;text-align:left;white-space:nowrap}
 .f-fecha small{display:block;font-size:.72rem;letter-spacing:.04em;text-transform:none;font-weight:300;opacity:.85}
 .f-btn{align-self:flex-start;border:1px solid rgba(255,255,255,.85);border-radius:999px;padding:11px 24px;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;font-weight:500;transition:background .3s,color .3s}
 .fa a:hover .f-btn,.fb a:hover .f-btn{background:var(--blanco);color:var(--bordo)}
@@ -1863,18 +1863,18 @@ function diasParaEncargar(x){return Math.ceil((new Date(x.cierre)-new Date())/86
 const IC={pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
   pago:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10.5h18M7 15h4"/></svg>'};
 function pintarCab(){const el=document.getElementById("fiestas-cab");if(!el)return;const ds=FIESTAS.dias;
-  el.innerHTML=`<div class="fx"><p class="fx-tit">Retirás tu pedido en el local el <b>${ds.map(x=>aFecha(x.f).getDate()).join(" o el ")} de diciembre</b>, de ${rangoHoras(ds[0])}</p>
+  el.innerHTML=`<div class="fx"><p class="fx-tit">Retirás tu pedido el <b>${ds.map(x=>aFecha(x.f).getDate()).join(" o el ")} de diciembre</b>, de ${rangoHoras(ds[0])}</p>
     <div class="fx-dias">${ds.map(x=>{const ab=abierta(x),n=diasParaEncargar(x);
       return `<div class="fx-dia${ab?"":" cerrado"}"><span class="fx-num">${aFecha(x.f).getDate()}</span><span class="fx-nom">${x.nombre}</span><span class="fx-lim">${ab?`Pedí hasta el ${txtCierre(x)}`:"Pedidos cerrados"}</span>${ab?`<span class="fx-quedan${n<=5?" pronto":""}">${n<=1?"Último día":`Quedan ${n} días`}</span>`:""}</div>`}).join("")}</div>
-    <ul class="fx-notas"><li>${IC.pin}Solano García 2405 · sin envíos</li><li>${IC.pago}Se confirma con el pago hecho</li></ul></div>`}
-function fechasHTML(){return `<div class="f-fechas">${diasAbiertos().map(x=>`<div class="f-fecha"><b>${aFecha(x.f).getDate()}</b><span>${x.nombre}<small>pedí hasta el ${txtCierre(x)}</small></span></div>`).join("")}</div>`}
+    <ul class="fx-notas"><li>${IC.pin}En el local, Solano García 2405 · sin envíos</li><li>${IC.pago}Se confirma con el pago hecho</li></ul></div>`}
+function fechasHTML(){return `<div class="f-fechas">${diasAbiertos().map(x=>`<div class="f-fecha"><b>${aFecha(x.f).getDate()}</b><span><small>pedidos<br>hasta el ${aFecha(x.cierre.slice(0,10)).getDate()}</small></span></div>`).join("")}</div>`}
 function opcionCartel(){return document.documentElement.dataset.cartel||FIESTAS.cartel||"A"}
 function pintarCartel(){const act=fiestasActivas(),op=opcionCartel(),n=(modo==="fiestas"?pedido:guardado).size;
   const tuyo=n?`<span class="f-tuyo">Tenés ${n} ${n===1?"producto":"productos"} en tu pedido de fiestas</span>`:"",btn=`<span class="f-btn">${n?"Seguir con mi pedido":"Ver menú"} &#8594;</span>`;
   const A=document.getElementById("fiestas-dest"),B=document.getElementById("fiestas-home"),Cb=document.getElementById("fiestas-barra");
   A.hidden=!(act&&op==="A");B.hidden=!(act&&op==="B");Cb.hidden=!(act&&op==="C");if(!act)return;
   if(op==="A")A.innerHTML=`<a href="#fiestas"><span class="fa-fotos" aria-hidden="true"><img src="fotos/tortas-pavlova-t.jpg" alt=""><img src="fotos/picada-tabla-grande-t.jpg" alt=""><img src="fotos/dulces-caja-t.jpg" alt=""></span><span class="fa-txt"><span class="eyebrow">Nochebuena · Fin de Año</span><strong>Menú de fiestas</strong>${fechasHTML()}${tuyo}${btn}</span></a>`;
-  if(op==="B")document.getElementById("fb-in").innerHTML=`<a href="#fiestas"><span class="fb-fotos" aria-hidden="true">${FIESTAS.fotosFranja.map(f=>`<img src="fotos/${f}" alt="">`).join("")}</span><span class="fb-txt"><span class="eyebrow">Navidad y Fin de Año</span><strong>Armá tu mesa de Nochebuena y Fin de Año</strong>${fechasHTML()}${tuyo}</span>${btn}</a>`;
+  if(op==="B")document.getElementById("fb-in").innerHTML=`<a href="#fiestas"><span class="fb-fotos" aria-hidden="true">${FIESTAS.fotosFranja.map(f=>`<img src="fotos/${f}" alt="">`).join("")}</span><span class="fb-txt"><strong>Armá tu mesa de Nochebuena y Fin de Año</strong>${fechasHTML()}${tuyo}</span>${btn}</a>`;
   if(op==="C")Cb.innerHTML=`<span class="wrap"><span><b>Navidad y Fin de Año</b> · pedidos para el ${diasAbiertos().map(x=>aFecha(x.f).getDate()).join(" y el ")} de diciembre${n?` · tenés ${n} ${n===1?"producto":"productos"} elegidos`:""}</span><em>${n?"Seguir con mi pedido":"Ver menú"} &#8594;</em></span>`}
 const PASOS={carta:document.getElementById("pasos-lista").innerHTML,fiestas:'<li><b>1</b><span><strong>Elegí</strong> tocá un producto y sumalo</span></li><li><b>2</b><span><strong>Completá</strong> el 24 o el 31 y el horario</span></li><li><b>3</b><span><strong>Pagá</strong> y confirmá por WhatsApp</span></li>'};
 function pintarPasos(){document.getElementById("pasos-lista").innerHTML=PASOS[modo]}
@@ -1922,7 +1922,7 @@ function pintarFechas(){
   const box=document.getElementById("co-fechas");let html="",n=0;const d=new Date();d.setHours(12,0,0,0);
   if(fechaSel&&!fechaOk(fechaSel))fechaSel=null;
   const ayuda=document.getElementById("co-fechas-ayuda");box.classList.toggle("dias-fiesta",modo==="fiestas");
-  if(modo==="fiestas"){ayuda.textContent="24 o 31 de diciembre · retiro en el local";document.getElementById("co-fechas-nota").hidden=true;
+  if(modo==="fiestas"){ayuda.textContent="";document.getElementById("co-fechas-nota").hidden=true;
     box.innerHTML=diasAbiertos().map(x=>{const d2=aFecha(x.f);return `<button type="button" data-f="${x.f}" aria-pressed="${fechaSel===x.f}"><small>${x.nombre}</small>${DIAS[d2.getDay()]} ${d2.getDate()} ${MES[d2.getMonth()]}</button>`}).join("");return}
   ayuda.textContent="martes a sábado · pedidos hasta las 19 h del día anterior";
   document.getElementById("co-fechas-nota").hidden=!fiestasActivas();
@@ -2006,7 +2006,7 @@ function fiestasPaso(on){const fi=modo==="fiestas";co.querySelector(".co-body:no
   coConf.hidden=on||!fi;coWa2.hidden=!on;wa.hidden=fi;document.getElementById("co-foot-nota").hidden=on;
   document.getElementById("co-tit").textContent=on?"Pagá para confirmar":fi?"Datos de tu pedido":"Datos para tu pedido";
   co.querySelector(".co-head .eyebrow").textContent=fi?"Navidad y Fin de Año":"Último paso";
-  document.getElementById("co-foot-nota").textContent=fi?"Al confirmar te mostramos cómo pagar. El pedido queda agendado con el pago hecho.":"Se abre WhatsApp con tu pedido armado. Te respondemos por ahí."}
+  document.getElementById("co-foot-nota").textContent=fi?"Al confirmar te mostramos cómo pagar.":"Se abre WhatsApp con tu pedido armado. Te respondemos por ahí."}
 function fiestasAbrir(){if(fConf&&fConf.firma!==firmaPedido())fiestasReset();fiestasPaso(!!fConf)}
 function fiestasReset(){fConf=null;fExtra="";const l=document.getElementById("co-comp-lbl");l.classList.remove("ok");l.textContent="Subir foto o PDF del comprobante";fCompEst("");document.getElementById("co-comp-sin").hidden=true;fiestasPaso(false)}
 function fiestasPie(msg,hayErr){fMsg=msg;coConf.setAttribute("aria-disabled",String(hayErr));
@@ -2019,7 +2019,7 @@ coConf.addEventListener("click",()=>{if(fechaSel&&!fechaOk(fechaSel)){fechaSel=n
   registrar({id:idTienda,tipo:"Retiro en el local",fecha:fechaSel,hora:`${horaSel} a ${horaSel+1} h`,cliente:nombre,celular:cel,pedido:lin.join("\n"),total,notas:[`Menú de fiestas (${fx.nombre})`,`Pago elegido: ${pagoSel}`,"Pago: pendiente (todavía no confirmado)"].join("\n"),mensaje:fMsg});
   fConf={firma:firmaPedido()};
   document.getElementById("co-pg-tit").textContent=tr?`Transferí ${fmt(total)} para agendar tu pedido`:"Pasá por el local a pagarlo";
-  document.getElementById("co-pg-res").textContent=`${fx.nombre} · retiro el ${fechaTexto().toLowerCase()}, de ${horaSel} a ${horaSel+1} h · ${fmt(total)}`;
+  document.getElementById("co-pg-res").textContent=`${fx.nombre} · retiro el ${fechaTexto().toLowerCase()}, de ${horaSel} a ${horaSel+1} h`;
   document.getElementById("co-cuenta").hidden=!tr;document.getElementById("co-comp").hidden=!tr;document.getElementById("co-local").hidden=tr;
   fCompListo(!tr);
   document.getElementById("co-pg-aviso").textContent=tr?"Hacé la transferencia, subí el comprobante y envianos el mensaje por WhatsApp. Con eso tu pedido queda agendado.":`Tu pedido queda agendado cuando pases por el local a pagarlo, con tarjeta o efectivo, antes del ${txtCierre(fx)} a las 19 h. Tocá el botón de abajo para avisarnos por WhatsApp.`;
