@@ -679,12 +679,6 @@ section.cat{border-bottom:0}
 footer.pie .wrap{gap:clamp(40px,6vw,64px)}
 .pie-logo{width:clamp(220px,34vw,360px);color:var(--blanco)}
 .pie-logo svg{width:100%;height:auto}
-.pie-cierre{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
-.pie-lema{font-size:.78rem;letter-spacing:.42em;margin-right:-.42em;text-transform:uppercase;color:var(--blanco);font-weight:500;line-height:2}
-.pie-cierre .firma{background:var(--blanco);width:clamp(160px,20vw,210px)}
-.pie-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 26px;padding-top:28px;border-top:1px solid rgba(255,255,255,.35);width:100%}
-.pie-nav a{color:var(--crema);text-decoration:none;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;font-weight:500}
-.pie-nav a:hover{color:var(--blanco);text-decoration:underline;text-underline-offset:4px}
 
 /* Sin blanco en el recorrido de la página: todo sobre crema */
 .foto,.dmini{background:var(--linea)}
@@ -1046,8 +1040,6 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
       <div><dt>WhatsApp</dt><dd class="tel"><a href="https://wa.me/59898747114" target="_blank" rel="noopener">098 747 114</a></dd></div>
       <div><dt>Instagram</dt><dd><a href="https://instagram.com/gusto_casero" target="_blank" rel="noopener">@gusto_casero</a></dd></div>
     </dl>
-    <div class="pie-cierre"><span class="pie-lema">Todo artesanal,<br>muuuy rico</span><span class="firma" role="img" aria-label="Gusto Casero"></span></div>
-    <nav class="pie-nav" id="pie-nav" aria-label="Categorías"></nav>
   </div>
 </footer>
 
@@ -1612,7 +1604,6 @@ document.querySelector(".menu-logo").innerHTML=document.querySelector(".etiqueta
   addEventListener("keydown",e=>{if(e.key==="Escape"&&!m.hidden)cerrar(true)});
   addEventListener("hashchange",()=>{if(!m.hidden)cerrar(false)});
 })();
-document.getElementById("pie-nav").innerHTML=C.map(c=>`<a href="#${c.id}">${c.nombre}</a>`).join("");
 
 /* Categorías con foto: cada tarjeta lleva directo a su sección de la carta */
 (function(){
