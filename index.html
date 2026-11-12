@@ -558,15 +558,14 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 @media (max-width:720px){.portada{background-image:url("recursos/portada-movil.webp")}.portada .wrap{min-height:72vh;padding-block:64px}}
 
 /* Los más pedidos: fila de tarjetas grandes con foto que se desliza */
-.destacados{padding-block:clamp(56px,8vw,96px);background:var(--blanco)}
-.destacados+.wrap .como{margin-top:clamp(48px,7vw,80px)}
+.destacados{padding-block:clamp(56px,8vw,96px) 0}
 .dest-head{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;margin-bottom:clamp(28px,4vw,40px)}
 .dest-head h2{margin:0;font-weight:200;font-size:clamp(2.4rem,5vw,3.4rem);line-height:1.05;color:var(--canela)}
 .dest-lista{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,2vw,20px)}
-.dest-lista a{display:flex;flex-direction:column;height:100%;text-decoration:none;color:inherit;border-radius:22px;overflow:hidden;background:var(--blanco);transition:transform .35s ease,box-shadow .35s ease}
+.dest-lista a{display:flex;flex-direction:column;height:100%;text-decoration:none;color:inherit;border-radius:22px;overflow:hidden;background:var(--crema);transition:transform .35s ease,box-shadow .35s ease}
 .dest-lista a:hover{transform:translateY(-4px);box-shadow:0 18px 40px -18px rgba(122,82,67,.45)}
 .dest-lista a:focus-visible{outline:2px solid var(--canela);outline-offset:3px}
-.dest-foto{display:block;aspect-ratio:4/5;overflow:hidden;background:var(--blanco)}
+.dest-foto{display:block;aspect-ratio:4/5;overflow:hidden;background:var(--linea)}
 .dest-foto img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
 .dest-foto.recorte img{object-fit:contain;padding:14%}
 .dest-lista a:hover .dest-foto img{transform:scale(1.05)}
@@ -576,17 +575,18 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 @media (max-width:820px){.dest-lista{grid-template-columns:repeat(2,minmax(0,1fr))}.dest-foto{aspect-ratio:1}.dest-txt{padding:12px 14px}.dest-txt strong{font-size:.98rem}.dest-ver{display:none}}
 /* Dos variantes, en damero: canela con blanco y crema con canela */
 .dest-lista .dest-txt{background:var(--canela);color:var(--blanco)}
-.dest-lista li:is(:nth-child(2),:nth-child(4),:nth-child(5),:nth-child(7)) .dest-txt{background:var(--crema);color:var(--canela)}
+.dest-lista li:is(:nth-child(2),:nth-child(4),:nth-child(5),:nth-child(7)) .dest-txt{background:var(--crema);color:var(--canela);border:1px solid var(--rosado);border-top:0;border-radius:0 0 22px 22px}
 @media (max-width:820px){
-  .dest-lista li .dest-txt{background:var(--canela);color:var(--blanco)}
-  .dest-lista li:is(:nth-child(2),:nth-child(3),:nth-child(6),:nth-child(7)) .dest-txt{background:var(--crema);color:var(--canela)}
+  .dest-lista li .dest-txt{background:var(--canela);color:var(--blanco);border:0}
+  .dest-lista li:is(:nth-child(2),:nth-child(3),:nth-child(6),:nth-child(7)) .dest-txt{background:var(--crema);color:var(--canela);border:1px solid var(--rosado);border-top:0;border-radius:0 0 22px 22px}
 }
 
 .como{border-radius:24px}
 
 /* Carta: cada producto en su tarjeta blanca, fotos más grandes */
-.carta{gap:18px}
-.prod,.prod:first-child,.sub+.prod{background:var(--blanco);border:0;border-radius:24px;padding:clamp(20px,3vw,32px)}
+.carta{gap:0}
+.prod,.prod:first-child,.sub+.prod{background:transparent;border:0;border-top:1px solid var(--linea);border-radius:0;padding:clamp(28px,4vw,40px) 0}
+.carta>.prod:first-child{border-top:0;padding-top:0}
 .prod{grid-template-columns:180px 1fr;gap:28px}
 .prod .foto{width:180px;border-radius:16px}
 .prod.ancho>.fotos .foto{width:210px}
@@ -600,8 +600,8 @@ section.cat{border-bottom:0}
 
 /* Dulces individuales: grilla de tarjetas con foto */
 #dulces ul.vars{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px;margin-top:14px}
-#dulces ul.vars li{flex-direction:column;align-items:stretch;gap:8px;padding:12px 12px 14px;background:var(--crema);border-radius:18px;min-height:0;text-align:center}
-#dulces .dmini{width:100%;height:auto;aspect-ratio:1;border-radius:14px;padding:10px;background:var(--blanco)!important}
+#dulces ul.vars li{flex-direction:column;align-items:stretch;gap:8px;padding:12px 12px 14px;background:transparent;border:1px solid var(--linea);border-radius:18px;min-height:0;text-align:center}
+#dulces .dmini{width:100%;height:auto;aspect-ratio:1;border-radius:14px;padding:6px;background:transparent!important}
 #dulces .vn{font-size:.92rem;line-height:1.35;flex:1}
 #dulces .lead{display:none}
 #dulces .ctrl{justify-content:center}
@@ -609,7 +609,8 @@ section.cat{border-bottom:0}
 #dulces ul.vars li{padding:10px 10px 14px}
 
 /* Tortas y tartas: dos columnas, foto grande arriba */
-#tortas .carta,#tartas .carta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+#tortas .carta,#tartas .carta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(28px,4vw,48px)}
+#tortas .carta>.prod:nth-child(2),#tartas .carta>.prod:nth-child(2){border-top:0;padding-top:0}
 #tortas .prod,#tartas .prod{grid-template-columns:1fr;gap:18px;align-content:start}
 #tortas .prod>.fotos,#tartas .prod>.fotos{flex-direction:row;gap:10px;align-self:stretch}
 #tortas .prod .foto,#tartas .prod .foto{width:100%;aspect-ratio:4/3;border-radius:16px}
@@ -666,7 +667,7 @@ section.cat{border-bottom:0}
 .pie-historia:hover{background:var(--blanco);color:var(--canela)}
 .pie-historia:focus-visible{outline:2px solid var(--blanco);outline-offset:3px}
 .hist-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(36px,7vw,96px);align-items:center}
-.hist-foto{position:relative;aspect-ratio:3/4;border-radius:24px;overflow:hidden;background:var(--blanco)}
+.hist-foto{position:relative;aspect-ratio:3/4;border-radius:24px;overflow:hidden;background:var(--crema)}
 .hist-foto img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1);opacity:.7}
 .hist-txt{display:flex;flex-direction:column;gap:18px}
 .hist-txt h2{margin:0;font-weight:200;font-size:clamp(2.3rem,4.6vw,3.4rem);line-height:1.05;color:var(--canela);text-wrap:balance}
@@ -685,6 +686,13 @@ footer.pie .wrap{gap:clamp(40px,6vw,64px)}
 .pie-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 26px;padding-top:28px;border-top:1px solid rgba(255,255,255,.35);width:100%}
 .pie-nav a{color:var(--crema);text-decoration:none;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;font-weight:500}
 .pie-nav a:hover{color:var(--blanco);text-decoration:underline;text-underline-offset:4px}
+
+/* Sin blanco en el recorrido de la página: todo sobre crema */
+.foto,.dmini{background:var(--linea)}
+.dmini,.foto.dmini{background:transparent!important}
+.ctrl button{background:transparent}
+.ctrl.on .mas,.ctrl button:hover{background:var(--canela)}
+.ev-lista li{background:transparent;border:1px solid var(--linea)}
 </style>
 
 <header class="portada">
