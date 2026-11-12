@@ -1749,12 +1749,13 @@ const sinDesayuno=k=>CERRADOS.includes(k)||!!FIESTAS.dias.find(x=>x.f===k);
 /* Menú de fiestas: productos de la carta (mismos precios y fotos) más los especiales.
    tomar("categoría de la carta","producto",["variedades que se incluyen"]) — sin variedades = todas. */
 function tomar(cat,n,vs){const c=C.find(x=>x.id===cat),p=c&&c.items.find(x=>x.n===n);if(!p)return null;const q={...p,b:cat};if(vs)q.v=p.v.filter(v=>vs.includes(v[0]));return q}
+FOTOS["fiestas|Budín inglés"]=["fiestas-budin-ingles-entero","fiestas-budin-ingles"];
 const MENU_FIESTAS=[
  tomar("picada","Tabla chica"),
  tomar("picada","Tabla grande"),
  tomar("panaderia","Pitas"),
  {...tomar("tortas","Pavlova",["28 cm"]),lado:0,u:"Grande · 28 cm"},
- /* PENDIENTE: fotos y precios confirmados del Panettone y el Budín inglés. Las fotos van en fotos/. */
+ /* PENDIENTE: foto del Panettone y precios confirmados del Panettone y el Budín inglés. Las fotos van en fotos/. */
  {n:"Panettone",v:[["Panettone",750]]},
  {n:"Budín inglés",nota:"Precio a confirmar",v:[["Budín inglés",1000]]},
  /* Postres individuales en caja de 6 o de 12, mezclando variedades (sin mínimo por variedad). Precio por unidad: pu.
