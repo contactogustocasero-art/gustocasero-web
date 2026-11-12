@@ -923,6 +923,32 @@ html[data-cat="fiestas"] .cat-aside .ilus{color:var(--bordo)}
 #co-fechas.dias-fiesta button{border-radius:14px;padding:14px 12px;font-size:1rem}
 #co-fechas.dias-fiesta button small{margin-bottom:2px}
 .co-foot [hidden]{display:none!important}
+/* Caja de postres individuales */
+.caja-tam{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 18px}
+.caja-tam button{font:inherit;display:flex;flex-direction:column;gap:2px;align-items:flex-start;padding:12px 14px;border:1.5px solid var(--rosado);border-radius:14px;background:var(--blanco);color:var(--tinta);cursor:pointer;text-align:left}
+.caja-tam button strong{font-weight:600}
+.caja-tam button span{font-size:.88rem;color:var(--tinta-suave)}
+.caja-tam button[aria-pressed="true"]{border-color:var(--bordo);background:var(--bordo);color:var(--blanco)}
+.caja-tam button[aria-pressed="true"] span{color:#F3D9C9}
+.caja-tam button:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+.cctrl{flex:none;display:flex;align-items:center;gap:6px;justify-content:flex-end}
+.cctrl button{font:inherit;width:32px;height:32px;border-radius:50%;border:1px solid var(--canela);background:var(--blanco);color:var(--canela);cursor:pointer;display:grid;place-items:center;font-size:1.1rem;line-height:1;padding:0}
+.cctrl button:hover:not(:disabled){background:var(--canela);color:var(--blanco)}
+.cctrl button:disabled{opacity:.35;cursor:not-allowed}
+.cctrl button:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+.cctrl .q{min-width:18px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums;color:var(--canela)}
+.cctrl .menos,.cctrl .q{display:none}
+.cctrl.on .menos,.cctrl.on .q{display:grid}
+.caja-en{margin-top:18px;padding:14px 16px;border-radius:14px;background:var(--blanco);font-size:.88rem}
+.caja-en-tit{margin:0 0 6px;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--bordo)}
+.caja-en ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.caja-en li{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.caja-en button{font:inherit;font-size:.8rem;border:0;background:none;color:var(--tinta-suave);text-decoration:underline;cursor:pointer;flex:none}
+.caja-pie{justify-content:space-between;align-items:center;gap:12px}
+.caja-cuenta{font-weight:600;color:var(--tinta)}
+.caja-agregar{font:inherit;border:0;border-radius:14px;background:var(--bordo);color:var(--blanco);padding:14px 22px;font-weight:500;cursor:pointer}
+.caja-agregar:disabled{background:#D9C3B6;cursor:not-allowed}
+@media (max-width:520px){.caja-pie{flex-direction:column;align-items:stretch;text-align:center}}
 /* Aviso de fiestas en la carta común */
 .fc-wrap{padding-top:12px}
 .fc-wrap[hidden],.fd-wrap[hidden]{display:none!important}
@@ -1666,10 +1692,11 @@ const MENU_FIESTAS=[
  /* PENDIENTE: fotos y precios confirmados del Panettone y el Budín inglés. Las fotos van en fotos/ y en FIESTAS.fotosFranja. */
  {n:"Panettone",v:[["Panettone",750]]},
  {n:"Budín inglés",nota:"Precio a confirmar",v:[["Budín inglés",1000]]},
- {n:"Postres individuales",b:"fiestas",org:v=>`dulces|${v}|${v}`,u:"x6",d:"Versiones individuales de nuestras tartas y tortas.",v:C.find(x=>x.id==="dulces").items[0].v}
+ /* Postres individuales en caja de 6 o de 12, mezclando variedades (sin mínimo por variedad). Precio por unidad: pu.
+    PENDIENTE: elegir la selección de variedades. Mientras tanto van todas las de la carta. */
+ {n:"Postres individuales",caja:1,tam:[6,12],pu:165,
+  variedades:C.find(x=>x.id==="dulces").items[0].v.map(v=>v[0])}
 ].filter(Boolean);
-FOTOS["fiestas|Postres individuales"]="dulces-caja";
-Object.keys(VAR).forEach(k=>{if(k.startsWith("dulces|"))VAR["fiestas|"+k.slice(7)]=VAR[k]});
 const DIASL=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
 const verFiestas=new URLSearchParams(location.search).has("fiestas");
 const aFecha=k=>{const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d,12)};
@@ -1696,6 +1723,16 @@ C.forEach(c=>{
   html+=`<section class="cat" id="${c.id}"><div class="cat-aside"><div class="ilus" aria-hidden="true">${svg}</div><div class="txt">${c.eyebrow?`<span class="eyebrow">${c.eyebrow}</span>`:""}<h2>${c.titulo||c.nombre}</h2>${c.intro?`<p>${c.intro}</p>`:""}${c.aviso?`<p class="aviso">${c.aviso}</p>`:""}</div>${c.cab||""}</div><div class="carta"><ul class="pgrid">`;
   let fichas="";
   c.items.forEach((p,i)=>{
+    if(p.caja){const fid=`f-${c.id}-${i}`,base=`${c.id}-caja`;
+      html+=`<li><button type="button" class="pcard" data-ficha="${fid}" data-ks="" data-caja="${base}"><span class="pcard-foto"><img src="fotos/dulces-caja-t.jpg" alt="" loading="lazy" width="360" height="360"></span><span class="pcard-txt"><strong>${p.n}</strong><span class="pcard-precio">Caja de ${p.tam.join(" o ")}</span></span><span class="pcard-cant" hidden></span></button></li>`;
+      fichas+=`<div class="ficha" id="${fid}" role="dialog" aria-modal="true" aria-label="${esc(p.n)}" hidden><div class="ficha-panel"><button type="button" class="ficha-cerrar" aria-label="Volver a ${esc(c.nombre)}">×</button>
+        <article class="prod caja" data-base="${base}" data-pu="${p.pu}" data-tam0="${p.tam[0]}"><div class="fotos"><button type="button" class="foto" data-big="fotos/dulces-caja.jpg" aria-label="Ver foto de ${esc(p.n)}"><img src="fotos/dulces-caja-t.jpg" alt="${esc(p.n)}" loading="lazy" width="600" height="600"></button></div>
+        <div class="prod-body"><div class="prod-head"><h3>${p.n}</h3></div><p class="desc">Armá tu caja combinando las variedades que quieras.</p>
+        <div class="caja-tam" role="group" aria-label="Tamaño de la caja">${p.tam.map(t=>`<button type="button" data-t="${t}" aria-pressed="false"><strong>Caja de ${t}</strong><span>${fmt(t*p.pu)}</span></button>`).join("")}</div>
+        <ul class="vars">${p.variedades.map(v=>{const vf=VAR["dulces|"+v];return `<li>${vf?`<button type="button" class="dmini" data-big="fotos/dulce-${vf}.webp" aria-label="Ver foto de ${esc(v)}"><img src="fotos/dulce-${vf}-t.webp" alt="${esc(v)}" loading="lazy" width="128" height="128"></button>`:""}<span class="vn">${v}</span><span class="lead" aria-hidden="true"></span><span class="cctrl" data-v="${esc(v)}"><button type="button" class="menos" aria-label="Quitar ${esc(v)}">−</button><span class="q" aria-live="polite">0</span><button type="button" class="mas" aria-label="Sumar ${esc(v)}">+</button></span></li>`}).join("")}</ul>
+        <div class="caja-en" hidden></div></div></article>
+        <div class="ficha-pie caja-pie"><span class="caja-cuenta" aria-live="polite"></span><button type="button" class="caja-agregar" disabled>Agregar caja</button></div></div></div>`;
+      return}
     if(p.sub){html+=`<div class="sub"><h3>${p.sub}</h3>${p.txt?`<p>${p.txt}</p>`:""}</div>`;return}
     const solo=p.v.length===1&&p.v[0][0]===p.n;
     const mp=(p.u&&/^x(\d+)$/.test(p.u))?+p.u.slice(1):(p.min||1);
@@ -1829,6 +1866,31 @@ document.getElementById("catalogo").addEventListener("click",e=>{
 });
 
 
+/* Caja de postres individuales: se elige el tamaño y se reparten las unidades entre las variedades */
+document.querySelectorAll(".prod.caja").forEach(art=>{
+  const pu=+art.dataset.pu,base=art.dataset.base,ficha=art.closest(".ficha"),pie=ficha.querySelector(".caja-pie"),btn=pie.querySelector(".caja-agregar"),cnt=new Map();let tam=+art.dataset.tam0;
+  const total=()=>{let t=0;cnt.forEach(v=>t+=v);return t};
+  function pintar(){const t=total(),falta=tam-t;
+    art.querySelectorAll(".caja-tam button").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.t===tam)));
+    art.querySelectorAll(".cctrl").forEach(el=>{const q=cnt.get(el.dataset.v)||0;el.classList.toggle("on",q>0);el.querySelector(".q").textContent=q;el.querySelector(".mas").disabled=t>=tam});
+    pie.querySelector(".caja-cuenta").textContent=t===0?`Elegí ${tam} postres`:falta>0?`Llevás ${t} de ${tam}`:`Caja completa`;
+    btn.disabled=falta!==0;btn.textContent=`Agregar caja de ${tam} · ${fmt(tam*pu)}`;
+    const en=[...pedido].filter(([k])=>k.startsWith(base+"-")),box=art.querySelector(".caja-en");box.hidden=!en.length;
+    box.innerHTML=en.length?`<p class="caja-en-tit">Ya en tu pedido</p><ul>${en.map(([k,it])=>`<li><span>${esc(it.l)}</span><button type="button" data-quitar="${k}">Quitar</button></li>`).join("")}</ul>`:""}
+  art._pintar=pintar;
+  art.addEventListener("click",e=>{
+    const tb=e.target.closest(".caja-tam button");
+    if(tb){tam=+tb.dataset.t;let t=total();for(const k of [...cnt.keys()].reverse()){while(t>tam&&cnt.get(k)>0){cnt.set(k,cnt.get(k)-1);t--}if(!cnt.get(k))cnt.delete(k)}pintar();return}
+    const b=e.target.closest(".cctrl button");
+    if(b){const v=b.closest(".cctrl").dataset.v,q=cnt.get(v)||0;if(b.classList.contains("mas")){if(total()<tam)cnt.set(v,q+1)}else if(q>1)cnt.set(v,q-1);else cnt.delete(v);pintar();return}
+    const qb=e.target.closest("[data-quitar]");if(qb){pedido.delete(qb.dataset.quitar);render()}});
+  btn.addEventListener("click",()=>{if(total()!==tam)return;
+    const det=[...cnt].map(([v,q])=>`${q} ${v}`).join(", ");
+    pedido.set(`${base}-${Date.now().toString(36)}`,{l:`Caja de ${tam} postres individuales (${det})`,p:tam*pu,q:1});
+    cnt.clear();render();ficha.querySelector(".ficha-cerrar").click()});
+  pintar();
+});
+
 /* Fichas de producto: cada tarjeta de la carta abre su ficha para elegir variedades y cantidades */
 (function(){
   const cat=document.getElementById("catalogo"),raiz=document.documentElement;let abierta=null,antes=null;
@@ -1842,7 +1904,10 @@ document.getElementById("catalogo").addEventListener("click",e=>{
   addEventListener("popstate",()=>{if(abierta)cerrar(true)});
   addEventListener("hashchange",()=>{if(abierta)cerrar(true)});
 })();
-function contarTarjetas(){document.querySelectorAll(".pcard").forEach(b=>{let n=0;b.dataset.ks.split(" ").forEach(k=>{const it=pedido.get(k);if(it)n+=it.q});const c=b.querySelector(".pcard-cant");c.hidden=!n;c.textContent=n?`${n} en tu pedido`:""})}
+function contarTarjetas(){document.querySelectorAll(".pcard").forEach(b=>{let n=0;b.dataset.ks.split(" ").forEach(k=>{const it=pedido.get(k);if(it)n+=it.q});
+  if(b.dataset.caja)pedido.forEach((it,k)=>{if(k.startsWith(b.dataset.caja+"-"))n+=it.q});
+  const c=b.querySelector(".pcard-cant");c.hidden=!n;c.textContent=n?(b.dataset.caja?`${n} ${n===1?"caja":"cajas"} en tu pedido`:`${n} en tu pedido`):""});
+  document.querySelectorAll(".prod.caja").forEach(a=>a._pintar&&a._pintar())}
 
 /* Pantalla de gracias: después de tocar "Enviar pedido por WhatsApp" */
 function mostrarGracias(panel,href,limpiar,titulo){
@@ -1887,17 +1952,18 @@ function pintarPasos(){document.getElementById("pasos-lista").innerHTML=PASOS[mo
    lo que no, queda guardado en el pedido de la carta y se avisa. */
 function ctrlDe(o,enFiestas){return [...document.querySelectorAll("#catalogo .ctrl")].find(el=>el.dataset.o===o&&!!el.closest("#fiestas")===enFiestas)}
 function derivarFiestas(f){
-  const x=diaF(f),pasan=[],quedan=[];
+  const x=diaF(f),pasan=[],quedan=[],ind=[];
   if(modo==="carta"){
     pedido.forEach((it,k)=>{const de=document.querySelector(`#catalogo .ctrl[data-k="${k}"]`),a=de&&ctrlDe(de.dataset.o,true);
-      if(!a){quedan.push(`${it.q} × ${it.l}`);return}
+      if(!a){if(de&&de.dataset.o.startsWith("dulces|")&&document.querySelector('.prod.caja')){ind.push(`${it.q} ${it.l.replace(/^Variedades: /,"")}`);return}quedan.push(`${it.q} × ${it.l}`);return}
       const fk=a.dataset.k,ya=guardado.get(fk),m=+a.dataset.m||1;
       guardado.set(fk,{l:a.dataset.l,p:+a.dataset.p,q:Math.max(m,it.q,ya?ya.q:0)});pasan.push(`${it.q} × ${a.dataset.l}`);pedido.delete(k)});
     if(pasan.length)render()}
   let h="";
-  if(pasan.length||quedan.length){
+  if(pasan.length||quedan.length||ind.length){
     h=`<p><strong>Los pedidos para ${x?x.nombre+" ("+txtDia(f)+")":numsF(" y ")} se hacen desde este menú.</strong></p>`;
     if(pasan.length)h+=`<p class="ok"><strong>Ya pasamos a tu pedido de fiestas:</strong></p><ul>${pasan.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`;
+    if(ind.length)h+=`<p>Los postres individuales para estas fechas van en <strong>caja de 6 o de 12</strong>, combinando las variedades que quieras. Armá la tuya desde «Postres individuales».</p><small>Los que habías elegido (${esc(ind.join(", "))}) quedan guardados en tu pedido de la carta.</small>`;
     if(quedan.length)h+=`<p>${quedan.length===1?"Este producto que elegiste no está disponible":"Estos productos que elegiste no están disponibles"} para ${x?x.nombre:"esta fecha"}:</p><ul>${quedan.map(t=>`<li>${esc(t)}</li>`).join("")}</ul><small>${quedan.length===1?"Queda guardado en tu pedido de la carta, por si lo querés":"Quedan guardados en tu pedido de la carta, por si los querés"} para otro día.</small>`}
   document.getElementById("fd-txt").innerHTML=h;document.getElementById("fd-wrap").hidden=!h;
   fechaPre=f;
