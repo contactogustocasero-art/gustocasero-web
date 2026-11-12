@@ -792,6 +792,60 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
 .hist-txt.ev .ev-lista li{border-color:var(--rosado);padding:16px 18px}
 .hist-txt.ev .des-pedir{align-self:center}
 @media (max-width:820px){.ev-modal .hist-foto{aspect-ratio:4/3}.hist-txt.ev .des-pedir{align-self:stretch}}
+
+/* ══ Carta tipo tienda: tarjetas con foto y nombre; cada producto se abre en su ficha ══ */
+#catalogo .carta{display:block}
+.pgrid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,2vw,22px)}
+@media (max-width:1100px){.pgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:820px){.pgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.pcard{position:relative;display:flex;flex-direction:column;width:100%;height:100%;padding:0;font:inherit;text-align:left;color:var(--canela);background:var(--crema);border:1px solid var(--rosado);border-radius:20px;overflow:hidden;cursor:pointer;transition:transform .35s ease,box-shadow .35s ease}
+.pcard:hover{transform:translateY(-3px);box-shadow:0 16px 34px -18px rgba(122,82,67,.45)}
+.pcard:focus-visible{outline:2px solid var(--canela);outline-offset:3px}
+.pcard-foto{display:block;aspect-ratio:1;background:var(--linea);overflow:hidden}
+.pcard-foto img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
+.pcard:hover .pcard-foto img{transform:scale(1.04)}
+.pcard-foto.vacia{display:grid;place-items:center;color:var(--canela)}
+.pcard-foto.vacia svg{width:52%;height:auto;opacity:.5}
+.pcard-txt{display:flex;flex-direction:column;gap:4px;padding:12px 14px 14px;flex:1}
+.pcard-txt strong{font-weight:500;font-size:1rem;line-height:1.3;color:var(--canela)}
+.pcard-precio{font-size:.85rem;color:var(--tinta-suave);font-variant-numeric:tabular-nums}
+.pcard-cant{position:absolute;top:10px;left:10px;padding:5px 11px;border-radius:999px;background:var(--canela);color:var(--blanco);font-size:.74rem;font-weight:600;letter-spacing:.02em}
+.pcard-cant[hidden]{display:none}
+@media (max-width:520px){.pcard-txt{padding:10px 12px 12px}.pcard-txt strong{font-size:.95rem}.pcard-cant{top:8px;left:8px;font-size:.68rem;padding:4px 9px}}
+@media (prefers-reduced-motion:reduce){.pcard,.pcard-foto img{transition:none}}
+.ficha{position:fixed;inset:0;z-index:26;background:rgba(62,46,39,.55);display:flex;align-items:center;justify-content:center;padding:max(24px,env(safe-area-inset-top,0px)) 24px max(24px,env(safe-area-inset-bottom,0px))}
+.ficha[hidden]{display:none}
+.con-ficha,.con-ficha body{overflow:hidden}
+.ficha-panel{position:relative;background:var(--crema);border-radius:28px;width:min(1000px,100%);max-height:100%;overflow-y:auto;overscroll-behavior:contain}
+.ficha-cerrar{position:absolute;top:14px;right:14px;z-index:2;font:inherit;font-size:1.5rem;line-height:1;width:44px;height:44px;border-radius:50%;border:1px solid var(--canela);background:var(--crema);color:var(--canela);cursor:pointer}
+.ficha-cerrar:hover{background:var(--canela);color:var(--blanco)}
+#catalogo .ficha .prod{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,48px);padding:clamp(28px,4vw,44px);margin:0;border:0;border-radius:0;background:transparent;align-items:start}
+#catalogo .ficha .prod.porfila,#catalogo .ficha .prod.sinfoto{grid-template-columns:1fr;padding-top:64px}
+#catalogo .ficha .prod>.fotos{display:flex;flex-direction:row;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px;width:100%;align-self:start;align-items:stretch;scrollbar-width:none}
+#catalogo .ficha .prod>.fotos::-webkit-scrollbar{display:none}
+#catalogo .ficha .prod>.fotos .foto{flex:0 0 100%;width:100%;max-width:none;aspect-ratio:1;border-radius:20px;scroll-snap-align:start}
+#catalogo .ficha .prod>.fotos:has(.foto+.foto) .foto{flex-basis:88%}
+#catalogo .ficha .prod>.foto.vacia{display:grid;width:100%;aspect-ratio:1;border-radius:20px}
+#catalogo .ficha .prod-body{padding-right:36px;gap:12px}
+#catalogo .ficha .prod h3{font-size:clamp(1.6rem,2.8vw,2.1rem);font-weight:300;line-height:1.15;color:var(--canela)}
+#catalogo .ficha .desc{font-size:.95rem;line-height:1.7}
+#catalogo .ficha ul.vars{margin-top:10px}
+#catalogo .ficha .des-pedir{align-self:stretch;margin-top:12px}
+.ficha-pie{position:sticky;bottom:0;z-index:1;background:var(--crema);padding:14px clamp(20px,4vw,44px) max(14px,env(safe-area-inset-bottom,0px));border-top:1px solid var(--rosado);display:flex;justify-content:flex-end}
+.ficha-listo{font:inherit;border:0;border-radius:14px;background:var(--canela);color:var(--blanco);padding:14px 28px;font-weight:500;letter-spacing:.02em;cursor:pointer}
+.ficha-listo:hover{background:var(--tinta)}
+@media (max-width:820px){
+  .ficha{align-items:flex-end;padding:env(safe-area-inset-top,0px) 0 0}
+  .ficha-panel{width:100%;max-height:92vh;border-radius:24px 24px 0 0}
+  #catalogo .ficha .prod{grid-template-columns:1fr;gap:18px;padding:18px 18px 22px}
+  #catalogo .ficha .prod>.fotos .foto,#catalogo .ficha .prod>.foto.vacia{aspect-ratio:4/3;border-radius:18px}
+  #catalogo .ficha .prod>.fotos:has(.foto+.foto) .foto{flex-basis:86%}
+  #catalogo .ficha .prod.porfila,#catalogo .ficha .prod.sinfoto{padding-top:76px}
+  #catalogo #desayunos .ficha .prod>.fotos .foto{aspect-ratio:1}
+  #catalogo .ficha .prod-body{padding-right:0}
+  .ficha-cerrar{top:28px;right:28px;width:40px;height:40px;background:rgba(248,239,228,.92)}
+  .ficha-listo{width:100%}
+}
 /* ══ Ventanas del pedido, desayuno y presupuesto: todo sobre crema, sin fondos blancos ══ */
 .checkout .co-panel,.checkout .co-body,.checkout .co-body.gracias,.checkout .co-foot,#desayuno .co-foot,#presupuesto .co-foot{background:var(--crema)}
 :where(.checkout) .co-aviso,:where(.checkout) .cuenta,:where(.checkout) .ds-elegido,:where(.checkout) .cal,:where(.checkout) .co-cerrar,:where(.checkout) .cal-head button,:where(.checkout) .ds-res button,:where(.checkout) .tiles label,:where(.checkout) .chips button,:where(.checkout) .ctrl button,:where(.checkout) input,:where(.checkout) textarea,:where(.checkout) select{background:var(--crema)}
@@ -955,7 +1009,7 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
   <div class="pasos-barra" role="note" aria-label="Cómo hacer tu pedido">
     <span class="pasos-tit">Cómo pedir</span>
     <ol>
-      <li><b>1</b><span><strong>Elegí</strong> tocá + en lo que quieras</span></li>
+      <li><b>1</b><span><strong>Elegí</strong> tocá un producto y sumalo</span></li>
       <li><b>2</b><span><strong>Completá</strong> día y horario</span></li>
       <li><b>3</b><span><strong>Enviá</strong> el pedido por WhatsApp</span></li>
     </ol>
@@ -1450,10 +1504,13 @@ const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&qu
 const ilus=document.getElementById("ilus").content;
 const pedido=new Map();
 let html="",idx="";
+const GRUPOS={dulces:1};
 C.forEach(c=>{
+  if(GRUPOS[c.id]){const g=c.items[0];c.items=g.v.map((v,j)=>{const vf=VAR[c.id+"|"+v[0]];return{n:v[0],u:g.u,v:[[v[0],v[1]]],k:`${c.id}-0-${j}`,et:`${g.n}: ${v[0]}`,foto:vf?`dulce-${vf}`:null}})}
   idx+=`<li><a href="#${c.id}">${c.nombre}</a></li>`;
   const svg=ilus.querySelector(`[data-ilus="${c.ilus}"]`).innerHTML;
-  html+=`<section class="cat" id="${c.id}"><div class="cat-aside"><div class="ilus" aria-hidden="true">${svg}</div><div class="txt"><h2>${c.nombre}</h2>${c.intro?`<p>${c.intro}</p>`:""}${c.aviso?`<p class="aviso">${c.aviso}</p>`:""}</div></div><div class="carta">`;
+  html+=`<section class="cat" id="${c.id}"><div class="cat-aside"><div class="ilus" aria-hidden="true">${svg}</div><div class="txt"><h2>${c.nombre}</h2>${c.intro?`<p>${c.intro}</p>`:""}${c.aviso?`<p class="aviso">${c.aviso}</p>`:""}</div></div><div class="carta"><ul class="pgrid">`;
+  let fichas="";
   c.items.forEach((p,i)=>{
     if(p.sub){html+=`<div class="sub"><h3>${p.sub}</h3>${p.txt?`<p>${p.txt}</p>`:""}</div>`;return}
     const solo=p.v.length===1&&p.v[0][0]===p.n;
@@ -1462,27 +1519,37 @@ C.forEach(c=>{
     const porFila=p.v.some(v=>(c.id+"|"+p.n+"|"+v[0]) in FILA);
     const fs=FOTOS[c.id+"|"+p.n];
     const lista=fs?[].concat(fs):[];
-    const foto=lista.length?`<div class="fotos">${lista.map(f=>`<button type="button" class="foto" data-big="fotos/${f}.jpg" aria-label="Ver foto de ${esc(p.n)}"><img src="fotos/${f}${p.grande?"":GALERIA.includes(c.id)?"-c":"-t"}.jpg"${p.grande||GALERIA.includes(c.id)?"":` srcset="fotos/${f}-t.jpg 360w, fotos/${f}.jpg 1100w" sizes="(max-width:520px) 92vw, 210px"`} alt="${esc(p.n)}" loading="lazy" width="360" height="360"></button>`).join("")}</div>`:(fs===""?`<div aria-hidden="true"></div>`:`<div class="foto vacia" aria-hidden="true">${svg}</div>`);
-    const sinFoto=fs==="";
-    html+=`<article class="prod${p.ancho?" ancho":""}${p.grande?" grande":""}${p.lado?" lado":""}${p.medio?" medio":""}${p.cuadro?" cuadro":""}${porFila?" porfila":""}${sinFoto?" sinfoto":""}">${porFila||sinFoto?"":foto}<div class="prod-body"><div class="prod-head"><h3>${p.n}</h3>${chip&&!(solo&&mp===1)?`<span class="unidad">${chip}</span>`:""}${p.nota?`<span class="nota-item">${p.nota}</span>`:""}</div>${p.d?`<p class="desc">${p.d}</p>`:""}<ul class="vars">`;
+    const fotoF=p.foto?`<div class="fotos"><button type="button" class="foto" data-big="fotos/${p.foto}.webp" aria-label="Ver foto de ${esc(p.n)}"><img src="fotos/${p.foto}.webp" alt="${esc(p.n)}" loading="lazy" width="600" height="600"></button></div>`:lista.length?`<div class="fotos">${lista.map(f=>`<button type="button" class="foto" data-big="fotos/${f}.jpg" aria-label="Ver foto de ${esc(p.n)}"><img src="fotos/${f}.jpg" alt="${esc(p.n)}" loading="lazy" width="600" height="600"></button>`).join("")}</div>`:null;
+    const foto=fotoF||(lista.length?`<div class="fotos">${lista.map(f=>`<button type="button" class="foto" data-big="fotos/${f}.jpg" aria-label="Ver foto de ${esc(p.n)}"><img src="fotos/${f}${p.grande?"":GALERIA.includes(c.id)?"-c":"-t"}.jpg"${p.grande||GALERIA.includes(c.id)?"":` srcset="fotos/${f}-t.jpg 360w, fotos/${f}.jpg 1100w" sizes="(max-width:520px) 92vw, 210px"`} alt="${esc(p.n)}" loading="lazy" width="360" height="360"></button>`).join("")}</div>`:(fs===""?`<div aria-hidden="true"></div>`:`<div class="foto vacia" aria-hidden="true">${svg}</div>`));
+    const sinFoto=fs===""&&!p.foto;
+    const fila1=porFila&&FILA[c.id+"|"+p.n+"|"+p.v[0][0]];
+    const tarjeta=p.foto?`fotos/${p.foto}-t.webp`:lista.length?`fotos/${lista[0]}${p.grande?"":GALERIA.includes(c.id)?"-c":"-t"}.jpg`:fila1?`fotos/${fila1}-t.jpg`:"";
+    const unidades=p.v.map(v=>{const mm=v[0].match(/\s*\(x(\d+)\)$/),m=mm?+mm[1]:mp;return m>1?[Math.round(v[1]/m),1]:[v[1],0]});
+    const desde=Math.min(...unidades.map(u=>u[0])),cu=unidades.find(u=>u[0]===desde)[1];
+    const fid=`f-${c.id}-${i}`;
+    const claves=p.v.map((v,j)=>p.k&&p.v.length===1?p.k:`${c.id}-${i}-${j}`).join(" ");
+    html+=`<li><button type="button" class="pcard" data-ficha="${fid}" data-ks="${claves}"><span class="pcard-foto${tarjeta?"":" vacia"}">${tarjeta?`<img src="${tarjeta}" alt="" loading="lazy" width="360" height="360">`:svg}</span><span class="pcard-txt"><strong>${p.n}</strong><span class="pcard-precio">${p.v.length>1?"Desde ":""}${fmt(desde)}${cu?" c/u":""}</span></span><span class="pcard-cant" hidden></span></button></li>`;
+    let art="";
+    art+=`<article class="prod${p.ancho?" ancho":""}${p.grande?" grande":""}${p.lado?" lado":""}${p.medio?" medio":""}${p.cuadro?" cuadro":""}${porFila?" porfila":""}${sinFoto?" sinfoto":""}">${porFila||sinFoto?"":(fotoF||foto)}<div class="prod-body"><div class="prod-head"><h3>${p.n}</h3>${chip&&!(solo&&mp===1)?`<span class="unidad">${chip}</span>`:""}${p.nota?`<span class="nota-item">${p.nota}</span>`:""}</div>${p.d?`<p class="desc">${p.d}</p>`:""}<ul class="vars">`;
     p.v.forEach((v,j)=>{
-      const k=`${c.id}-${i}-${j}`;
+      const k=p.k&&p.v.length===1?p.k:`${c.id}-${i}-${j}`;
       let nombre=v[0],m=mp;
       const mm=nombre.match(/\s*\(x(\d+)\)$/);
       if(mm){m=+mm[1];nombre=nombre.slice(0,mm.index)}
       const unit=m>1?Math.round(v[1]/m):v[1];
-      const etiqueta=solo?p.n:`${p.n}: ${nombre}`;
+      const etiqueta=p.et||(solo?p.n:`${p.n}: ${nombre}`);
       const label=solo?(m>1?"":(p.u||"Precio")):nombre;
       const minTxt=(mm&&m>1)?`<span class="min">mín. ${m}</span>`:"";
-      const vf=VAR[c.id+"|"+v[0]];
+      const vf=p.foto?null:VAR[c.id+"|"+v[0]];
       const mini=vf?`<button type="button" class="dmini" data-big="fotos/dulce-${vf}.webp" aria-label="Ver foto de ${esc(v[0])}"><img src="fotos/dulce-${vf}-t.webp" alt="${esc(v[0])}" loading="lazy" width="128" height="128"></button>`:"";
       const ff=FILA[c.id+"|"+p.n+"|"+v[0]];
       const celda=porFila?(ff?`<button type="button" class="foto" data-big="fotos/${ff}.jpg" aria-label="Ver foto de ${esc(nombre)}"><img src="fotos/${ff}-t.jpg" alt="${esc(nombre)}" loading="lazy" width="360" height="360"></button>`:`<div class="foto vacia" aria-hidden="true">${svg}</div>`):"";
-      html+=`<li>${celda}${porFila?'<span class="frow">':""}${mini}<span class="vn">${label}${minTxt}</span>${label||minTxt?`<span class="lead" aria-hidden="true"></span>`:""}<span class="vp">${fmt(unit)}${m>1?`<small> c/u</small>`:""}</span>${c.id==="desayunos"?"":`<span class="ctrl" data-k="${k}" data-l="${esc(etiqueta)}" data-p="${unit}" data-m="${m}"><button type="button" class="menos" aria-label="Quitar de ${esc(etiqueta)}">−</button><span class="q" aria-live="polite">0</span><button type="button" class="mas" aria-label="${m>1?`Agregar ${esc(etiqueta)}, mínimo ${m}`:`Agregar ${esc(etiqueta)}`}">+</button></span>`}${porFila?"</span>":""}</li>`;
+      art+=`<li>${celda}${porFila?'<span class="frow">':""}${mini}<span class="vn">${label}${minTxt}</span>${label||minTxt?`<span class="lead" aria-hidden="true"></span>`:""}<span class="vp">${fmt(unit)}${m>1?`<small> c/u</small>`:""}</span>${c.id==="desayunos"?"":`<span class="ctrl" data-k="${k}" data-l="${esc(etiqueta)}" data-p="${unit}" data-m="${m}"><button type="button" class="menos" aria-label="Quitar de ${esc(etiqueta)}">−</button><span class="q" aria-live="polite">0</span><button type="button" class="mas" aria-label="${m>1?`Agregar ${esc(etiqueta)}, mínimo ${m}`:`Agregar ${esc(etiqueta)}`}">+</button></span>`}${porFila?"</span>":""}</li>`;
     });
-    html+=`</ul>${c.id==="desayunos"?`<button type="button" class="wa des-pedir" data-op="${esc(p.n.replace(/^Desayuno\s+/,""))}">Pedir ${esc(p.n)}</button>`:""}</div></article>`;
+    art+=`</ul>${c.id==="desayunos"?`<button type="button" class="wa des-pedir" data-op="${esc(p.n.replace(/^Desayuno\s+/,""))}">Pedir ${esc(p.n)}</button>`:""}</div></article>`;
+    fichas+=`<div class="ficha" id="${fid}" role="dialog" aria-modal="true" aria-label="${esc(p.n)}" hidden><div class="ficha-panel"><button type="button" class="ficha-cerrar" aria-label="Volver a ${esc(c.nombre)}">×</button>${art}${c.id==="desayunos"?"":`<div class="ficha-pie"><button type="button" class="ficha-listo">Listo, seguir eligiendo</button></div>`}</div></div>`;
   });
-  html+=`</div></section>`;
+  html+=`</ul></div>${fichas}</section>`;
 });
 document.getElementById("indice").innerHTML=idx;
 document.getElementById("catalogo").innerHTML=html;
@@ -1562,6 +1629,7 @@ function render(){
   document.getElementById("p-cant").textContent=cant;document.getElementById("p-word").textContent=cant===1?"producto":"productos";
   document.getElementById("p-total").textContent=fmt(total);
   document.getElementById("p-lista").textContent=lin.join(" · ");
+  contarTarjetas();
   if(typeof actualizarCheckout==="function")actualizarCheckout();
   document.querySelectorAll(".ctrl").forEach(el=>{
     const it=pedido.get(el.dataset.k);el.classList.toggle("on",!!it);el.querySelector(".q").textContent=it?it.q:0;
@@ -1576,6 +1644,21 @@ document.getElementById("catalogo").addEventListener("click",e=>{
   render();
 });
 
+
+/* Fichas de producto: cada tarjeta de la carta abre su ficha para elegir variedades y cantidades */
+(function(){
+  const cat=document.getElementById("catalogo"),raiz=document.documentElement;let abierta=null,antes=null;
+  function abrir(id){const f=document.getElementById(id);if(!f)return;antes=document.activeElement;abierta=f;f.hidden=false;raiz.classList.add("con-ficha");f.querySelector(".ficha-panel").scrollTop=0;f.querySelector(".ficha-cerrar").focus();history.pushState({ficha:id},"",location.href)}
+  function cerrar(desdeAtras){if(!abierta)return;abierta.hidden=true;abierta=null;raiz.classList.remove("con-ficha");if(!desdeAtras&&history.state&&history.state.ficha)history.back();if(antes&&antes.focus)antes.focus({preventScroll:true})}
+  cat.addEventListener("click",e=>{
+    const t=e.target.closest(".pcard");if(t){abrir(t.dataset.ficha);return}
+    if(e.target.closest(".ficha-cerrar,.ficha-listo,.des-pedir")||e.target.classList.contains("ficha"))cerrar();
+  });
+  addEventListener("keydown",e=>{if(e.key==="Escape"&&abierta&&document.getElementById("visor").hidden)cerrar()});
+  addEventListener("popstate",()=>{if(abierta)cerrar(true)});
+  addEventListener("hashchange",()=>{if(abierta)cerrar(true)});
+})();
+function contarTarjetas(){document.querySelectorAll(".pcard").forEach(b=>{let n=0;b.dataset.ks.split(" ").forEach(k=>{const it=pedido.get(k);if(it)n+=it.q});const c=b.querySelector(".pcard-cant");c.hidden=!n;c.textContent=n?`${n} en tu pedido`:""})}
 
 /* Pantalla de gracias: después de tocar "Enviar pedido por WhatsApp" */
 function mostrarGracias(panel,href,limpiar,titulo){
