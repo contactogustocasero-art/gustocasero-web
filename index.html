@@ -692,9 +692,34 @@ footer.pie .wrap{gap:clamp(40px,6vw,64px)}
 .ctrl button{background:transparent}
 .ctrl.on .mas,.ctrl button:hover{background:var(--canela)}
 .ev-lista li{background:transparent;border:1px solid var(--linea)}
+
+/* ── Pantallas ── */
+html[data-vista="inicio"] .solo-carta{display:none!important}
+html[data-vista="carta"] .solo-inicio{display:none!important}
+section.cat[hidden]{display:none!important}
+html[data-vista="carta"] nav.indice{margin-top:0}
+html[data-vista="carta"] #catalogo section.cat,html[data-vista="carta"] #eventos{padding-top:clamp(40px,6vw,72px)}
+nav.indice a.volver{flex:none;display:grid;place-items:center;width:38px;height:38px;padding:0;border-radius:50%;border:1px solid var(--canela);color:var(--canela);text-decoration:none}
+nav.indice a.volver:hover{border-color:var(--canela)}
+nav.indice a.mini{padding:0;border:0}
+nav.indice a.volver:hover{background:var(--canela);color:var(--blanco)}
+nav.indice .wrap{gap:18px}
+@media (min-width:821px){html[data-vista="carta"] nav.indice ul{gap:22px}html[data-vista="carta"] nav.indice ul a{letter-spacing:.15em}}
+nav.indice a.mini{display:block}
+@media (max-width:820px){nav.indice a.mini{display:none}}
+.vista-sig{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding-block:8px clamp(56px,8vw,88px)}
+.vista-sig a{text-decoration:none;color:var(--canela)}
+.vista-sig .ant,.vista-sig .sig{display:flex;flex-direction:column;gap:4px;padding:18px 0;border-top:1px solid var(--linea)}
+.vista-sig .sig{text-align:right}
+.vista-sig small{font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;font-weight:600;color:var(--tinta-suave)}
+.vista-sig span{font-weight:300;font-size:clamp(1.15rem,2vw,1.5rem)}
+.vista-sig .ant:hover span,.vista-sig .sig:hover span{text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1px}
+.vista-sig .ini{border:1px solid var(--canela);border-radius:999px;padding:11px 22px;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;font-weight:500;white-space:nowrap}
+.vista-sig .ini:hover{background:var(--canela);color:var(--blanco)}
+@media (max-width:640px){.vista-sig{grid-template-columns:1fr 1fr}.vista-sig .ini{grid-column:1/-1;grid-row:2;justify-self:center;margin-top:12px}}
 </style>
 
-<header class="portada">
+<header class="portada solo-inicio">
   <h1 class="solo-lector">Gusto Casero · Panadería y pastelería artesanal en Montevideo</h1>
   <div class="barra-top">
     <div class="wrap">
@@ -730,14 +755,14 @@ footer.pie .wrap{gap:clamp(40px,6vw,64px)}
   </div>
 </header>
 
-<section class="destacados" id="destacados" aria-labelledby="dest-tit">
+<section class="destacados solo-inicio" id="destacados" aria-labelledby="dest-tit">
   <div class="wrap">
     <div class="dest-head"><span class="eyebrow">Elegí una categoría</span><h2 id="dest-tit">Nuestra carta</h2></div>
     <ul class="dest-lista" id="dest-lista"></ul>
   </div>
 </section>
 
-<div class="wrap">
+<div class="wrap solo-inicio">
 
   <div class="como">
     <div class="como-tit"><span class="eyebrow">Pedidos</span><h2>Cómo hacer tu pedido</h2></div>
@@ -749,9 +774,10 @@ footer.pie .wrap{gap:clamp(40px,6vw,64px)}
   </div>
 </div>
 
-<nav class="indice" aria-label="Categorías">
+<nav class="indice solo-carta" aria-label="Categorías">
   <div class="wrap">
-    <div class="mini" aria-hidden="true"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="383 268 377 90"><defs><g id="l1-glyph-7-0">
+    <a class="volver" href="#inicio" aria-label="Volver al inicio"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></a>
+    <a class="mini" href="#inicio" aria-label="Volver al inicio"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="383 268 377 90"><defs><g id="l1-glyph-7-0">
 <path d="M 1.875 -19.046875 C 1.875 -10.578125 9.359375 -4.21875 17.5625 -4.359375 C 11.984375 -1.359375 3.75 0.421875 3.75 5.203125 C 3.75 7.765625 6.03125 9.453125 9.078125 9.453125 C 16.671875 9.453125 23.359375 2.203125 29.578125 2.203125 C 31.546875 2.203125 32.34375 3.46875 32.34375 4.59375 C 32.34375 10.765625 11.1875 8.796875 11.1875 17.1875 C 11.1875 18.015625 11.796875 18.578125 12.5 18.578125 C 13.90625 18.578125 13.53125 16.625 14.046875 15.359375 C 16.484375 9.40625 34.734375 11.796875 34.734375 2.953125 C 34.734375 0.234375 32.671875 -2.015625 29.34375 -2.015625 C 21.0625 -2.015625 15.640625 5.25 9.453125 5.25 C 8.328125 5.25 7.53125 4.640625 7.53125 3.5625 C 7.53125 0.609375 14.75 -1.875 22.84375 -5.34375 C 28.65625 -7.4375 32.8125 -12.828125 32.8125 -19.046875 C 32.8125 -27.53125 25.328125 -33.84375 17.09375 -33.703125 L 27.625 -36.5625 L 27.015625 -38.484375 C 14.84375 -33.703125 1.875 -32.34375 1.875 -19.046875 Z M 5.8125 -21.859375 C 5.8125 -27.578125 8.5625 -31.921875 13.8125 -31.921875 C 21.765625 -31.921875 28.84375 -24.4375 28.84375 -16.484375 C 28.84375 -10.8125 26.125 -6.40625 20.828125 -6.40625 C 12.875 -6.40625 5.8125 -13.90625 5.8125 -21.859375 Z M 5.8125 -21.859375 " />
 </g>
 <g id="l1-glyph-7-1">
@@ -835,14 +861,14 @@ footer.pie .wrap{gap:clamp(40px,6vw,64px)}
 <g fill="currentColor" fill-opacity="1">
 <use xlink:href="#l1-glyph-8-5" x="613.142965" y="284.711422" />
 </g>
-</svg></div>
+</svg></a>
     <ul id="indice"></ul>
   </div>
 </nav>
 
-<main class="wrap" id="catalogo"></main>
+<main class="wrap solo-carta" id="catalogo"></main>
 
-<div class="wrap">
+<div class="wrap solo-carta">
 <section class="cat" id="eventos">
   <div class="cat-aside"><div class="ilus" aria-hidden="true" data-ilus-ev="flores"></div><div class="txt"><h2>Eventos y reuniones</h2></div></div>
   <div class="carta ev">
@@ -855,6 +881,8 @@ footer.pie .wrap{gap:clamp(40px,6vw,64px)}
   </div>
 </section>
 </div>
+
+<nav class="wrap vista-sig solo-carta" id="vista-sig" aria-label="Más de la carta"></nav>
 
 <footer class="pie">
   <div class="wrap">
@@ -1342,6 +1370,36 @@ C.forEach(c=>{
 });
 document.getElementById("indice").innerHTML=idx+'<li><a href="#eventos">Eventos</a></li>';
 document.getElementById("catalogo").innerHTML=html;
+/* Pantallas: inicio (portada + categorías) y una pantalla por categoría. El pedido se mantiene entre pantallas. */
+(function(){
+  const raiz=document.documentElement;
+  const vistas=C.map(c=>[c.id,c.nombre]).concat([["eventos","Eventos y reuniones"]]);
+  const ids=vistas.map(v=>v[0]);
+  const titulo=document.title;
+  let yInicio=0,actual=null;
+  function ir(){
+    const h=decodeURIComponent(location.hash.slice(1));
+    if(ids.includes(h)){
+      if(actual===null)yInicio=scrollY;
+      actual=h;raiz.dataset.vista="carta";
+      document.querySelectorAll("section.cat").forEach(sec=>sec.hidden=sec.id!==h);
+      document.querySelectorAll("nav.indice ul a").forEach(a=>{const on=a.getAttribute("href")==="#"+h;a.classList.toggle("activa",on);if(on){a.setAttribute("aria-current","page");const ul=a.closest("ul");ul.scrollTo({left:a.offsetLeft-ul.offsetLeft-(ul.clientWidth-a.offsetWidth)/2})}else a.removeAttribute("aria-current")});
+      const i=ids.indexOf(h),ant=vistas[i-1],sig=vistas[i+1];
+      document.getElementById("vista-sig").innerHTML=(ant?`<a class="ant" href="#${ant[0]}"><small>Anterior</small><span>&#8592; ${ant[1]}</span></a>`:"<span></span>")+`<a class="ini" href="#inicio">Volver al inicio</a>`+(sig?`<a class="sig" href="#${sig[0]}"><small>Siguiente</small><span>${sig[1]} &#8594;</span></a>`:"<span></span>");
+      document.title=vistas[i][1]+" · Gusto Casero";
+      scrollTo({top:0,behavior:"instant"});
+    }else{
+      const venia=actual!==null;actual=null;raiz.dataset.vista="inicio";
+      document.querySelectorAll("section.cat").forEach(sec=>sec.hidden=false);
+      document.title=titulo;
+      if(h==="destacados")document.getElementById("destacados").scrollIntoView({behavior:"instant"});
+      else if(venia)scrollTo({top:yInicio,behavior:"instant"});
+    }
+  }
+  addEventListener("hashchange",ir);
+  ir();
+})();
+
 /* Nuestra historia: se abre desde el encabezado o el pie, no está en el recorrido de la carta */
 (function(){
   const h=document.getElementById("historia"),cerrar=h.querySelector(".hist-cerrar");let antes=null;
