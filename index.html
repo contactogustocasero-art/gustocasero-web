@@ -545,7 +545,7 @@ section.cat{grid-template-columns:1fr;gap:clamp(36px,5vw,56px)}
 /* ══ Elevación de diseño ══
    Portada como la tapa del manual: foto de croissants desenfocada y logo a una tinta en blanco (B.2: fondos con más de 15 % de saturación).
    Paleta, Urbanist, logo, ilustraciones y pattern sin cambios: solo cambia la puesta en página. */
-.portada{background:var(--tinta) url("recursos/portada.webp") center/cover no-repeat;color:var(--blanco);border-radius:0 0 50% 50% / 0 0 clamp(28px,5vw,64px) clamp(28px,5vw,64px)}
+.portada{background:var(--tinta) url("recursos/portada.webp") center/cover no-repeat;color:var(--blanco)}
 .portada::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(122,82,67,.18),rgba(122,82,67,.34))}
 .portada .wrap{position:relative;z-index:1;display:flex;justify-content:center;align-items:center;min-height:clamp(480px,78vh,760px);padding-block:clamp(72px,10vw,120px)}
 .portada .ilus-lado{display:none}
@@ -652,7 +652,15 @@ section.cat{border-bottom:0}
 .firma{display:block;width:clamp(170px,22vw,230px);aspect-ratio:632/123;background:var(--canela);-webkit-mask:url("recursos/firma.png") center/contain no-repeat;mask:url("recursos/firma.png") center/contain no-repeat}
 
 /* Nuestra historia: texto del manual + foto del recetario (A.10: blanco y negro, 70 % de opacidad) */
-.historia{padding-block:clamp(72px,10vw,128px) 0}
+.historia{position:fixed;inset:0;z-index:28;background:rgba(62,46,39,.55);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) 16px max(16px,env(safe-area-inset-bottom,0px));overflow-y:auto}
+.historia[hidden]{display:none}
+.con-historia,.con-historia body{overflow:hidden}
+.hist-panel{position:relative;background:var(--crema);border-radius:28px;width:min(1120px,100%);max-height:100%;overflow-y:auto;padding:clamp(48px,6vw,80px) clamp(8px,3vw,40px)}
+.hist-cerrar{position:absolute;top:16px;right:16px;font:inherit;font-size:1.5rem;line-height:1;width:44px;height:44px;border-radius:50%;border:1px solid var(--canela);background:var(--crema);color:var(--canela);cursor:pointer;z-index:1}
+.hist-cerrar:hover{background:var(--canela);color:var(--blanco)}
+.pie-historia{font:inherit;cursor:pointer;background:transparent;color:var(--blanco);border:1px solid rgba(255,255,255,.85);border-radius:999px;padding:12px 28px;font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;font-weight:500;transition:background .3s,color .3s}
+.pie-historia:hover{background:var(--blanco);color:var(--canela)}
+.pie-historia:focus-visible{outline:2px solid var(--blanco);outline-offset:3px}
 .hist-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(36px,7vw,96px);align-items:center}
 .hist-foto{position:relative;aspect-ratio:3/4;border-radius:24px;overflow:hidden;background:var(--blanco)}
 .hist-foto img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1);opacity:.7}
@@ -661,7 +669,7 @@ section.cat{border-bottom:0}
 .hist-txt p{margin:0;color:var(--tinta-suave);font-weight:300;font-size:1rem;line-height:1.75;max-width:52ch}
 .hist-txt .hist-lead{font-size:clamp(1.12rem,1.6vw,1.28rem);line-height:1.6;color:var(--tinta);font-weight:300}
 .hist-txt .firma{margin-top:8px}
-@media (max-width:820px){.hist-grid{grid-template-columns:1fr}.hist-foto{aspect-ratio:4/3;max-height:340px}}
+@media (max-width:820px){.hist-grid{grid-template-columns:1fr}.hist-foto{aspect-ratio:4/3;max-height:300px}.hist-panel{border-radius:22px;padding-top:68px}}
 
 /* Pie editorial */
 footer.pie .wrap{gap:clamp(40px,6vw,64px)}
@@ -679,7 +687,7 @@ footer.pie .wrap{gap:clamp(40px,6vw,64px)}
   <h1 class="solo-lector">Gusto Casero · Panadería y pastelería artesanal en Montevideo</h1>
   <div class="barra-top">
     <div class="wrap">
-      <nav aria-label="Secciones"><a href="#destacados">Carta</a><a href="#historia">Nuestra historia</a><a href="#eventos">Eventos</a></nav>
+      <nav aria-label="Secciones"><a href="#destacados">Carta</a><a href="#historia" data-historia>Nuestra historia</a><a href="#eventos">Eventos</a></nav>
       <div class="barra-der"><a class="barra-ig" href="https://instagram.com/gusto_casero" target="_blank" rel="noopener" aria-label="Instagram de Gusto Casero"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r=".9" fill="currentColor" stroke="none"/></svg></a><a class="barra-cta" href="#destacados">Hacer pedido</a></div>
     </div>
   </div>
@@ -716,20 +724,6 @@ footer.pie .wrap{gap:clamp(40px,6vw,64px)}
   <div class="wrap">
     <div class="dest-head"><span class="eyebrow">Elegí una categoría</span><h2 id="dest-tit">Nuestra carta</h2></div>
     <ul class="dest-lista" id="dest-lista"></ul>
-  </div>
-</section>
-
-<section class="historia" id="historia" aria-labelledby="hist-tit">
-  <div class="wrap hist-grid">
-    <div class="hist-foto" aria-hidden="true"><img src="recursos/recetario.webp" alt="" loading="lazy" width="900" height="1200"></div>
-    <div class="hist-txt">
-      <span class="eyebrow">Nuestra historia</span>
-      <h2 id="hist-tit">Gustos que llenan el alma</h2>
-      <p class="hist-lead">Con el aroma a pan recién horneado que danzaba por los rincones de la cocina de mamá leudó nuestro propósito: invitarte a viajar en el tiempo a través del sabor, con gustos que remitan a tu casa, a tu infancia, a las mujeres que te demostraron su amor a través de la cocina.</p>
-      <p>Somos Victoria y Josefina, hermanas, colmadas de recetas heredadas, con la misión de integrar el pasado para presentar una cocina contemporánea. Para nosotras, se trata de ofrecerte gustos que se sientan reales, familiares, elaborados de manera artesanal con productos frescos, de calidad. Porque nos importa.</p>
-      <p>Porque queremos dar el mismo amor que recibimos. Porque queremos que te puedas llevar a casa una porción de la nuestra y saborear gustos cercanos, gustos que llenan el alma, gustos caseros.</p>
-      <span class="firma" role="img" aria-label="Gusto Casero"></span>
-    </div>
   </div>
 </section>
 
@@ -861,10 +855,28 @@ footer.pie .wrap{gap:clamp(40px,6vw,64px)}
       <div><dt>WhatsApp</dt><dd class="tel"><a href="https://wa.me/59898747114" target="_blank" rel="noopener">098 747 114</a></dd></div>
       <div><dt>Instagram</dt><dd><a href="https://instagram.com/gusto_casero" target="_blank" rel="noopener">@gusto_casero</a></dd></div>
     </dl>
+    <button type="button" class="pie-historia" data-historia>Conocé nuestra historia</button>
     <div class="pie-cierre"><span class="pie-lema">Todo artesanal,<br>muuuy rico</span><span class="firma" role="img" aria-label="Gusto Casero"></span></div>
     <nav class="pie-nav" id="pie-nav" aria-label="Categorías"></nav>
   </div>
 </footer>
+
+<div class="historia" id="historia" role="dialog" aria-modal="true" aria-labelledby="hist-tit" hidden>
+  <div class="hist-panel">
+  <button type="button" class="hist-cerrar" aria-label="Cerrar">×</button>
+  <div class="wrap hist-grid">
+    <div class="hist-foto" aria-hidden="true"><img src="recursos/recetario.webp" alt="" width="900" height="1200"></div>
+    <div class="hist-txt">
+      <span class="eyebrow">Nuestra historia</span>
+      <h2 id="hist-tit">Gustos que llenan el alma</h2>
+      <p class="hist-lead">Con el aroma a pan recién horneado que danzaba por los rincones de la cocina de mamá leudó nuestro propósito: invitarte a viajar en el tiempo a través del sabor, con gustos que remitan a tu casa, a tu infancia, a las mujeres que te demostraron su amor a través de la cocina.</p>
+      <p>Somos Victoria y Josefina, hermanas, colmadas de recetas heredadas, con la misión de integrar el pasado para presentar una cocina contemporánea. Para nosotras, se trata de ofrecerte gustos que se sientan reales, familiares, elaborados de manera artesanal con productos frescos, de calidad. Porque nos importa.</p>
+      <p>Porque queremos dar el mismo amor que recibimos. Porque queremos que te puedas llevar a casa una porción de la nuestra y saborear gustos cercanos, gustos que llenan el alma, gustos caseros.</p>
+      <span class="firma" role="img" aria-label="Gusto Casero"></span>
+    </div>
+  </div>
+  </div>
+</div>
 
 <div class="pedido" id="pedido" hidden>
   <div class="wrap">
@@ -1320,6 +1332,17 @@ C.forEach(c=>{
 });
 document.getElementById("indice").innerHTML=idx+'<li><a href="#eventos">Eventos</a></li>';
 document.getElementById("catalogo").innerHTML=html;
+/* Nuestra historia: se abre desde el encabezado o el pie, no está en el recorrido de la carta */
+(function(){
+  const h=document.getElementById("historia"),cerrar=h.querySelector(".hist-cerrar");let antes=null;
+  function abrir(){antes=document.activeElement;h.hidden=false;document.documentElement.classList.add("con-historia");cerrar.focus()}
+  function salir(){h.hidden=true;document.documentElement.classList.remove("con-historia");if(location.hash==="#historia")history.replaceState(null,"",location.pathname+location.search);if(antes&&antes.focus)antes.focus()}
+  document.querySelectorAll("[data-historia]").forEach(b=>b.addEventListener("click",e=>{e.preventDefault();abrir()}));
+  cerrar.addEventListener("click",salir);
+  h.addEventListener("click",e=>{if(e.target===h)salir()});
+  addEventListener("keydown",e=>{if(e.key==="Escape"&&!h.hidden)salir()});
+  if(location.hash==="#historia")abrir();
+})();
 document.querySelector(".pie-logo").innerHTML=document.querySelector(".etiqueta .logo").innerHTML;
 document.getElementById("pie-nav").innerHTML=C.map(c=>`<a href="#${c.id}">${c.nombre}</a>`).join("")+'<a href="#eventos">Eventos</a>';
 
