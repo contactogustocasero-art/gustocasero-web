@@ -1640,7 +1640,7 @@ const FIESTAS={
  desde:"2026-12-01",
  hasta:"2027-01-01",
  /* Cómo se anuncia en el inicio: "A" tarjeta destacada en «Nuestra carta», "B" franja de color, "C" aviso fino arriba de todo */
- cartel:"A",
+ cartel:"B",
  dias:[
   {f:"2026-12-24",nombre:"Nochebuena",cierre:"2026-12-22T19:00",horas:[11,12,13,14,15]},
   {f:"2026-12-31",nombre:"Fin de Año",cierre:"2026-12-29T19:00",horas:[11,12,13,14,15]}
@@ -1868,7 +1868,7 @@ function pintarCartel(){const act=fiestasActivas(),op=opcionCartel(),n=(modo==="
   const A=document.getElementById("fiestas-dest"),B=document.getElementById("fiestas-home"),Cb=document.getElementById("fiestas-barra");
   A.hidden=!(act&&op==="A");B.hidden=!(act&&op==="B");Cb.hidden=!(act&&op==="C");if(!act)return;
   if(op==="A")A.innerHTML=`<a href="#fiestas"><span class="fa-fotos" aria-hidden="true"><img src="fotos/tortas-pavlova-t.jpg" alt=""><img src="fotos/picada-tabla-grande-t.jpg" alt=""><img src="fotos/dulces-caja-t.jpg" alt=""></span><span class="fa-txt"><span class="eyebrow">Nochebuena · Fin de Año</span><strong>Menú de fiestas</strong>${fechasHTML()}${tuyo}${btn}</span></a>`;
-  if(op==="B")document.getElementById("fb-in").innerHTML=`<a href="#fiestas"><span class="fb-fotos" aria-hidden="true"><img src="fotos/tortas-pavlova-t.jpg" alt=""><img src="fotos/picada-tabla-grande-t.jpg" alt=""><img src="fotos/dulces-caja-t.jpg" alt=""></span><span class="fb-txt"><span class="eyebrow">Menú de fiestas</span><strong>Encargá tu mesa de Nochebuena y Fin de Año</strong>${fechasHTML()}${tuyo}</span>${btn}</a>`;
+  if(op==="B")document.getElementById("fb-in").innerHTML=`<a href="#fiestas"><span class="fb-fotos" aria-hidden="true"><img src="fotos/tortas-pavlova-t.jpg" alt=""><img src="fotos/picada-tabla-grande-t.jpg" alt=""><img src="fotos/dulces-caja-t.jpg" alt=""></span><span class="fb-txt"><span class="eyebrow">Menú de fiestas</span><strong>Armá tu mesa de Nochebuena y Fin de Año</strong>${fechasHTML()}${tuyo}</span>${btn}</a>`;
   if(op==="C")Cb.innerHTML=`<span class="wrap"><span><b>Menú de fiestas</b> · pedidos para el ${diasAbiertos().map(x=>aFecha(x.f).getDate()).join(" y el ")} de diciembre${n?` · tenés ${n} ${n===1?"producto":"productos"} elegidos`:""}</span><em>${n?"Seguir con mi pedido":"Ver menú"} &#8594;</em></span>`}
 const PASOS={carta:document.getElementById("pasos-lista").innerHTML,fiestas:'<li><b>1</b><span><strong>Elegí</strong> tocá un producto y sumalo</span></li><li><b>2</b><span><strong>Completá</strong> el 24 o el 31 y el horario</span></li><li><b>3</b><span><strong>Pagá</strong> y confirmá por WhatsApp</span></li>'};
 function pintarPasos(){document.getElementById("pasos-lista").innerHTML=PASOS[modo]}
