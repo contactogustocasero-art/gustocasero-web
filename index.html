@@ -1020,6 +1020,13 @@ html[data-cat="fiestas"] .fondo-fiestas{display:block}
 .fx-notas svg{color:var(--oro)}
 .fc-aviso{position:relative;overflow:hidden;background:var(--fverde);border:0;color:var(--blanco);padding:14px clamp(14px,2.5vw,22px)}
 .fc-aviso>*:not(.fdeco){position:relative;z-index:1}
+/* Estrellitas del aviso: ubicadas para no tapar texto ni botón */
+.fc-aviso .fdeco .ch{width:var(--w,20px)}
+.fc-aviso .s1{--w:34px;left:calc(100% - 20px);top:20px}
+.fc-aviso .s2{--w:22px;left:14px;top:calc(100% - 12px)}
+.fc-aviso .s3{--w:18px;left:72%;top:10px}
+.fc-aviso .s4{--w:20px;left:calc(100% - 14px);top:calc(100% - 12px)}
+@media (min-width:641px){.fc-aviso .s1{--w:34px;left:78%;top:30%}.fc-aviso .s2{--w:22px;left:84%;top:80%}.fc-aviso .s3{--w:16px;left:73%;top:78%}.fc-aviso .s4{--w:14px;left:60%;top:16%}}
 .fc-foto{background:none!important;width:54px;height:auto;color:var(--blanco)}
 .fc-foto svg{display:block;width:100%;height:auto}
 .fc-txt strong{color:var(--blanco);font-weight:500}
@@ -1771,7 +1778,7 @@ const CH='<svg viewBox="-50 -50 100 100"><path fill="currentColor" d="M0-50C2.6-
 const FB_CH=[[21.5,12.5,120],[77.8,8.8,64],[70.4,16.2,52],[28.9,24.4,52],[88.8,30,118],[9.6,36.8,112],[93.2,49,46],[85.9,59.3,74],[9.8,55.2,46]];
 const FB_PT=[[35.8,7],[64.2,7.6],[33.3,18.2],[11.4,21],[87.6,16.3],[17.8,28.2],[76.6,23.2],[65.4,25.9],[83.9,40.6],[15.4,47.6],[5.9,63.5],[12.1,69.6],[92.8,66.9]];
 const FX_CH=[[6,18,90],[94,14,70],[90,82,60],[8,86,44]],FX_PT=[[16,8],[84,30],[4,52],[96,58],[22,94],[74,92]];
-const AV_CH=[],AV_PT=[[98.5,12],[98.5,88],[66,6],[30,95],[86,95],[50,4]];
+const AV_PT=[[66,6],[30,95],[50,4]];
 function deco(ch,pt){return `<span class="fdeco" aria-hidden="true">${ch.map(([x,y,t],k)=>`<span class="ch" style="left:${x}%;top:${y}%;--s:${t};--d:${-(k*0.7).toFixed(1)}s">${CH}</span>`).join("")}${pt.map(([x,y])=>`<span class="pt" style="left:${x}%;top:${y}%"></span>`).join("")}</span>`}
 const PAG_CH=[[6,9,110],[93,7,70],[16,30,60],[88,26,120],[4,52,80],[96,46,56],[12,74,64],[90,68,100],[50,4,44],[30,92,70],[72,88,84],[58,60,40],[38,40,36],[80,52,30]];
 const PAG_PT=[[22,6],[70,14],[40,18],[97,30],[8,38],[60,32],[26,50],[86,40],[3,64],[46,72],[94,80],[18,86],[62,94],[84,96],[34,64],[76,72],[52,46],[10,20],[30,10],[98,58],[66,80],[42,86]];
@@ -2044,7 +2051,7 @@ document.getElementById("fd-cerrar").addEventListener("click",()=>{document.getE
 addEventListener("hashchange",()=>{if(location.hash!=="#fiestas")document.getElementById("fd-wrap").hidden=true});
 document.getElementById("fondo-fiestas").innerHTML=deco(PAG_CH,PAG_PT);
 function pintarAvisoCarta(){const act=fiestasActivas();document.getElementById("fc-wrap").hidden=!act;if(!act)return;
-  const fa=document.querySelector(".fc-aviso");if(!fa.querySelector(".fdeco")){fa.insertAdjacentHTML("afterbegin",deco(AV_CH,AV_PT));document.getElementById("fc-foto").innerHTML=ilus.querySelector('[data-ilus="arbol"]').innerHTML}
+  const fa=document.querySelector(".fc-aviso");if(!fa.querySelector(".fdeco")){fa.insertAdjacentHTML("afterbegin",`<span class="fdeco" aria-hidden="true"><span class="ch s1">${CH}</span><span class="ch s2">${CH}</span><span class="ch s3">${CH}</span><span class="ch s4">${CH}</span>${AV_PT.map(([x,y])=>`<span class="pt" style="left:${x}%;top:${y}%"></span>`).join("")}</span>`);document.getElementById("fc-foto").innerHTML=ilus.querySelector('[data-ilus="arbol"]').innerHTML}
   const t=numsF().replace(/^el /,"");document.getElementById("fc-tit").textContent=`¿Tu pedido es para el ${t}?`;
   document.getElementById("fc-sub").textContent="Entrá acá para hacer tu pedido para las fiestas :)"}
 pintarCab();pintarCartel();pintarAvisoCarta();setInterval(()=>{pintarCab();pintarCartel();pintarAvisoCarta()},60000);
