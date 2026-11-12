@@ -894,32 +894,28 @@ nav.indice ul a[href="#fiestas"]{align-self:center;padding:7px 14px;margin-block
 nav.indice ul a[href="#fiestas"]:hover,nav.indice ul a[href="#fiestas"].activa{background:var(--bordo-osc);color:var(--blanco);border:0}
 nav.indice ul li:has(> a[href="#fiestas"]){display:flex;align-items:center}
 #menu-carta a[href="#fiestas"]{grid-column:1/-1;justify-self:start;font-weight:600;font-size:1rem;background:var(--bordo);color:var(--blanco);border-radius:999px;padding:8px 18px;text-decoration:none}
-/* Botón en la portada: lo primero que se ve al entrar */
-.fp-btn{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:12px 22px;border-radius:999px;background:var(--bordo);color:var(--blanco);text-decoration:none;font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;font-weight:600;box-shadow:0 10px 26px -12px rgba(60,20,14,.6);transition:background .3s,transform .3s}
-.fp-btn:hover{background:var(--bordo-osc);transform:translateY(-2px)}
-.fp-btn:focus-visible{outline:2px solid var(--blanco);outline-offset:3px}
-.fp-btn[hidden]{display:none!important}
-@media (max-width:420px){.fp-btn{letter-spacing:.1em;font-size:.68rem;padding:11px 18px}}
+
 /* Pantalla del menú de fiestas: dos fechas grandes y dos datos clave */
 html[data-cat="fiestas"] .cat-aside .eyebrow{color:var(--bordo)}
 .fx-pie{display:flex;justify-content:center;margin-top:clamp(28px,4vw,44px)}
 html[data-cat="fiestas"] .cat-aside h2{color:var(--bordo)}
 html[data-cat="fiestas"] .cat-aside h2::before,html[data-cat="fiestas"] .cat-aside h2::after{background:var(--bordo)}
 html[data-cat="fiestas"] .cat-aside .ilus{color:var(--bordo)}
-.fx{display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;max-width:760px}
-.fx-dias{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
-.fx-dia{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto auto;column-gap:16px;row-gap:2px;align-items:center;text-align:left;background:var(--blanco);border-radius:20px;padding:18px 20px;border-top:4px solid var(--bordo)}
-.fx-num{grid-row:1/4;min-width:1.15em;text-align:center;font-weight:200;font-size:clamp(3.2rem,8vw,4.4rem);line-height:.85;color:var(--bordo);font-variant-numeric:tabular-nums}
+.fx{width:100%;max-width:620px;background:var(--blanco);border-radius:22px;border-top:4px solid var(--bordo);padding:clamp(20px,4vw,28px) clamp(16px,4vw,32px);display:flex;flex-direction:column;gap:18px;text-align:center}
+.fx-tit{margin:0;font-size:1.05rem;line-height:1.4;color:var(--tinta);text-wrap:balance}
+.fx-tit b{font-weight:600;color:var(--bordo)}
+.fx-dias{display:grid;grid-template-columns:1fr 1fr}
+.fx-dia{display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 8px}
+.fx-dia+.fx-dia{border-left:1px solid var(--linea)}
+.fx-num{font-weight:200;font-size:clamp(3rem,9vw,4rem);line-height:.9;color:var(--bordo);font-variant-numeric:tabular-nums}
 .fx-nom{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--tinta-suave)}
-.fx-ret{font-size:1rem;color:var(--tinta);line-height:1.3}
-.fx-lim{font-size:.84rem;color:var(--tinta-suave);line-height:1.3}
-.fx-lim.pronto{color:var(--baya);font-weight:600}
-.fx-dia.cerrado{border-top-color:var(--linea)}
-.fx-dia.cerrado .fx-num,.fx-dia.cerrado .fx-nom{color:var(--rosado)}
-.fx-notas{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;font-size:.9rem;color:var(--tinta)}
+.fx-lim{font-size:.86rem;color:var(--tinta);line-height:1.35}
+.fx-quedan{margin-top:4px;font-size:.74rem;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--crema);color:var(--tinta-suave)}
+.fx-quedan.pronto{background:var(--bordo);color:var(--blanco)}
+.fx-dia.cerrado .fx-num,.fx-dia.cerrado .fx-nom,.fx-dia.cerrado .fx-lim{color:var(--rosado)}
+.fx-notas{list-style:none;margin:0;padding:16px 0 0;border-top:1px solid var(--linea);display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;font-size:.88rem;color:var(--tinta-suave)}
 .fx-notas li{display:flex;align-items:center;gap:8px}
-.fx-notas svg{flex:none;width:20px;height:20px;color:var(--bordo)}
-@media (max-width:560px){.fx-dias{grid-template-columns:1fr}.fx-notas{flex-direction:column;align-items:flex-start;gap:8px}}
+.fx-notas svg{flex:none;width:18px;height:18px;color:var(--bordo)}
 /* Checkout en modo fiestas: días como tarjetas y pago en dos pasos */
 .chips button.fiesta{border:1px dashed var(--bordo);color:var(--bordo)}
 .chips button.fiesta small{color:var(--bordo);font-weight:600}
@@ -985,7 +981,6 @@ html[data-cat="fiestas"] .fc-wrap{display:none!important}
 <path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 332.695312 320.695312 C 332.695312 313.796875 336.03125 308.542969 342.363281 308.542969 C 351.972656 308.542969 360.511719 317.585938 360.511719 327.195312 C 360.511719 334.039062 357.234375 339.351562 350.84375 339.351562 C 341.234375 339.351562 332.695312 330.304688 332.695312 320.695312 M 360.113281 345.375 C 359.308594 345.117188 358.734375 345.117188 358.101562 345.175781 C 358.058594 345.179688 358.011719 345.191406 357.96875 345.195312 C 357.402344 345.265625 356.65625 345.441406 355.964844 345.636719 C 355.925781 345.648438 355.890625 345.660156 355.851562 345.671875 C 347.875 348.082031 343.667969 353.425781 337.105469 353.425781 C 335.75 353.425781 334.789062 352.695312 334.789062 351.394531 C 334.789062 347.832031 343.496094 344.835938 353.273438 340.652344 C 360.285156 338.105469 365.316406 331.605469 365.316406 324.085938 C 365.316406 313.855469 356.269531 306.222656 346.320312 306.394531 L 359.039062 302.945312 L 358.304688 300.625 C 343.609375 306.394531 327.949219 308.03125 327.949219 324.085938 C 327.949219 334.320312 336.992188 342.007812 346.886719 341.839844 C 340.160156 345.457031 330.210938 347.605469 330.210938 353.371094 C 330.210938 356.480469 332.980469 358.515625 336.652344 358.515625 C 344.585938 358.515625 351.710938 351.953125 358.359375 350.191406 C 359.171875 349.996094 360.027344 349.859375 360.886719 349.835938 C 361.945312 349.8125 362.78125 350.023438 363.40625 350.414062 C 363.523438 349.613281 363.417969 348.773438 363.0625 348.046875 C 362.445312 346.785156 361.53125 345.824219 360.113281 345.375 " />
 </svg></div>
       <span class="eyebrow" id="bajada">Panadería y pastelería artesanal</span>
-      <a class="fp-btn" id="fiestas-portada" href="#fiestas" hidden>Menú de Navidad y Fin de Año <span aria-hidden="true">&#8594;</span></a>
     </div>
     <div class="ilus-lado" aria-hidden="true" data-ilus="roll tarta bagel croissant"></div>
   </div>
@@ -1688,7 +1683,7 @@ const txtCierre=x=>{const c=new Date(x.cierre);return `${DIASL[c.getDay()]} ${c.
 const rangoHoras=x=>`${x.horas[0]} a ${x.horas[x.horas.length-1]+1} h`;
 /* Dos pedidos separados: el de la carta de siempre y el de fiestas. Se intercambian al entrar o salir de la pantalla de fiestas. */
 let modo="carta",guardado=new Map(),scriptListo=false;
-if(fiestasActivas())C.unshift({id:"fiestas",nombre:"Fin de año",titulo:"Navidad y Fin de Año",ilus:"flores",eyebrow:"Menú especial",intro:"",pie:'<div id="fiestas-cab" class="fx-pie"></div>',items:MENU_FIESTAS});
+if(fiestasActivas())C.unshift({id:"fiestas",nombre:"Fin de año",titulo:"Navidad y Fin de Año",ilus:"flores",eyebrow:"",intro:"",pie:'<div id="fiestas-cab" class="fx-pie"></div>',items:MENU_FIESTAS});
 C.forEach(c=>{
   if(GRUPOS[c.id]){const g=c.items[0];c.items=g.v.map((v,j)=>{const vf=VAR[c.id+"|"+v[0]];return{n:v[0],u:g.u,v:[[v[0],v[1]]],k:`${c.id}-0-${j}`,et:`${g.n}: ${v[0]}`,foto:vf?`dulce-${vf}`:null}})}
   idx+=`<li><a href="#${c.id}">${c.nombre}</a></li>`;
@@ -1867,16 +1862,17 @@ function cambiarModo(m){
 function diasParaEncargar(x){return Math.ceil((new Date(x.cierre)-new Date())/864e5)}
 const IC={pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
   pago:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10.5h18M7 15h4"/></svg>'};
-function pintarCab(){const el=document.getElementById("fiestas-cab");if(!el)return;
-  el.innerHTML=`<div class="fx"><div class="fx-dias">${FIESTAS.dias.map(x=>{const d=aFecha(x.f),ab=abierta(x),n=diasParaEncargar(x);
-    return `<div class="fx-dia${ab?"":" cerrado"}"><span class="fx-num">${d.getDate()}</span><span class="fx-nom">${x.nombre}</span><span class="fx-ret">${ab?`Retiro de ${rangoHoras(x)}`:"Pedidos cerrados"}</span><span class="fx-lim${ab&&n<=5?" pronto":""}">${ab?`Pedí hasta el ${txtCierre(x)} · ${n<=1?"último día":`quedan ${n} días`}`:"Gracias por tantos pedidos"}</span></div>`}).join("")}</div>
-    <ul class="fx-notas"><li>${IC.pin}Retiro en el local, sin envíos</li><li>${IC.pago}Se confirma con el pago hecho</li></ul></div>`}
+function pintarCab(){const el=document.getElementById("fiestas-cab");if(!el)return;const ds=FIESTAS.dias;
+  el.innerHTML=`<div class="fx"><p class="fx-tit">Retirás tu pedido en el local el <b>${ds.map(x=>aFecha(x.f).getDate()).join(" o el ")} de diciembre</b>, de ${rangoHoras(ds[0])}</p>
+    <div class="fx-dias">${ds.map(x=>{const ab=abierta(x),n=diasParaEncargar(x);
+      return `<div class="fx-dia${ab?"":" cerrado"}"><span class="fx-num">${aFecha(x.f).getDate()}</span><span class="fx-nom">${x.nombre}</span><span class="fx-lim">${ab?`Pedí hasta el ${txtCierre(x)}`:"Pedidos cerrados"}</span>${ab?`<span class="fx-quedan${n<=5?" pronto":""}">${n<=1?"Último día":`Quedan ${n} días`}</span>`:""}</div>`}).join("")}</div>
+    <ul class="fx-notas"><li>${IC.pin}Solano García 2405 · sin envíos</li><li>${IC.pago}Se confirma con el pago hecho</li></ul></div>`}
 function fechasHTML(){return `<div class="f-fechas">${diasAbiertos().map(x=>`<div class="f-fecha"><b>${aFecha(x.f).getDate()}</b><span>${x.nombre}<small>pedí hasta el ${txtCierre(x)}</small></span></div>`).join("")}</div>`}
 function opcionCartel(){return document.documentElement.dataset.cartel||FIESTAS.cartel||"A"}
 function pintarCartel(){const act=fiestasActivas(),op=opcionCartel(),n=(modo==="fiestas"?pedido:guardado).size;
   const tuyo=n?`<span class="f-tuyo">Tenés ${n} ${n===1?"producto":"productos"} en tu pedido de fiestas</span>`:"",btn=`<span class="f-btn">${n?"Seguir con mi pedido":"Ver menú"} &#8594;</span>`;
   const A=document.getElementById("fiestas-dest"),B=document.getElementById("fiestas-home"),Cb=document.getElementById("fiestas-barra");
-  document.getElementById("fiestas-portada").hidden=!act;A.hidden=!(act&&op==="A");B.hidden=!(act&&op==="B");Cb.hidden=!(act&&op==="C");if(!act)return;
+  A.hidden=!(act&&op==="A");B.hidden=!(act&&op==="B");Cb.hidden=!(act&&op==="C");if(!act)return;
   if(op==="A")A.innerHTML=`<a href="#fiestas"><span class="fa-fotos" aria-hidden="true"><img src="fotos/tortas-pavlova-t.jpg" alt=""><img src="fotos/picada-tabla-grande-t.jpg" alt=""><img src="fotos/dulces-caja-t.jpg" alt=""></span><span class="fa-txt"><span class="eyebrow">Nochebuena · Fin de Año</span><strong>Menú de fiestas</strong>${fechasHTML()}${tuyo}${btn}</span></a>`;
   if(op==="B")document.getElementById("fb-in").innerHTML=`<a href="#fiestas"><span class="fb-fotos" aria-hidden="true">${FIESTAS.fotosFranja.map(f=>`<img src="fotos/${f}" alt="">`).join("")}</span><span class="fb-txt"><span class="eyebrow">Navidad y Fin de Año</span><strong>Armá tu mesa de Nochebuena y Fin de Año</strong>${fechasHTML()}${tuyo}</span>${btn}</a>`;
   if(op==="C")Cb.innerHTML=`<span class="wrap"><span><b>Navidad y Fin de Año</b> · pedidos para el ${diasAbiertos().map(x=>aFecha(x.f).getDate()).join(" y el ")} de diciembre${n?` · tenés ${n} ${n===1?"producto":"productos"} elegidos`:""}</span><em>${n?"Seguir con mi pedido":"Ver menú"} &#8594;</em></span>`}
