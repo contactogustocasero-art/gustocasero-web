@@ -1568,6 +1568,10 @@ const FIESTAS={
   {f:"2026-12-31",nombre:"Fin de Año",cierre:"2026-12-29T19:00",horas:[11,12,13,14,15]}
  ]
 };
+/* Días con el local cerrado: no se pueden elegir ni en la carta ni en Desayunos */
+const CERRADOS=["2026-12-25","2027-01-01"];
+/* Desayunos no entrega en los días de fiestas ni en los cerrados */
+const sinDesayuno=k=>CERRADOS.includes(k)||!!FIESTAS.dias.find(x=>x.f===k);
 /* Menú de fiestas: productos de la carta (mismos precios y fotos) más los especiales.
    tomar("categoría de la carta","producto",["variedades que se incluyen"]) — sin variedades = todas. */
 function tomar(cat,n,vs){const c=C.find(x=>x.id===cat),p=c&&c.items.find(x=>x.n===n);if(!p)return null;const q={...p,b:cat};if(vs)q.v=p.v.filter(v=>vs.includes(v[0]));return q}
@@ -1799,13 +1803,13 @@ let fechaSel=null,horaSel=null,pagoSel=null,consultaSel=null;
 const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 /* Sin pedidos para el mismo día: se encarga hasta las 19 h del día anterior */
 function minRetiro(){const t=new Date(),h=t.getHours();t.setHours(0,0,0,0);t.setDate(t.getDate()+(h>=19?2:1));return t}
-function fechaOk(k){const x=diaF(k);if(modo==="fiestas")return !!x&&abierta(x);if(x&&enTemporada())return false;const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d)>=minRetiro()}
+function fechaOk(k){const x=diaF(k);if(modo==="fiestas")return !!x&&abierta(x);if(x||CERRADOS.includes(k))return false;const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d)>=minRetiro()}
 function franjasLibres(d){if(modo==="fiestas"){const x=diaF(iso(d));return x?x.horas:[]}return FR}
 function pintarParaHoy(){const tarde=new Date().getHours()>=19;const q=tarde?"¿Lo necesitás para hoy o para mañana?":"¿Lo necesitás para hoy?";const t=encodeURIComponent(tarde?"¡Hola Gusto Casero! Quería consultar disponibilidad para un pedido para hoy o mañana.":"¡Hola Gusto Casero! Quería consultar disponibilidad para un pedido para hoy.");document.querySelectorAll("[data-parahoy]").forEach(p=>{p.innerHTML=`${q} <a href="https://wa.me/${WA}?text=${t}" target="_blank" rel="noopener">Comunicate por WhatsApp</a> para chequear disponibilidad.`})}
 pintarParaHoy();setInterval(pintarParaHoy,60000);
 /* Hoy (y mañana después de las 19 h) no se encargan por la web: el botón lleva a consultar por WhatsApp */
 function diasConsulta(){const d=new Date(),r=[];d.setHours(12,0,0,0);if(modo==="fiestas")return r;
-  for(let i=0;i<2;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay();if(w<2||w>6||fechaOk(iso(x)))continue;r.push({k:iso(x),t:i===0?"hoy":"mañana",x})}
+  for(let i=0;i<2;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay(),k=iso(x);if(w<2||w>6||fechaOk(k)||CERRADOS.includes(k)||diaF(k))continue;r.push({k:iso(x),t:i===0?"hoy":"mañana",x})}
   return r}
 function pintarFechas(){
   const box=document.getElementById("co-fechas");let html="",n=0;const d=new Date();d.setHours(12,0,0,0);
@@ -1817,7 +1821,7 @@ function pintarFechas(){
   const cons=diasConsulta();if(consultaSel&&!cons.some(c=>c.k===consultaSel))consultaSel=null;
   cons.forEach(c=>{html+=`<button type="button" class="consulta" data-c="${c.k}" aria-pressed="${consultaSel===c.k}"><small>${c.t==="hoy"?"Hoy":"Mañana"}</small>${c.x.getDate()} ${MES[c.x.getMonth()]}</button>`});
   for(let i=1;i<24&&n<10;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay();if(w<2||w>6)continue;
-    const xf=diaF(iso(x));if(xf&&enTemporada()){if(fiestasActivas()&&abierta(xf)){html+=`<button type="button" class="fiesta" data-fiesta="${xf.f}" aria-pressed="false" aria-label="${DIAS[w]} ${x.getDate()} de diciembre: ${xf.nombre}, se pide desde el menú de fiestas"><small>${xf.nombre}</small>${x.getDate()} ${MES[x.getMonth()]}</button>`;n++}continue}
+    const xf=diaF(iso(x));if(xf){if(fiestasActivas()&&abierta(xf)){html+=`<button type="button" class="fiesta" data-fiesta="${xf.f}" aria-pressed="false" aria-label="${DIAS[w]} ${x.getDate()} de diciembre: ${xf.nombre}, se pide desde el menú de fiestas"><small>${xf.nombre}</small>${x.getDate()} ${MES[x.getMonth()]}</button>`;n++}continue}
     if(!fechaOk(iso(x)))continue;
     const k=iso(x);html+=`<button type="button" data-f="${k}" aria-pressed="${fechaSel===k}"><small>${i===0?"Hoy":i===1?"Mañana":DC[w]}</small>${x.getDate()} ${MES[x.getMonth()]}</button>`;n++}
   box.innerHTML=html}
@@ -1994,7 +1998,7 @@ async function subirComprobante(file,id){const pdf=file.type==="application/pdf"
   function fechas(){let h="",n=0;const d=new Date();d.setHours(12,0,0,0);
     const tarde=new Date().getHours()>=19;
     if(fecha){const [fy,fm,fd]=fecha.split("-").map(Number);const t=new Date();t.setHours(12,0,0,0);const lim=new Date(t);lim.setDate(t.getDate()+(tarde?2:1));if(new Date(fy,fm-1,fd,12)<lim)fecha=null}
-    for(let i=(tarde?2:1);i<24&&n<12;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay();if(w<2||w>6)continue;const k=iso(x);
+    for(let i=(tarde?2:1);i<24&&n<12;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay();const k=iso(x);if(w<2||w>6||sinDesayuno(k))continue;
       h+=`<button type="button" data-f="${k}" aria-pressed="${fecha===k}"><small>${i===1?"Mañana":DC[w]}</small>${x.getDate()} ${MES[x.getMonth()]}</button>`;n++}
     $("ds-fechas").innerHTML=h}
   function horas(){$("ds-horas").innerHTML=HS.map((x,i)=>`<button type="button" data-h="${i}" aria-pressed="${hora===i}">${x}</button>`).join("")}
@@ -2005,7 +2009,7 @@ async function subirComprobante(file,id){const pdf=file.type==="application/pdf"
   const hoy0=()=>{const t=new Date();t.setHours(0,0,0,0);return t};
   function minFecha(){const t=hoy0();t.setDate(t.getDate()+(new Date().getHours()>=19?2:1));return t}
   let mesCal=null;
-  function habil(x){const w=x.getDay();return w>=2&&w<=6&&x>=minFecha()}
+  function habil(x){const w=x.getDay();return w>=2&&w<=6&&x>=minFecha()&&!sinDesayuno(iso(x))}
   function cal(){
     const box=$("ds-cal"),min=minFecha();
     if(!mesCal)mesCal=new Date(min.getFullYear(),min.getMonth(),1);
