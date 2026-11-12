@@ -1359,7 +1359,7 @@ document.getElementById("pie-nav").innerHTML=C.map(c=>`<a href="#${c.id}">${c.no
 
 /* Categorías con foto: cada tarjeta lleva directo a su sección de la carta */
 (function(){
-  const F={panaderia:"panaderia-croissants.jpg",picada:"picada-tabla-grande.jpg",te:"te-rolls.jpg",dulces:"dulce-frutos-rojos.webp",tartas:"tartas-lemon-pie.jpg",tortas:"tortas-torta-alfajor-de-chocolate-y-nuez.jpg",desayunos:"desayunos-desayuno-compartir.jpg",eventos:"panaderia-sandwiches-romero.jpg"};
+  const F={panaderia:"panaderia-croissants.jpg",picada:"picada-tabla-grande.jpg",te:"te-rolls.jpg",dulces:"dulces-caja.jpg",tartas:"tartas-lemon-pie.jpg",tortas:"tortas-torta-alfajor-de-chocolate-y-nuez.jpg",desayunos:"desayunos-desayuno-compartir.jpg",eventos:"panaderia-sandwiches-romero.jpg"};
   const cats=C.map(c=>[c.id,c.nombre]).concat([["eventos","Eventos y reuniones"]]);
   document.getElementById("dest-lista").innerHTML=cats.map(([id,nombre],i)=>`<li><a href="#${id}"><span class="dest-foto${F[id].endsWith(".webp")?" recorte":""}"><img src="fotos/${F[id]}" alt="" loading="lazy"></span><span class="dest-txt"><strong>${nombre}</strong><span class="dest-ver" aria-hidden="true">Ver &#8594;</span></span></a></li>`).join("");
 })();
