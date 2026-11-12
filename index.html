@@ -698,7 +698,7 @@ html[data-vista="inicio"] .solo-carta{display:none!important}
 html[data-vista="carta"] .solo-inicio{display:none!important}
 section.cat[hidden]{display:none!important}
 html[data-vista="carta"] nav.indice{margin-top:0}
-html[data-vista="carta"] #catalogo section.cat,html[data-vista="carta"] #eventos{padding-top:clamp(40px,6vw,72px)}
+html[data-vista="carta"] #catalogo section.cat{padding-top:clamp(40px,6vw,72px)}
 nav.indice a.volver{flex:none;display:grid;place-items:center;width:38px;height:38px;padding:0;border-radius:50%;border:1px solid var(--canela);color:var(--canela);text-decoration:none}
 nav.indice a.volver:hover{border-color:var(--canela)}
 nav.indice a.mini{padding:0;border:0}
@@ -721,7 +721,7 @@ nav.indice a.mini{display:block}
 
 /* Cómo pedir: franja corta arriba de cada categoría (no en Desayunos ni Eventos, que se piden con su propio botón) */
 .pasos-wrap{padding-top:clamp(20px,3vw,28px)}
-html[data-cat="desayunos"] .pasos-wrap,html[data-cat="eventos"] .pasos-wrap{display:none!important}
+html[data-cat="desayunos"] .pasos-wrap{display:none!important}
 .pasos-barra{display:flex;align-items:center;gap:clamp(16px,3vw,36px);background:var(--canela);color:var(--blanco);border-radius:18px;padding:14px clamp(16px,3vw,28px)}
 .pasos-tit{flex:none;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;font-weight:600;color:var(--crema)}
 .pasos-barra ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,2.5vw,32px);flex:1}
@@ -770,7 +770,7 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
 .destacados{padding-bottom:clamp(40px,6vw,64px)}
 .dest-lista{display:flex!important;flex-wrap:wrap;justify-content:center}
 .dest-lista li{flex:0 0 calc((100% - 3 * clamp(12px,2vw,20px)) / 4)}
-@media (max-width:820px){.dest-lista li{flex-basis:calc((100% - clamp(12px,2vw,20px)) / 2)}.dest-lista li:last-child:nth-child(odd){flex-basis:100%}.dest-lista li:last-child:nth-child(odd) .dest-foto{aspect-ratio:2/1}.dest-lista li:last-child:nth-child(odd) .dest-foto img{object-position:center 60%}}
+@media (max-width:820px){.dest-lista li{flex-basis:calc((100% - clamp(12px,2vw,20px)) / 2)}.dest-lista li:last-child:nth-child(odd){flex-basis:100%}.dest-lista li:last-child:nth-child(odd) a{flex-direction:row}.dest-lista li:last-child:nth-child(odd) .dest-foto{flex:0 0 50%;aspect-ratio:1}.dest-lista li:last-child:nth-child(odd) .dest-foto img{object-position:center 40%}.dest-lista li:last-child:nth-child(odd) .dest-txt{justify-content:center;text-align:center;padding:16px}.dest-lista li:last-child:nth-child(odd) .dest-txt strong{font-size:1.15rem}.dest-lista li:last-child:nth-child(odd):nth-child(7) .dest-txt{border-top:1px solid var(--rosado);border-left:0;border-radius:0 22px 22px 0}}
 /* Invitación a Eventos */
 .invita{padding-bottom:clamp(64px,9vw,112px)}
 .invita-card{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);border-radius:24px;overflow:hidden;background:var(--canela);color:var(--blanco);text-decoration:none;transition:transform .35s ease,box-shadow .35s ease}
@@ -785,6 +785,20 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
 .invita-btn{align-self:flex-start;margin-top:8px;border:1px solid rgba(255,255,255,.85);border-radius:999px;padding:11px 24px;font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;font-weight:500;transition:background .3s,color .3s}
 .invita-card:hover .invita-btn{background:var(--blanco);color:var(--canela)}
 @media (max-width:720px){.invita-card{grid-template-columns:1fr}.invita-foto{min-height:0;aspect-ratio:16/10}}
+
+.ev-modal .hist-foto img{filter:none;opacity:1}
+.ev-modal .hist-foto{aspect-ratio:4/5}
+.hist-txt.ev .ev-lista{grid-template-columns:1fr;gap:12px}
+.hist-txt.ev .ev-lista li{border-color:var(--rosado);padding:16px 18px}
+.hist-txt.ev .des-pedir{align-self:center}
+@media (max-width:820px){.ev-modal .hist-foto{aspect-ratio:4/3}.hist-txt.ev .des-pedir{align-self:stretch}}
+/* ══ Ventanas del pedido, desayuno y presupuesto: todo sobre crema, sin fondos blancos ══ */
+.checkout .co-panel,.checkout .co-body,.checkout .co-body.gracias,.checkout .co-foot,#desayuno .co-foot,#presupuesto .co-foot{background:var(--crema)}
+:where(.checkout) .co-aviso,:where(.checkout) .cuenta,:where(.checkout) .ds-elegido,:where(.checkout) .cal,:where(.checkout) .co-cerrar,:where(.checkout) .cal-head button,:where(.checkout) .ds-res button,:where(.checkout) .tiles label,:where(.checkout) .chips button,:where(.checkout) .ctrl button,:where(.checkout) input,:where(.checkout) textarea,:where(.checkout) select{background:var(--crema)}
+:where(.checkout) .ds-res button:hover,:where(.checkout) .ds-res button:focus-visible{background:var(--linea)}
+.checkout .ds-paso{background:var(--crema);border:1px solid var(--rosado)}
+.checkout .cuenta{border-color:var(--rosado)}
+.checkout .co-foot{box-shadow:none;border-top:1px solid var(--rosado)}
 </style>
 
 <header class="portada solo-inicio">
@@ -832,10 +846,10 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
 
 <section class="invita solo-inicio" aria-labelledby="inv-tit">
   <div class="wrap">
-    <a class="invita-card" href="#eventos">
+    <a class="invita-card" href="#eventos" data-modal="eventos">
       <span class="invita-foto" aria-hidden="true"><img src="fotos/panaderia-sandwiches-romero.jpg" alt="" loading="lazy"></span>
       <span class="invita-txt">
-        <span class="eyebrow">Eventos y reuniones</span>
+        <span class="eyebrow">Propuesta para tu evento</span>
         <strong id="inv-tit">¿Tenés un cumple, una juntada o una reunión en la ofi?</strong>
         <span class="invita-sub">Consultá por propuestas para tu evento.</span>
         <span class="invita-btn">Ver propuestas <span aria-hidden="true">&#8594;</span></span>
@@ -950,19 +964,6 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
 
 <main class="wrap solo-carta" id="catalogo"></main>
 
-<div class="wrap solo-carta">
-<section class="cat" id="eventos">
-  <div class="cat-aside"><div class="ilus" aria-hidden="true" data-ilus-ev="flores"></div><div class="txt"><h2>Eventos y reuniones</h2></div></div>
-  <div class="carta ev">
-    <ul class="ev-lista">
-      <li><strong>Para tu oficina</strong><span>Desayunos de trabajo, coffee breaks, reuniones y fin de año.</span></li>
-      <li><strong>Para tu festejo o juntada</strong><span>Cumpleaños, bautismos, festejos y reuniones en casa.</span></li>
-    </ul>
-    <p class="ev-aviso">Preparamos solo la comida: no ofrecemos armado de mesas ni servicio de mozos.</p>
-    <button type="button" class="wa des-pedir" id="pr-abrir">Pedir presupuesto</button>
-  </div>
-</section>
-</div>
 
 <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menú" hidden>
   <div class="menu-panel">
@@ -970,8 +971,8 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
     <nav class="menu-nav" aria-label="Menú principal">
       <a class="menu-grande" href="#inicio">Inicio</a>
       <div class="menu-grupo"><span class="menu-eti">La carta</span><div id="menu-carta"></div></div>
-      <a class="menu-grande" href="#eventos">Eventos y reuniones</a>
-      <a class="menu-grande" href="#historia" data-historia>Nuestra historia</a>
+      <a class="menu-grande" href="#eventos" data-modal="eventos">Propuesta para tu evento</a>
+      <a class="menu-grande" href="#historia" data-modal="historia">Nuestra historia</a>
     </nav>
     <div class="menu-datos">
       <span>Solano García 2405</span><span>Martes a sábado, 9 a 19 h</span>
@@ -996,14 +997,32 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
   </div>
 </footer>
 
+<div class="historia ev-modal" id="eventos" role="dialog" aria-modal="true" aria-labelledby="ev-tit" hidden>
+  <div class="hist-panel">
+  <button type="button" class="hist-cerrar" aria-label="Cerrar">×</button>
+  <div class="wrap hist-grid">
+    <div class="hist-foto" aria-hidden="true"><img src="fotos/picada-tabla-grande.jpg" alt="" loading="lazy"></div>
+    <div class="hist-txt ev">
+      <span class="eyebrow">Eventos y reuniones</span>
+      <h2 id="ev-tit">Propuesta para tu evento</h2>
+      <ul class="ev-lista">
+        <li><strong>Para tu oficina</strong><span>Desayunos de trabajo, coffee breaks, reuniones y fin de año.</span></li>
+        <li><strong>Para tu festejo o juntada</strong><span>Cumpleaños, bautismos, festejos y reuniones en casa.</span></li>
+      </ul>
+      <p class="ev-aviso">Preparamos solo la comida: no ofrecemos armado de mesas ni servicio de mozos.</p>
+      <button type="button" class="wa des-pedir" id="pr-abrir">Pedir presupuesto</button>
+    </div>
+  </div>
+  </div>
+</div>
+
 <div class="historia" id="historia" role="dialog" aria-modal="true" aria-labelledby="hist-tit" hidden>
   <div class="hist-panel">
   <button type="button" class="hist-cerrar" aria-label="Cerrar">×</button>
   <div class="wrap hist-grid">
     <div class="hist-foto" aria-hidden="true"><img src="recursos/recetario.webp" alt="" width="900" height="1200"></div>
     <div class="hist-txt">
-      <span class="eyebrow">Nuestra historia</span>
-      <h2 id="hist-tit">Gustos que llenan el alma</h2>
+      <span class="eyebrow" id="hist-tit">Nuestra historia</span>
       <p class="hist-lead">Con el aroma a pan recién horneado que danzaba por los rincones de la cocina de mamá leudó nuestro propósito: invitarte a viajar en el tiempo a través del sabor, con gustos que remitan a tu casa, a tu infancia, a las mujeres que te demostraron su amor a través de la cocina.</p>
       <p>Somos Victoria y Josefina, hermanas, colmadas de recetas heredadas, con la misión de integrar el pasado para presentar una cocina contemporánea. Para nosotras, se trata de ofrecerte gustos que se sientan reales, familiares, elaborados de manera artesanal con productos frescos, de calidad. Porque nos importa.</p>
       <p>Porque queremos dar el mismo amor que recibimos. Porque queremos que te puedas llevar a casa una porción de la nuestra y saborear gustos cercanos, gustos que llenan el alma, gustos caseros.</p>
@@ -1214,7 +1233,7 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
 <div class="checkout" id="presupuesto" hidden role="dialog" aria-modal="true" aria-labelledby="pr-tit">
   <div class="co-panel">
     <div class="co-head">
-      <div><span class="eyebrow">Eventos y reuniones</span><h2 id="pr-tit">Pedir presupuesto</h2></div>
+      <div><span class="eyebrow">Propuesta para tu evento</span><h2 id="pr-tit">Pedir presupuesto</h2></div>
       <button type="button" class="co-cerrar" id="pr-cerrar" aria-label="Volver a la carta">×</button>
     </div>
     <div class="co-body">
@@ -1470,7 +1489,7 @@ document.getElementById("catalogo").innerHTML=html;
 /* Pantallas: inicio (portada + categorías) y una pantalla por categoría. El pedido se mantiene entre pantallas. */
 (function(){
   const raiz=document.documentElement;
-  const vistas=C.map(c=>[c.id,c.nombre]).concat([["eventos","Eventos y reuniones"]]);
+  const vistas=C.map(c=>[c.id,c.nombre]);
   const ids=vistas.map(v=>v[0]);
   const titulo=document.title;
   let yInicio=0,actual=null;
@@ -1481,7 +1500,7 @@ document.getElementById("catalogo").innerHTML=html;
       actual=h;raiz.dataset.vista="carta";raiz.dataset.cat=h;
       document.querySelectorAll("section.cat").forEach(sec=>sec.hidden=sec.id!==h);
       document.querySelectorAll("nav.indice ul a").forEach(a=>{const on=a.getAttribute("href")==="#"+h;a.classList.toggle("activa",on);if(on){a.setAttribute("aria-current","page");const ul=a.closest("ul");ul.scrollTo({left:a.offsetLeft-ul.offsetLeft-(ul.clientWidth-a.offsetWidth)/2})}else a.removeAttribute("aria-current")});
-      const i=ids.indexOf(h),enCarta=i<C.length,ant=enCarta&&vistas[i-1],sig=enCarta&&i+1<C.length&&vistas[i+1];
+      const i=ids.indexOf(h),ant=vistas[i-1],sig=vistas[i+1];
       document.getElementById("vista-sig").innerHTML=(ant?`<a class="ant" href="#${ant[0]}"><small>Anterior</small><span>&#8592; ${ant[1]}</span></a>`:"<span></span>")+`<a class="ini" href="#inicio">Volver al inicio</a>`+(sig?`<a class="sig" href="#${sig[0]}"><small>Siguiente</small><span>${sig[1]} &#8594;</span></a>`:"<span></span>");
       document.title=vistas[i][1]+" · Gusto Casero";
       scrollTo({top:0,behavior:"instant"});
@@ -1499,17 +1518,20 @@ document.getElementById("catalogo").innerHTML=html;
   addEventListener("load",()=>{if(raiz.dataset.vista==="carta")scrollTo({top:0,behavior:"instant"})});
 })();
 
-/* Nuestra historia: se abre desde el encabezado o el pie, no está en el recorrido de la carta */
-(function(){
-  const h=document.getElementById("historia"),cerrar=h.querySelector(".hist-cerrar");let antes=null;
+/* Ventanas independientes (Nuestra historia, Propuesta para tu evento): se abren desde el menú o el inicio, no están en el recorrido de la carta */
+const ventanas={};
+["historia","eventos"].forEach(id=>{
+  const h=document.getElementById(id),cerrar=h.querySelector(".hist-cerrar");let antes=null;
   function abrir(){antes=document.activeElement;h.hidden=false;document.documentElement.classList.add("con-historia");cerrar.focus()}
-  function salir(){h.hidden=true;document.documentElement.classList.remove("con-historia");if(location.hash==="#historia")history.replaceState(null,"",location.pathname+location.search);if(antes&&antes.focus)antes.focus()}
-  document.querySelectorAll("[data-historia]").forEach(b=>b.addEventListener("click",e=>{e.preventDefault();abrir()}));
-  cerrar.addEventListener("click",salir);
+  function salir(volver=true){h.hidden=true;document.documentElement.classList.remove("con-historia");if(location.hash==="#"+id)history.replaceState(null,"",location.pathname+location.search);if(volver&&antes&&antes.focus)antes.focus()}
+  ventanas[id]={abrir,salir};
+  document.querySelectorAll(`[data-modal="${id}"]`).forEach(b=>b.addEventListener("click",e=>{e.preventDefault();abrir()}));
+  cerrar.addEventListener("click",()=>salir());
   h.addEventListener("click",e=>{if(e.target===h)salir()});
   addEventListener("keydown",e=>{if(e.key==="Escape"&&!h.hidden)salir()});
-  if(location.hash==="#historia")abrir();
-})();
+  if(location.hash==="#"+id)abrir();
+});
+document.getElementById("pr-abrir").addEventListener("click",()=>ventanas.eventos.salir(false));
 document.querySelector(".pie-logo").innerHTML=document.querySelector(".etiqueta .logo").innerHTML;
 document.getElementById("menu-carta").innerHTML=C.map(c=>`<a href="#${c.id}">${c.nombre}</a>`).join("");
 document.querySelector(".menu-logo").innerHTML=document.querySelector(".etiqueta .logo").innerHTML;
@@ -1527,7 +1549,7 @@ document.getElementById("pie-nav").innerHTML=C.map(c=>`<a href="#${c.id}">${c.no
 
 /* Categorías con foto: cada tarjeta lleva directo a su sección de la carta */
 (function(){
-  const F={panaderia:"panaderia-croissants.jpg",picada:"picada-tabla-grande.jpg",te:"te-roll-canela.jpg",dulces:"dulces-caja.jpg",tartas:"tartas-lemon-pie-c.jpg",tortas:"tortas-torta-alfajor-de-chocolate-y-nuez-c.jpg",desayunos:"desayunos-desayuno-compartir.jpg",eventos:"panaderia-sandwiches-romero.jpg"};
+  const F={panaderia:"panaderia-croissants.jpg",picada:"picada-tabla-grande.jpg",te:"te-roll-canela.jpg",dulces:"dulces-caja.jpg",tartas:"tartas-lemon-pie-c.jpg",tortas:"tortas-torta-alfajor-de-chocolate-y-nuez-c.jpg",desayunos:"desayunos-desayuno-compartir-alto.jpg",eventos:"panaderia-sandwiches-romero.jpg"};
   const cats=C.map(c=>[c.id,c.nombre]);
   document.getElementById("dest-lista").innerHTML=cats.map(([id,nombre],i)=>`<li><a href="#${id}"><span class="dest-foto${F[id].endsWith(".webp")?" recorte":""}"><img src="fotos/${F[id]}" alt="" loading="lazy"></span><span class="dest-txt"><strong>${nombre}</strong><span class="dest-ver" aria-hidden="true">Ver &#8594;</span></span></a></li>`).join("");
 })();
