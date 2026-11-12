@@ -870,22 +870,15 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
 .f-tuyo{font-size:.82rem;font-weight:600;color:#F3E3C4}
 @media (max-width:720px){.fa a{grid-template-columns:1fr}.fa-fotos{min-height:0;aspect-ratio:16/11}.f-btn{align-self:stretch;text-align:center}}
 /* Opción B · franja de color entre la portada y la carta */
-/* Tarjeta separada de la portada, con brillo que la recorre y fotos que flotan */
+/* Tarjeta separada de la portada, con un brillo que la recorre */
 .fb{padding-top:clamp(28px,5vw,56px);color:var(--blanco)}
-.fb a{position:relative;overflow:hidden;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:clamp(20px,4vw,48px);padding:clamp(28px,5vw,52px) clamp(20px,4vw,52px);border-radius:28px;background:radial-gradient(120% 140% at 15% 0%,#C8303A 0%,var(--baya) 55%,var(--bordo-osc) 100%);color:inherit;text-decoration:none;box-shadow:0 22px 44px -24px rgba(120,16,24,.65);transition:transform .35s ease,box-shadow .35s ease}
+.fb a{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:clamp(20px,4vw,48px);padding:clamp(28px,5vw,52px) clamp(20px,4vw,52px);border-radius:28px;background:radial-gradient(120% 140% at 15% 0%,#C8303A 0%,var(--baya) 55%,var(--bordo-osc) 100%);color:inherit;text-decoration:none;box-shadow:0 22px 44px -24px rgba(120,16,24,.65);transition:transform .35s ease,box-shadow .35s ease}
 .fb a:hover{transform:translateY(-4px);box-shadow:0 28px 52px -24px rgba(120,16,24,.75)}
 .fb a:focus-visible{outline:2px solid var(--bordo);outline-offset:4px}
 .fb a::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.16) 48%,transparent 66%);transform:translateX(-120%);animation:fb-brillo 7s ease-in-out 1.2s infinite;pointer-events:none}
 .fb a>*{position:relative;z-index:1}
 @keyframes fb-brillo{0%{transform:translateX(-120%)}30%,100%{transform:translateX(120%)}}
-.fb-fotos img{animation:fb-flota 4.5s ease-in-out infinite}
-.fb-fotos img:nth-child(2){animation-delay:-1.5s}
-.fb-fotos img:nth-child(3){animation-delay:-3s}
-@keyframes fb-flota{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-7px) rotate(-3deg)}}
-@media (prefers-reduced-motion:reduce){.fb a::after,.fb-fotos img{animation:none}.fb a{transition:none}}
-.fb-fotos{display:flex}
-.fb-fotos img{width:clamp(76px,10vw,120px);aspect-ratio:1;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.9);display:block;box-shadow:0 8px 18px -8px rgba(60,0,8,.6)}
-.fb-fotos img+img{margin-left:-22px}
+@media (prefers-reduced-motion:reduce){.fb a::after{animation:none}.fb a{transition:none}}
 .fb-txt{display:flex;flex-direction:column;gap:12px;min-width:0}
 .fb-txt .eyebrow{color:#F3D9C9}
 .fb-txt strong{font-weight:200;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.05;text-wrap:balance}
@@ -1680,8 +1673,6 @@ const FIESTAS={
  hasta:"2027-01-01",
  /* Cómo se anuncia en el inicio: "A" tarjeta destacada en «Nuestra carta», "B" franja de color, "C" aviso fino arriba de todo */
  cartel:"B",
- /* Fotos redondas de la franja del inicio (carpeta fotos/). Cuando estén las del panettone y el budín inglés, van acá. */
- fotosFranja:["tortas-pavlova-t.jpg","picada-tabla-grande-t.jpg","dulces-caja-t.jpg"],
  dias:[
   {f:"2026-12-24",nombre:"Nochebuena",titulo:"Navidad",cierre:"2026-12-22T19:00",horas:[11,12,13,14,15]},
   {f:"2026-12-31",nombre:"Fin de Año",titulo:"Fin de Año",cierre:"2026-12-29T19:00",horas:[11,12,13,14,15]}
@@ -1699,7 +1690,7 @@ const MENU_FIESTAS=[
  tomar("picada","Tabla grande"),
  tomar("panaderia","Pitas"),
  {...tomar("tortas","Pavlova",["28 cm"]),lado:0,u:"Grande · 28 cm"},
- /* PENDIENTE: fotos y precios confirmados del Panettone y el Budín inglés. Las fotos van en fotos/ y en FIESTAS.fotosFranja. */
+ /* PENDIENTE: fotos y precios confirmados del Panettone y el Budín inglés. Las fotos van en fotos/. */
  {n:"Panettone",v:[["Panettone",750]]},
  {n:"Budín inglés",nota:"Precio a confirmar",v:[["Budín inglés",1000]]},
  /* Postres individuales en caja de 6 o de 12, mezclando variedades (sin mínimo por variedad). Precio por unidad: pu.
@@ -1954,7 +1945,7 @@ function pintarCartel(){const act=fiestasActivas(),op=opcionCartel(),n=(modo==="
   const A=document.getElementById("fiestas-dest"),B=document.getElementById("fiestas-home"),Cb=document.getElementById("fiestas-barra");
   A.hidden=!(act&&op==="A");B.hidden=!(act&&op==="B");Cb.hidden=!(act&&op==="C");if(!act)return;
   if(op==="A")A.innerHTML=`<a href="#fiestas"><span class="fa-fotos" aria-hidden="true"><img src="fotos/tortas-pavlova-t.jpg" alt=""><img src="fotos/picada-tabla-grande-t.jpg" alt=""><img src="fotos/dulces-caja-t.jpg" alt=""></span><span class="fa-txt"><span class="eyebrow">${mesaF()}</span><strong>${tituloF()}</strong>${fechasHTML()}${tuyo}${btn}</span></a>`;
-  if(op==="B")document.getElementById("fb-in").innerHTML=`<a href="#fiestas"><span class="fb-fotos" aria-hidden="true">${FIESTAS.fotosFranja.map(f=>`<img src="fotos/${f}" alt="">`).join("")}</span><span class="fb-txt"><strong>Armá tu mesa de ${mesaF()}</strong>${fechasHTML()}${tuyo}</span>${btn}</a>`;
+  if(op==="B")document.getElementById("fb-in").innerHTML=`<a href="#fiestas"><span class="fb-txt"><strong>Armá tu mesa de ${mesaF()}</strong>${fechasHTML()}${tuyo}</span>${btn}</a>`;
   if(op==="C")Cb.innerHTML=`<span class="wrap"><span><b>${tituloF()}</b> · pedidos para el ${diasAbiertos().map(x=>aFecha(x.f).getDate()).join(" y el ")} de diciembre${n?` · tenés ${n} ${n===1?"producto":"productos"} elegidos`:""}</span><em>${n?"Seguir con mi pedido":"Ver menú"} &#8594;</em></span>`}
 const PASOS={carta:document.getElementById("pasos-lista").innerHTML,fiestas:'<li><b>1</b><span><strong>Elegí</strong> tocá un producto y sumalo</span></li><li><b>2</b><span><strong>Completá</strong> '+(vigentes().length>1?"el día":"tus datos")+' y el horario</span></li><li><b>3</b><span><strong>Pagá</strong> y confirmá por WhatsApp</span></li>'};
 function pintarPasos(){document.getElementById("pasos-lista").innerHTML=PASOS[modo]}
