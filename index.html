@@ -1803,7 +1803,9 @@ wa.addEventListener("click",e=>{if(fechaSel&&!fechaOk(fechaSel)){pintarFechas();
   const hoy0=()=>{const t=new Date();t.setHours(0,0,0,0);return t};
   function minFecha(){const t=hoy0();t.setDate(t.getDate()+(new Date().getHours()>=19?2:1));return t}
   let mesCal=null;
-  function habil(x){const w=x.getDay();return w>=2&&w<=6&&x>=minFecha()}
+  /* Fechas habilitadas a mano aunque ya pasó el corte de las 19 h del día anterior (formato AAAA-MM-DD) */
+  const DES_HABILITADAS=["2026-11-19"];
+  function habil(x){const w=x.getDay();if(DES_HABILITADAS.includes(iso(x))&&x>hoy0())return true;return w>=2&&w<=6&&x>=minFecha()}
   function cal(){
     const box=$("ds-cal"),min=minFecha();
     if(!mesCal)mesCal=new Date(min.getFullYear(),min.getMonth(),1);
