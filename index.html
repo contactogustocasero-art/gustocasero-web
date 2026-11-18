@@ -1667,19 +1667,21 @@ const co=document.getElementById("checkout"),wa=document.getElementById("p-wa");
 const DIAS=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"],DC=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"],MES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
 const FR=[9,10,11,12,13,14,15,16,17,18];
 let fechaSel=null,horaSel=null,pagoSel=null,consultaSel=null;
+/* Fecha y hora actual de Montevideo, sin importar el huso horario del dispositivo del cliente */
+function ahora(){const p={};new Intl.DateTimeFormat("en-US",{timeZone:"America/Montevideo",year:"numeric",month:"numeric",day:"numeric",hour:"numeric",minute:"numeric",second:"numeric",hourCycle:"h23"}).formatToParts(new Date()).forEach(x=>p[x.type]=+x.value);return new Date(p.year,p.month-1,p.day,p.hour%24,p.minute,p.second)}
 const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 /* Sin pedidos para el mismo día: se encarga hasta las 19 h del día anterior */
-function minRetiro(){const t=new Date(),h=t.getHours();t.setHours(0,0,0,0);t.setDate(t.getDate()+(h>=19?2:1));return t}
+function minRetiro(){const t=ahora(),h=t.getHours();t.setHours(0,0,0,0);t.setDate(t.getDate()+(h>=19?2:1));return t}
 function fechaOk(k){const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d)>=minRetiro()}
 function franjasLibres(d){return FR}
-function pintarParaHoy(){const tarde=new Date().getHours()>=19;const q=tarde?"¿Lo necesitás para hoy o para mañana?":"¿Lo necesitás para hoy?";const t=encodeURIComponent(tarde?"¡Hola Gusto Casero! Quería consultar disponibilidad para un pedido para hoy o mañana.":"¡Hola Gusto Casero! Quería consultar disponibilidad para un pedido para hoy.");document.querySelectorAll("[data-parahoy]").forEach(p=>{p.innerHTML=`${q} <a href="https://wa.me/${WA}?text=${t}" target="_blank" rel="noopener">Comunicate por WhatsApp</a> para chequear disponibilidad.`})}
+function pintarParaHoy(){const tarde=ahora().getHours()>=19;const q=tarde?"¿Lo necesitás para hoy o para mañana?":"¿Lo necesitás para hoy?";const t=encodeURIComponent(tarde?"¡Hola Gusto Casero! Quería consultar disponibilidad para un pedido para hoy o mañana.":"¡Hola Gusto Casero! Quería consultar disponibilidad para un pedido para hoy.");document.querySelectorAll("[data-parahoy]").forEach(p=>{p.innerHTML=`${q} <a href="https://wa.me/${WA}?text=${t}" target="_blank" rel="noopener">Comunicate por WhatsApp</a> para chequear disponibilidad.`})}
 pintarParaHoy();setInterval(pintarParaHoy,60000);
 /* Hoy (y mañana después de las 19 h) no se encargan por la web: el botón lleva a consultar por WhatsApp */
-function diasConsulta(){const d=new Date(),r=[];d.setHours(12,0,0,0);
+function diasConsulta(){const d=ahora(),r=[];d.setHours(12,0,0,0);
   for(let i=0;i<2;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay();if(w<2||w>6||fechaOk(iso(x)))continue;r.push({k:iso(x),t:i===0?"hoy":"mañana",x})}
   return r}
 function pintarFechas(){
-  const box=document.getElementById("co-fechas");let html="",n=0;const d=new Date();d.setHours(12,0,0,0);
+  const box=document.getElementById("co-fechas");let html="",n=0;const d=ahora();d.setHours(12,0,0,0);
   if(fechaSel&&!fechaOk(fechaSel))fechaSel=null;
   const cons=diasConsulta();if(consultaSel&&!cons.some(c=>c.k===consultaSel))consultaSel=null;
   cons.forEach(c=>{html+=`<button type="button" class="consulta" data-c="${c.k}" aria-pressed="${consultaSel===c.k}"><small>${c.t==="hoy"?"Hoy":"Mañana"}</small>${c.x.getDate()} ${MES[c.x.getMonth()]}</button>`});
@@ -1700,7 +1702,7 @@ function actualizarCheckout(){
   document.getElementById("co-items").innerHTML=items.join("");document.getElementById("co-total").textContent=fmt(total);
   const {nombre,cel}=datos();
   let corto=false;
-  if(fechaSel&&horaSel!==null){const [y,m,dd]=fechaSel.split("-").map(Number);corto=(new Date(y,m-1,dd,horaSel)-new Date())<=24*3600e3}
+  if(fechaSel&&horaSel!==null){const [y,m,dd]=fechaSel.split("-").map(Number);corto=(new Date(y,m-1,dd,horaSel)-ahora())<=24*3600e3}
   document.getElementById("co-aviso").hidden=!corto;
   const msg=`¡Hola Gusto Casero! Quiero hacer este pedido:\n\n${lin.join("\n")}\n\nTotal estimado: ${fmt(total)}\n\nNombre: ${nombre}\nCelular: ${cel}\nRetiro: ${fechaTexto()}${horaSel!==null?`, de ${horaSel} a ${horaSel+1} h`:""}\nForma de pago: ${pagoSel||""}${corto?"\n\n(Pedido con 24 horas de anticipación o menos: quedo a la espera de su confirmación.)":""}`;
   wa.href=`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
@@ -1789,9 +1791,9 @@ wa.addEventListener("click",e=>{if(fechaSel&&!fechaOk(fechaSel)){pintarFechas();
   const $=id=>document.getElementById(id);
   const radio=n=>{const r=f.querySelector(`input[name="${n}"]:checked`);return r?r.value:""};
   const palabras=s=>s.trim()?s.trim().split(/\s+/).length:0;
-  function fechas(){let h="",n=0;const d=new Date();d.setHours(12,0,0,0);
-    const tarde=new Date().getHours()>=19;
-    if(fecha){const [fy,fm,fd]=fecha.split("-").map(Number);const t=new Date();t.setHours(12,0,0,0);const lim=new Date(t);lim.setDate(t.getDate()+(tarde?2:1));if(new Date(fy,fm-1,fd,12)<lim)fecha=null}
+  function fechas(){let h="",n=0;const d=ahora();d.setHours(12,0,0,0);
+    const tarde=ahora().getHours()>=19;
+    if(fecha){const [fy,fm,fd]=fecha.split("-").map(Number);const t=ahora();t.setHours(12,0,0,0);const lim=new Date(t);lim.setDate(t.getDate()+(tarde?2:1));if(new Date(fy,fm-1,fd,12)<lim)fecha=null}
     for(let i=(tarde?2:1);i<24&&n<12;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay();if(w<2||w>6)continue;const k=iso(x);
       h+=`<button type="button" data-f="${k}" aria-pressed="${fecha===k}"><small>${i===1?"Mañana":DC[w]}</small>${x.getDate()} ${MES[x.getMonth()]}</button>`;n++}
     $("ds-fechas").innerHTML=h}
@@ -1800,8 +1802,8 @@ wa.addEventListener("click",e=>{if(fechaSel&&!fechaOk(fechaSel)){pintarFechas();
   const celOk=c=>c.replace(/\D/g,"").length>=8;
   const nomOk=n=>n.trim().split(/\s+/).filter(Boolean).length>=2;
   function errs(){const v=vals();return{fecha:!fecha,opcion:!radio("opcion"),zona:!!v.dir&&!zonaP,dir:!v.dir,env:!nomOk(v.en)||!celOk(v.ec),rec:!nomOk(v.rn)||!celOk(v.rc),hora:hora===null,msj:palabras(v.msj)>35,pago:!radio("pago")}}
-  const hoy0=()=>{const t=new Date();t.setHours(0,0,0,0);return t};
-  function minFecha(){const t=hoy0();t.setDate(t.getDate()+(new Date().getHours()>=19?2:1));return t}
+  const hoy0=()=>{const t=ahora();t.setHours(0,0,0,0);return t};
+  function minFecha(){const t=hoy0();t.setDate(t.getDate()+(ahora().getHours()>=19?2:1));return t}
   let mesCal=null;
   /* Fechas habilitadas a mano aunque ya pasó el corte de las 19 h del día anterior (formato AAAA-MM-DD) */
   const DES_HABILITADAS=["2026-11-19"];
@@ -1959,7 +1961,7 @@ document.querySelectorAll(".ilus-lado[data-ilus]").forEach(el=>{const t=document
   const IDEAS={"Empresa u oficina":["Desayuno","Merienda","Coffee break","Almuerzo","After office"],"Particular":["Brunch","Almuerzo o cena","Picada","Té en casa"]};
   const radio=n=>(f.querySelector(`input[name="${n}"]:checked`)||{}).value||"";
   let intento=false,enviando=false,tipoChips="";
-  const manana=new Date();manana.setDate(manana.getDate()+1);
+  const manana=ahora();manana.setDate(manana.getDate()+1);
   $("pr-fecha").min=`${manana.getFullYear()}-${String(manana.getMonth()+1).padStart(2,"0")}-${String(manana.getDate()).padStart(2,"0")}`;
   const MESES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],DS=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
   function fechaTxt(v){if(!v)return"";const [y,m,d]=v.split("-").map(Number);const x=new Date(y,m-1,d);return `${DS[x.getDay()]} ${d} de ${MESES[m-1]}`}
