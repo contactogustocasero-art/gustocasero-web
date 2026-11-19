@@ -1105,7 +1105,7 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
         <div class="campo">
           <label for="co-nombre">Nombre</label>
           <input id="co-nombre" name="nombre" type="text" autocomplete="name" required>
-          <p class="err" id="e-nombre" hidden>Escribí tu nombre.</p>
+          <p class="err" id="e-nombre" hidden>Escribí tu nombre real, por ejemplo María.</p>
         </div>
         <div class="campo">
           <label for="co-cel">Celular de contacto</label>
@@ -1328,8 +1328,8 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
         <section class="ds-paso">
           <h3><span>6</span>Tus datos<b class="req" aria-hidden="true">*</b></h3>
           <div class="dos">
-            <div class="campo"><label for="pr-nom" class="vh">Nombre</label><input id="pr-nom" type="text" autocomplete="name" placeholder="Nombre y apellido"><p class="err" hidden data-e="nom">Escribí tu nombre.</p></div>
-            <div class="campo"><label for="pr-cel" class="vh">Celular</label><input id="pr-cel" type="tel" inputmode="tel" autocomplete="tel" placeholder="Celular"><p class="err" hidden data-e="cel">Escribí un celular válido.</p></div>
+            <div class="campo"><label for="pr-nom" class="vh">Nombre</label><input id="pr-nom" type="text" autocomplete="name" placeholder="Nombre y apellido"><p class="err" hidden data-e="nom">Escribí tu nombre real.</p></div>
+            <div class="campo"><label for="pr-cel" class="vh">Celular</label><input id="pr-cel" type="tel" inputmode="tel" autocomplete="tel" placeholder="Celular"><p class="err" hidden data-e="cel">Escribí un celular válido, por ejemplo 099 123 456.</p></div>
           </div>
         </section>
         <section class="ds-paso">
@@ -1419,6 +1419,12 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="zonas.js?v=5"></script>
+<script>
+/* Validación de contacto: nombre con letras de verdad y celular uruguayo (09X XXX XXX, con o sin +598) */
+function nombreValido(n,dos){n=(n||"").trim();if(!/^[A-Za-zÀ-ÿ'´.\- ]+$/.test(n))return false;const ps=n.split(/\s+/).filter(Boolean);if(dos&&ps.length<2)return false;
+  const L=n.replace(/[^A-Za-zÀ-ÿ]/g,"");if(L.length<2||/^(.)\1+$/i.test(L))return false;return ps.every(w=>/[aeiouyáéíóúàèìòùäëïöüâêîôû]/i.test(w)||w.replace(/[^A-Za-zÀ-ÿ]/g,"").length<=2)}
+function celValido(c){c=(c||"").trim();if(!/^[+\d\s().\-]+$/.test(c))return false;const d=c.replace(/\D/g,"").replace(/^(00)?598/,"");return /^0?9[1-9]\d{6}$/.test(d)}
+</script>
 <script>
 const WA="59898747114";
 /* Registro automático: al tocar "Enviar pedido por WhatsApp" el pedido también se guarda en la planilla de Google.
@@ -1695,7 +1701,7 @@ function pintarHoras(){
   box.innerHTML=FR.map(h=>`<button type="button" data-h="${h}" aria-pressed="${horaSel===h}" ${libres.includes(h)?"":"disabled"}>${h} a ${h+1} h</button>`).join("")}
 function fechaTexto(){if(!fechaSel)return"";const [y,m,d]=fechaSel.split("-").map(Number);const x=new Date(y,m-1,d);return `${DIAS[x.getDay()]} ${d} de ${["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"][m-1]}`}
 function datos(){return{nombre:document.getElementById("co-nombre").value.trim(),cel:document.getElementById("co-cel").value.trim()}}
-function errores(){const {nombre,cel}=datos();return{nombre:!nombre,cel:(cel.replace(/\D/g,"").length<8),fecha:!fechaSel||!fechaOk(fechaSel),hora:horaSel===null,pago:!pagoSel}}
+function errores(){const {nombre,cel}=datos();return{nombre:!nombreValido(nombre),cel:!celValido(cel),fecha:!fechaSel||!fechaOk(fechaSel),hora:horaSel===null,pago:!pagoSel}}
 function actualizarCheckout(){
   let total=0;const items=[],lin=[];
   pedido.forEach(it=>{total+=it.q*it.p;items.push(`<li><span>${it.q} × ${esc(it.l)}</span><span>${fmt(it.q*it.p)}</span></li>`);lin.push(`• ${it.q} × ${it.l}`)});
@@ -1799,8 +1805,8 @@ wa.addEventListener("click",e=>{if(fechaSel&&!fechaOk(fechaSel)){pintarFechas();
     $("ds-fechas").innerHTML=h}
   function horas(){$("ds-horas").innerHTML=HS.map((x,i)=>`<button type="button" data-h="${i}" aria-pressed="${hora===i}">${x}</button>`).join("")}
   function vals(){return{dir:$("ds-dir").value.trim(),dir2:$("ds-dir2").value.trim(),en:$("ds-env-nom").value.trim(),ec:$("ds-env-cel").value.trim(),rn:$("ds-rec-nom").value.trim(),rc:$("ds-rec-cel").value.trim(),msj:$("ds-msj").value.trim()}}
-  const celOk=c=>c.replace(/\D/g,"").length>=8;
-  const nomOk=n=>n.trim().split(/\s+/).filter(Boolean).length>=2;
+  const celOk=celValido;
+  const nomOk=n=>nombreValido(n,true);
   function errs(){const v=vals();return{fecha:!fecha,opcion:!radio("opcion"),zona:!!v.dir&&!zonaP,dir:!v.dir,env:!nomOk(v.en)||!celOk(v.ec),rec:!nomOk(v.rn)||!celOk(v.rc),hora:hora===null,msj:palabras(v.msj)>35,pago:!radio("pago")}}
   const hoy0=()=>{const t=ahora();t.setHours(0,0,0,0);return t};
   function minFecha(){const t=hoy0();t.setDate(t.getDate()+(ahora().getHours()>=19?2:1));return t}
@@ -1968,7 +1974,7 @@ document.querySelectorAll(".ilus-lado[data-ilus]").forEach(el=>{const t=document
   function chips(tipo){if(tipo===tipoChips)return;tipoChips=tipo;const L=IDEAS[tipo]||[];
     $("pr-ideas").innerHTML=L.map(t=>`<button type="button" aria-pressed="false">${t}</button>`).join("");$("pr-ideas-ayuda").hidden=!!L.length}
   function vals(){return{tipo:radio("tipo"),emp:$("pr-emp").value.trim(),pers:parseInt($("pr-pers").value,10),fecha:$("pr-fecha").value,hora:$("pr-hora").value,ideas:[...$("pr-ideas").querySelectorAll('[aria-pressed="true"]')].map(b=>b.textContent),entrega:radio("entrega"),dir:$("pr-dir").value.trim(),nom:$("pr-nom").value.trim(),cel:$("pr-cel").value.trim(),com:$("pr-com").value.trim()}}
-  function errs(){const v=vals();return{tipo:!v.tipo,pers:!(v.pers>=1),fecha:!v.fecha,hora:!v.hora,entrega:!v.entrega,dir:v.entrega==="Entrega"&&!v.dir,nom:v.nom.length<2,cel:v.cel.replace(/\D/g,"").length<8}}
+  function errs(){const v=vals();return{tipo:!v.tipo,pers:!(v.pers>=1),fecha:!v.fecha,hora:!v.hora,entrega:!v.entrega,dir:v.entrega==="Entrega"&&!v.dir,nom:!nombreValido(v.nom),cel:!celValido(v.cel)}}
   function texto(v){
     const l=["¡Hola Gusto Casero! Quiero pedir un presupuesto para un evento:",""];
     l.push(`• Para: ${v.tipo}${v.tipo==="Empresa u oficina"&&v.emp?` (${v.emp})`:""}`);
