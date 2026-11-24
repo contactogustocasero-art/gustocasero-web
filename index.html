@@ -1323,7 +1323,6 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
             </div>
             <p class="err" hidden data-e="entrega">Elegí una opción.</p>
           </fieldset>
-          <div class="campo" id="pr-dir-c" hidden><label for="pr-dir" class="ds-sub">Dirección o barrio</label><input id="pr-dir" type="text" autocomplete="street-address" placeholder="Calle y número, o barrio"><p class="err" hidden data-e="dir">Escribí la dirección o el barrio.</p></div>
         </section>
         <section class="ds-paso">
           <h3><span>6</span>Tus datos<b class="req" aria-hidden="true">*</b></h3>
@@ -1967,8 +1966,8 @@ document.querySelectorAll(".ilus-lado[data-ilus]").forEach(el=>{const t=document
   function fechaTxt(v){if(!v)return"";const [y,m,d]=v.split("-").map(Number);const x=new Date(y,m-1,d);return `${DS[x.getDay()]} ${d} de ${MESES[m-1]}`}
   function chips(tipo){if(tipo===tipoChips)return;tipoChips=tipo;const L=IDEAS[tipo]||[];
     $("pr-ideas").innerHTML=L.map(t=>`<button type="button" aria-pressed="false">${t}</button>`).join("");$("pr-ideas-ayuda").hidden=!!L.length}
-  function vals(){return{tipo:radio("tipo"),emp:$("pr-emp").value.trim(),pers:parseInt($("pr-pers").value,10),fecha:$("pr-fecha").value,hora:$("pr-hora").value,ideas:[...$("pr-ideas").querySelectorAll('[aria-pressed="true"]')].map(b=>b.textContent),entrega:radio("entrega"),dir:$("pr-dir").value.trim(),nom:$("pr-nom").value.trim(),cel:$("pr-cel").value.trim(),com:$("pr-com").value.trim()}}
-  function errs(){const v=vals();return{tipo:!v.tipo,pers:!(v.pers>=1),fecha:!v.fecha,hora:!v.hora,entrega:!v.entrega,dir:v.entrega==="Entrega"&&!v.dir,nom:v.nom.length<2,cel:v.cel.replace(/\D/g,"").length<8}}
+  function vals(){return{tipo:radio("tipo"),emp:$("pr-emp").value.trim(),pers:parseInt($("pr-pers").value,10),fecha:$("pr-fecha").value,hora:$("pr-hora").value,ideas:[...$("pr-ideas").querySelectorAll('[aria-pressed="true"]')].map(b=>b.textContent),entrega:radio("entrega"),nom:$("pr-nom").value.trim(),cel:$("pr-cel").value.trim(),com:$("pr-com").value.trim()}}
+  function errs(){const v=vals();return{tipo:!v.tipo,pers:!(v.pers>=1),fecha:!v.fecha,hora:!v.hora,entrega:!v.entrega,nom:v.nom.length<2,cel:v.cel.replace(/\D/g,"").length<8}}
   function texto(v){
     const l=["¡Hola Gusto Casero! Quiero pedir un presupuesto para un evento:",""];
     l.push(`• Para: ${v.tipo}${v.tipo==="Empresa u oficina"&&v.emp?` (${v.emp})`:""}`);
@@ -1976,14 +1975,13 @@ document.querySelectorAll(".ilus-lado[data-ilus]").forEach(el=>{const t=document
     l.push(`• Fecha: ${fechaTxt(v.fecha)}`);
     l.push(`• Hora de la reunión: ${v.hora?v.hora+" h":""}`);
     if(v.ideas.length)l.push(`• Qué tenemos en mente: ${v.ideas.join(", ")}`);
-    l.push(`• ${v.entrega==="Entrega"?`Entrega en: ${v.dir}`:(v.entrega||"Entrega o retiro:")}`);
+    l.push(`• ${v.entrega||"Entrega o retiro:"}`);
     l.push(`• Nombre: ${v.nom}`,`• Celular: ${v.cel}`);
     if(v.com)l.push("",`Sobre el evento: ${v.com}`);
     return l.join("\n")}
   function actualizar(){
     const v=vals(),e=errs();chips(v.tipo);
     $("pr-emp-c").hidden=v.tipo!=="Empresa u oficina";
-    $("pr-dir-c").hidden=v.entrega!=="Entrega";
     wa3.href=`https://wa.me/${WA}?text=${encodeURIComponent(texto(v))}`;
     const faltan=Object.values(e).filter(Boolean).length;
     env.setAttribute("aria-disabled",String(faltan>0));
@@ -1991,7 +1989,7 @@ document.querySelectorAll(".ilus-lado[data-ilus]").forEach(el=>{const t=document
     if(intento)marcar(false)}
   function marcar(foco){const e=errs();let primero=null;
     f.querySelectorAll(".err").forEach(p=>{const k=p.dataset.e;p.hidden=!e[k];if(e[k]&&!primero)primero=p.closest(".ds-paso")});
-    [["pers","pr-pers"],["fecha","pr-fecha"],["hora","pr-hora"],["dir","pr-dir"],["nom","pr-nom"],["cel","pr-cel"]].forEach(([k,id])=>$(id).setAttribute("aria-invalid",String(e[k])));
+    [["pers","pr-pers"],["fecha","pr-fecha"],["hora","pr-hora"],["nom","pr-nom"],["cel","pr-cel"]].forEach(([k,id])=>$(id).setAttribute("aria-invalid",String(e[k])));
     if(foco&&primero)primero.scrollIntoView({block:"center",behavior:"smooth"});return !primero}
   function abrir(){actualizar();pan.hidden=false;document.body.style.overflow="hidden"}
   function cerrar(){pan.hidden=true;pan.classList.remove("listo");document.body.style.overflow=""}
@@ -2000,7 +1998,7 @@ document.querySelectorAll(".ilus-lado[data-ilus]").forEach(el=>{const t=document
     if(enviando)return;actualizar();intento=true;if(!marcar(true))return;
     const v=vals(),id=nuevoId("p");
     const pedido=[`Para: ${v.tipo}`,v.tipo==="Empresa u oficina"&&v.emp?`Empresa: ${v.emp}`:"",`Personas: ${v.pers}`,v.ideas.length?`Ideas: ${v.ideas.join(", ")}`:"",
-      `Entrega: ${v.entrega}`,v.entrega==="Entrega"?`Dirección: ${v.dir}`:""].filter(Boolean).join("\n");
+      `Entrega: ${v.entrega}`].filter(Boolean).join("\n");
     const body=JSON.stringify({id,tipo:"Pedido de presupuesto",fecha:v.fecha,hora:v.hora,cliente:v.nom,celular:v.cel,pedido,total:null,notas:v.com,mensaje:texto(v)});
     enviando=true;env.disabled=true;env.textContent="Enviando…";$("pr-falta").textContent="";
     let ok=false;
