@@ -1588,9 +1588,8 @@ FIESTAS.carta=[
  {id:"f-picada",base:"picada",nombre:"Tablas de picada",ilus:"bagel",intro:"",items:[tomar("picada","Tabla chica"),tomar("picada","Tabla grande")]},
  {id:"f-pitas",base:"panaderia",nombre:"Pitas",ilus:"croissant",intro:"",items:[tomar("panaderia","Pitas")]},
  {id:"f-dulces",base:"tortas",nombre:"Para el postre",ilus:"torta",intro:"",items:[{...tomar("tortas","Pavlova",["28 cm"]),lado:0,n:"Pavlova",u:"Grande · 28 cm"},
-   /* PRECIOS A CONFIRMAR: cambiar el número por el precio real y borrar la nota */
-   {n:"Panettone",v:[["Panettone",750]]},
-   {n:"Budín inglés",nota:"Precio a confirmar",v:[["Budín inglés",1000]]}]},
+   {n:"Panettone",v:[["Panettone",790]]},
+   {n:"Budín inglés",v:[["Budín inglés",600]]}]},
  {id:"f-indiv",base:"dulces",nombre:"Postres individuales",ilus:"tarta",intro:"Versiones individuales de nuestras tartas y tortas.",items:[...C.find(x=>x.id==="dulces").items]}
 ].map(c=>({...c,items:c.items.filter(Boolean)}));
 let modo="carta",guardC=new Map(),guardF=new Map(),iniciado=false;
