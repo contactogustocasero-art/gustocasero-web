@@ -847,6 +847,46 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
 .checkout .ds-paso{background:var(--crema);border:1px solid var(--rosado)}
 .checkout .cuenta{border-color:var(--rosado)}
 .checkout .co-foot{box-shadow:none;border-top:1px solid var(--rosado)}
+
+/* ── Fiestas (24 y 31 de diciembre) ── */
+/* Cartel en el inicio: fondo de hojas y bayas con etiqueta ovalada beige al centro */
+.fiestas-wrap{padding-top:clamp(28px,4vw,44px)}
+.fiestas-wrap[hidden]{display:none!important}
+.fiestas-cartel{position:relative;display:flex;align-items:center;justify-content:center;width:100%;font:inherit;border:0;border-radius:18px;cursor:pointer;background:#F3E3C4 url("recursos/fiestas-hojas.jpg") center/cover no-repeat;padding:clamp(36px,6vw,64px) clamp(14px,4vw,64px);text-align:center;color:inherit}
+.fiestas-cartel .caja{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:#EFE1C8;border-radius:clamp(70px,12vw,140px)/clamp(64px,9vw,100px);padding:clamp(26px,3.5vw,36px) clamp(36px,6vw,80px);box-shadow:inset 0 0 0 7px #EFE1C8,inset 0 0 0 8px rgba(122,82,67,.45),0 8px 24px rgba(74,58,51,.22);transition:transform .25s}
+.fiestas-cartel:hover .caja{transform:translateY(-2px)}
+.fiestas-cartel .eyebrow{color:#9E4A3A;white-space:nowrap}
+@media (max-width:420px){.fiestas-cartel .eyebrow{letter-spacing:.2em;font-size:.66rem}}
+.fiestas-cartel strong{font-weight:300;font-size:clamp(1.5rem,3.2vw,2.2rem);line-height:1.1;color:var(--tinta);text-wrap:balance}
+.fiestas-cartel em{font-style:normal;margin-top:6px;padding:9px 20px;border-radius:999px;background:var(--salvia);color:var(--blanco);font-size:.86rem;font-weight:500;transition:background .2s}
+.fiestas-cartel:hover em{background:#6F826F}
+.fiestas-cartel:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
+/* Menú de fiestas: la carta se cambia por el menú de fiestas (todas sus categorías en una sola pantalla) */
+.fiestas-portada{display:none;background:var(--salvia);color:var(--blanco);text-align:center;padding:clamp(48px,9vw,96px) 20px clamp(40px,7vw,72px)}
+html.modo-fiestas .fiestas-portada{display:block}
+html.modo-fiestas .pasos-wrap,html.modo-fiestas .vista-sig{display:none!important}
+.fiestas-portada .eyebrow{color:var(--crema)}
+.fiestas-portada h1{margin:10px 0 14px;font-weight:200;font-size:clamp(2.6rem,7vw,4.6rem);line-height:1;letter-spacing:-.01em}
+.fiestas-portada p+p{margin-top:10px}
+.fiestas-portada p{margin:0 auto;max-width:46ch;color:var(--crema);font-size:.98rem;line-height:1.55}
+.fiestas-portada .derivado{margin-top:16px;display:inline-block;background:var(--blanco);color:var(--tinta);padding:10px 16px;font-size:.9rem;border-radius:12px}
+.volver-carta{font:inherit;font-size:.9rem;padding:9px 16px;border:1px solid var(--blanco);border-radius:999px;background:transparent;color:var(--blanco);cursor:pointer;margin-top:22px;text-decoration:none;display:inline-block}
+.volver-carta:hover{background:var(--blanco);color:var(--salvia)}
+.nav-fiestas{display:none}
+html.modo-fiestas .nav-fiestas{display:flex;align-items:center;flex:none;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--salvia);white-space:nowrap}
+html.modo-fiestas nav.indice .mini{display:none}
+html.modo-fiestas nav.indice{border-bottom:2px solid var(--salvia)}
+html.modo-fiestas nav.indice a.volver{border-color:var(--salvia);color:var(--salvia)}
+html.modo-fiestas nav.indice a.volver:hover{background:var(--salvia);color:var(--blanco)}
+html.modo-fiestas nav.indice ul a.activa,html.modo-fiestas nav.indice ul a:hover{color:var(--salvia);border-bottom-color:var(--salvia)}
+html.modo-fiestas .cat-aside h2,html.modo-fiestas .cat-aside .ilus{color:var(--salvia)}
+@media (max-width:700px){html.modo-fiestas .nav-fiestas{display:none}}
+.menu-fiestas[hidden]{display:none}
+.chips button.fiesta{border-color:var(--salvia);color:var(--salvia)}
+.chips button.fiesta small{color:var(--salvia)}
+.co-foot button.wa{font:inherit;border:0;cursor:pointer;display:block;width:100%;text-align:center;background:var(--salvia);color:var(--blanco);font-weight:500;letter-spacing:.04em;padding:15px 22px;border-radius:14px}
+.co-foot button.wa[aria-disabled="true"]{background:#B7C2B7}
+.co-foot [hidden]{display:none!important}
 </style>
 
 <header class="portada solo-inicio">
@@ -885,6 +925,8 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
   </div>
 </header>
 
+<div class="wrap solo-inicio fiestas-wrap" id="fiestas-wrap" hidden><div class="fiestas-cartel" id="fiestas-cartel"></div></div>
+
 <section class="destacados solo-inicio" id="destacados" aria-labelledby="dest-tit">
   <div class="wrap">
     <div class="dest-head"><span class="eyebrow">Elegí una categoría</span><h2 id="dest-tit">Nuestra carta</h2></div>
@@ -906,6 +948,7 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
   </div>
 </section>
 
+<div class="fiestas-portada solo-carta" id="fiestas-portada"></div>
 <nav class="indice solo-carta" aria-label="Categorías">
   <div class="wrap">
     <a class="volver" href="#inicio" aria-label="Volver al inicio"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></a>
@@ -994,6 +1037,7 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
 <use xlink:href="#l1-glyph-8-5" x="613.142965" y="284.711422" />
 </g>
 </svg></a>
+    <span class="nav-fiestas">Menú de fiestas</span>
     <ul id="indice"></ul>
     <button type="button" class="menu-btn" aria-controls="menu" aria-expanded="false" aria-label="Menú"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
@@ -1018,6 +1062,7 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
     <div class="menu-head"><a class="menu-logo" href="#inicio" aria-label="Inicio"></a><button type="button" class="menu-cerrar" aria-label="Cerrar menú">×</button></div>
     <nav class="menu-nav" aria-label="Menú principal">
       <a class="menu-grande" href="#inicio">Inicio</a>
+      <a class="menu-grande menu-fiestas" href="#fiestas" id="menu-fiestas" hidden>Menú de fiestas</a>
       <div class="menu-grupo"><span class="menu-eti">La carta</span><div id="menu-carta"></div></div>
       <a class="menu-grande" href="#eventos" data-modal="eventos">Propuesta para tu evento</a>
       <a class="menu-grande" href="#historia" data-modal="historia">Nuestra historia</a>
@@ -1113,7 +1158,7 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
           <p class="err" id="e-cel" hidden>Escribí un celular válido, por ejemplo 099 123 456.</p>
         </div>
         <fieldset class="campo">
-          <legend>Fecha de retiro <small>martes a sábado · pedidos hasta las 19 h del día anterior</small></legend>
+          <legend>Fecha de retiro <small id="co-fechas-ayuda">martes a sábado · pedidos hasta las 19 h del día anterior</small></legend>
           <div class="chips" id="co-fechas"></div>
           <div class="co-hoy" id="co-hoy" hidden role="status">
             <strong id="co-hoy-tit">¿Lo necesitás para hoy?</strong>
@@ -1131,14 +1176,37 @@ nav.indice .menu-btn:hover{background:var(--canela);color:var(--blanco)}
           <legend>Forma de pago</legend>
           <div class="chips" id="co-pago"><button type="button" data-p="Transferencia" aria-pressed="false">Transferencia</button><button type="button" data-p="Efectivo al retirar" aria-pressed="false">Efectivo al retirar</button><button type="button" data-p="Tarjeta al retirar" aria-pressed="false">Tarjeta al retirar</button></div>
           <p class="err" id="e-pago" hidden>Elegí cómo vas a pagar.</p>
+          <p class="co-nota" id="co-pago-nota" hidden>Para confirmar tu pedido de fiestas tiene que quedar pago antes del retiro.</p>
         </fieldset>
         <p class="co-aviso" id="co-aviso" hidden>Para pedidos con 24 horas de anticipación o menos, vas a recibir una confirmación nuestra por WhatsApp.</p>
         <p class="co-local">Retiro en el local: Solano García 2405.</p>
       </form>
     </div>
+    <div class="co-body ds-pagar" id="co-pagar" hidden>
+      <div class="pg-ok"><span class="eyebrow">Pedido registrado</span><h3 id="co-pg-tit"></h3><p id="co-pg-res"></p></div>
+      <div class="cuenta" id="co-cuenta">
+        <p class="cuenta-tit">Datos para transferir · Santander, en pesos</p>
+        <dl>
+          <div><dt>Titular</dt><dd>Victoria Bo</dd></div>
+          <div><dt>Desde Santander</dt><dd><span class="num">932302</span> <button type="button" class="copiar" data-c="932302">Copiar</button><small>Sucursal 0005</small></dd></div>
+          <div><dt>Desde otro banco</dt><dd><span class="num">0005000000932302</span> <button type="button" class="copiar" data-c="0005000000932302">Copiar</button><small>BROU, Itaú, BBVA, Scotiabank y demás</small></dd></div>
+        </dl>
+      </div>
+      <div class="cuenta" id="co-comp">
+        <p class="cuenta-tit">Comprobante de la transferencia</p>
+        <label class="comp-btn" for="co-comp-file" id="co-comp-lbl">Subir foto o PDF del comprobante</label>
+        <input type="file" id="co-comp-file" accept="image/*,application/pdf" class="vh">
+        <p class="comp-est" id="co-comp-est" aria-live="polite" hidden></p>
+        <button type="button" class="comp-sin" id="co-comp-sin" hidden>No puedo subirlo, lo mando por WhatsApp</button>
+      </div>
+      <div class="cuenta" id="co-local"><p class="cuenta-tit">Pago en el local</p><p class="pg-local">Solano García 2405<br>Martes a sábado, de 9 a 19 h</p></div>
+      <p class="co-aviso" id="co-pg-aviso"></p>
+    </div>
     <div class="co-foot">
       <a class="wa" id="p-wa" href="https://wa.me/59898747114" target="_blank" rel="noopener">Enviar pedido por WhatsApp</a>
-      <p class="co-nota">Se abre WhatsApp con tu pedido armado. Te respondemos por ahí.</p>
+      <button type="button" class="wa" id="co-confirmar" aria-disabled="true" hidden>Confirmar pedido</button>
+      <a class="wa" id="co-wa2" href="https://wa.me/59898747114" target="_blank" rel="noopener" hidden>Enviar por WhatsApp</a>
+      <p class="co-nota" id="co-foot-nota">Se abre WhatsApp con tu pedido armado. Te respondemos por ahí.</p>
     </div>
   </div>
 </div>
@@ -1494,10 +1562,71 @@ const fmt=n=>"$"+n.toLocaleString("es-UY");
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ilus=document.getElementById("ilus").content;
 const pedido=new Map();
-let html="",idx="";
+let fechaSel=null,horaSel=null,pagoSel=null,consultaSel=null;
 const GRUPOS={dulces:1};
-C.forEach(c=>{
-  if(GRUPOS[c.id]){const g=c.items[0];c.items=g.v.map((v,j)=>{const vf=VAR[c.id+"|"+v[0]];return{n:v[0],u:g.u,v:[[v[0],v[1]]],k:`${c.id}-0-${j}`,et:`${g.n}: ${v[0]}`,foto:vf?`dulce-${vf}`:null}})}
+C.forEach(c=>{if(GRUPOS[c.id]){const g=c.items[0];c.items=g.v.map((v,j)=>{const vf=VAR[c.id+"|"+v[0]];return{n:v[0],u:g.u,v:[[v[0],v[1]]],k:`${c.id}-0-${j}`,et:`${g.n}: ${v[0]}`,foto:vf?`dulce-${vf}`:null}})}});
+
+/* ── FIESTAS ──────────────────────────────────────────────
+   Desde "desde" hasta "hasta" (sin incluir) aparece el cartel de fiestas en el inicio y "Menú de fiestas" en el menú.
+   Cada día de fiestas: fecha, nombre, hasta cuándo se puede pedir (cierre) y franjas de retiro (11 = de 11 a 12 h).
+   En el calendario de siempre esos días no se pueden elegir: llevan al menú de fiestas.
+   Si se agota la disponibilidad antes, agregar agotado:true en ese día y se dejan de tomar pedidos.
+   Link directo al menú de fiestas: https://gustocasero.com.uy/#fiestas */
+const FIESTAS={
+ desde:"2026-11-26",
+ hasta:"2027-01-01",
+ dias:[
+  {f:"2026-12-24",nombre:"Nochebuena",cierre:"2026-12-22T19:00",horas:[11,12,13,14,15]},
+  {f:"2026-12-31",nombre:"Fin de Año",cierre:"2026-12-29T19:00",horas:[11,12,13,14,15]}
+ ],
+ carta:[]
+};
+/* Menú de fiestas: se arma con productos de la carta (mismos precios y fotos).
+   tomar("categoría de la carta","producto",["variedades que se incluyen"]) — sin variedades = todas. */
+function tomar(cat,n,vs){const c=C.find(x=>x.id===cat),p=c&&c.items.find(x=>x.n===n);if(!p)return null;const q={...p};if(vs)q.v=p.v.filter(v=>vs.includes(v[0]));return q}
+FIESTAS.carta=[
+ {id:"f-picada",base:"picada",nombre:"Tablas de picada",ilus:"bagel",intro:"",items:[tomar("picada","Tabla chica"),tomar("picada","Tabla grande")]},
+ {id:"f-pitas",base:"panaderia",nombre:"Pitas",ilus:"croissant",intro:"",items:[tomar("panaderia","Pitas")]},
+ {id:"f-dulces",base:"tortas",nombre:"Para el postre",ilus:"torta",intro:"",items:[{...tomar("tortas","Pavlova",["28 cm"]),lado:0,n:"Pavlova",u:"Grande · 28 cm"},
+   /* PRECIOS A CONFIRMAR: cambiar el número por el precio real y borrar la nota */
+   {n:"Panettone",v:[["Panettone",750]]},
+   {n:"Budín inglés",nota:"Precio a confirmar",v:[["Budín inglés",1000]]}]},
+ {id:"f-indiv",base:"dulces",nombre:"Postres individuales",ilus:"tarta",intro:"Versiones individuales de nuestras tartas y tortas.",items:[...C.find(x=>x.id==="dulces").items]}
+].map(c=>({...c,items:c.items.filter(Boolean)}));
+let modo="carta",guardC=new Map(),guardF=new Map(),iniciado=false;
+const DIASL=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+const aFecha=k=>{const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d,12)};
+const diaF=k=>FIESTAS.dias.find(x=>x.f===k);
+const abierta=x=>!x.agotado&&ahora()<new Date(x.cierre);
+const fiestasActivas=()=>{const t=ahora();return t>=new Date(FIESTAS.desde+"T00:00")&&t<new Date(FIESTAS.hasta+"T00:00")&&FIESTAS.dias.some(abierta)};
+const diasAbiertos=()=>FIESTAS.dias.filter(abierta);
+const txtDia=k=>{const x=aFecha(k);return `${DIASL[x.getDay()]} ${x.getDate()}`};
+const txtCierre=x=>{const c=new Date(x.cierre);return `${DIASL[c.getDay()]} ${c.getDate()} a las ${c.getHours()} h`};
+function rangoHoras(x){return `${x.horas[0]} a ${x.horas[x.horas.length-1]+1} h`}
+function pintarCartel(){const w=document.getElementById("fiestas-wrap"),el=document.getElementById("fiestas-cartel"),on=fiestasActivas();
+  document.getElementById("menu-fiestas").hidden=!on;
+  if(!on){w.hidden=true;return}
+  el.setAttribute("role","link");el.tabIndex=0;el.setAttribute("aria-label","Ver menú de fiestas");
+  el.innerHTML=`<span class="caja"><span class="eyebrow">${diasAbiertos().map(x=>x.nombre).join(" · ")}</span><strong>Hacé tu pedido para las fiestas</strong><em>Ver menú de fiestas</em></span>`;
+  w.hidden=false}
+function pintarPortadaFiestas(derivado){
+  const ds=diasAbiertos(),k=derivado&&diaF(derivado),h=ds.length?rangoHoras(ds[0]):"";
+  document.getElementById("fiestas-portada").innerHTML=`<span class="eyebrow">Gusto Casero</span><h1>Menú de fiestas</h1><p>${ds.map(x=>x.nombre).join(" y ")}: retirás en el local el ${ds.map(x=>txtDia(x.f)).join(" o el ")} de diciembre, de ${h}.</p><p>Tomamos pedidos ${ds.length>1?ds.map(x=>`hasta el ${txtCierre(x).replace(/ a las.*/,"")} para ${x.nombre}`).join(" y "):`hasta el ${txtCierre(ds[0]).replace(/ a las.*/,"")}`}, o hasta agotar disponibilidad. Para confirmar el pedido tiene que quedar pago antes del retiro.</p>${k?`<p class="derivado">Los pedidos para el ${txtDia(k.f)} de diciembre se hacen desde este menú.${guardC.size?" Lo que elegiste de la carta quedó guardado.":""}</p>`:""}<br><a class="volver-carta" href="#inicio">← Volver a la carta</a>`}
+/* Entrar y salir del menú de fiestas: el pedido de la carta y el de fiestas se guardan por separado */
+function entrarFiestas(f){
+  if(modo!=="fiestas"){guardC=new Map(pedido);pedido.clear();guardF.forEach((v,k)=>pedido.set(k,v));modo="fiestas"}
+  fechaSel=(f&&diaF(f)&&abierta(diaF(f)))?f:null;horaSel=null;
+  armarCarta(FIESTAS.carta);pintarPortadaFiestas(f);document.documentElement.classList.add("modo-fiestas");
+  if(iniciado){render();if(window.reobservar)reobservar()}}
+function salirFiestas(){
+  if(modo!=="fiestas")return;
+  guardF=new Map(pedido);pedido.clear();guardC.forEach((v,k)=>pedido.set(k,v));modo="carta";fechaSel=null;horaSel=null;
+  armarCarta(C);document.documentElement.classList.remove("modo-fiestas");
+  if(iniciado){render();if(window.reobservar)reobservar()}}
+function armarCarta(LISTA){
+let html="",idx="";
+LISTA.forEach(c=>{
+  const cb=c.base||c.id;
   idx+=`<li><a href="#${c.id}">${c.nombre}</a></li>`;
   const svg=ilus.querySelector(`[data-ilus="${c.ilus}"]`).innerHTML;
   html+=`<section class="cat" id="${c.id}"><div class="cat-aside"><div class="ilus" aria-hidden="true">${svg}</div><div class="txt"><h2>${c.nombre}</h2>${c.intro?`<p>${c.intro}</p>`:""}${c.aviso?`<p class="aviso">${c.aviso}</p>`:""}</div></div><div class="carta"><ul class="pgrid">`;
@@ -1507,14 +1636,14 @@ C.forEach(c=>{
     const solo=p.v.length===1&&p.v[0][0]===p.n;
     const mp=(p.u&&/^x(\d+)$/.test(p.u))?+p.u.slice(1):(p.min||1);
     const chip=mp>1?`Mínimo ${mp} unidades`:(p.u||"");
-    const porFila=p.v.some(v=>(c.id+"|"+p.n+"|"+v[0]) in FILA);
-    const fs=FOTOS[c.id+"|"+p.n];
+    const porFila=p.v.some(v=>(cb+"|"+p.n+"|"+v[0]) in FILA);
+    const fs=FOTOS[cb+"|"+p.n];
     const lista=fs?[].concat(fs):[];
     const fotoF=p.foto?`<div class="fotos"><button type="button" class="foto" data-big="fotos/${p.foto}.webp" aria-label="Ver foto de ${esc(p.n)}"><img src="fotos/${p.foto}.webp" alt="${esc(p.n)}" loading="lazy" width="600" height="600"></button></div>`:lista.length?`<div class="fotos">${lista.map(f=>`<button type="button" class="foto" data-big="fotos/${f}.jpg" aria-label="Ver foto de ${esc(p.n)}"><img src="fotos/${f}.jpg" alt="${esc(p.n)}" loading="lazy" width="600" height="600"></button>`).join("")}</div>`:null;
-    const foto=fotoF||(lista.length?`<div class="fotos">${lista.map(f=>`<button type="button" class="foto" data-big="fotos/${f}.jpg" aria-label="Ver foto de ${esc(p.n)}"><img src="fotos/${f}${p.grande?"":GALERIA.includes(c.id)?"-c":"-t"}.jpg"${p.grande||GALERIA.includes(c.id)?"":` srcset="fotos/${f}-t.jpg 360w, fotos/${f}.jpg 1100w" sizes="(max-width:520px) 92vw, 210px"`} alt="${esc(p.n)}" loading="lazy" width="360" height="360"></button>`).join("")}</div>`:(fs===""?`<div aria-hidden="true"></div>`:`<div class="foto vacia" aria-hidden="true">${svg}</div>`));
+    const foto=fotoF||(lista.length?`<div class="fotos">${lista.map(f=>`<button type="button" class="foto" data-big="fotos/${f}.jpg" aria-label="Ver foto de ${esc(p.n)}"><img src="fotos/${f}${p.grande?"":GALERIA.includes(cb)?"-c":"-t"}.jpg"${p.grande||GALERIA.includes(cb)?"":` srcset="fotos/${f}-t.jpg 360w, fotos/${f}.jpg 1100w" sizes="(max-width:520px) 92vw, 210px"`} alt="${esc(p.n)}" loading="lazy" width="360" height="360"></button>`).join("")}</div>`:(fs===""?`<div aria-hidden="true"></div>`:`<div class="foto vacia" aria-hidden="true">${svg}</div>`));
     const sinFoto=fs===""&&!p.foto;
-    const fila1=porFila&&FILA[c.id+"|"+p.n+"|"+p.v[0][0]];
-    const tarjeta=p.foto?`fotos/${p.foto}-t.webp`:lista.length?`fotos/${lista[0]}${p.grande?"":GALERIA.includes(c.id)?"-c":"-t"}.jpg`:fila1?`fotos/${fila1}-t.jpg`:"";
+    const fila1=porFila&&FILA[cb+"|"+p.n+"|"+p.v[0][0]];
+    const tarjeta=p.foto?`fotos/${p.foto}-t.webp`:lista.length?`fotos/${lista[0]}${p.grande?"":GALERIA.includes(cb)?"-c":"-t"}.jpg`:fila1?`fotos/${fila1}-t.jpg`:"";
     const unidades=p.v.map(v=>{const mm=v[0].match(/\s*\(x(\d+)\)$/),m=mm?+mm[1]:mp;return m>1?[Math.round(v[1]/m),1]:[v[1],0]});
     const desde=Math.min(...unidades.map(u=>u[0])),cu=unidades.find(u=>u[0]===desde)[1];
     const fid=`f-${c.id}-${i}`;
@@ -1531,9 +1660,9 @@ C.forEach(c=>{
       const etiqueta=p.et||(solo?p.n:`${p.n}: ${nombre}`);
       const label=solo?(m>1?"":(p.u||"Precio")):nombre;
       const minTxt=(mm&&m>1)?`<span class="min">mín. ${m}</span>`:"";
-      const vf=p.foto?null:VAR[c.id+"|"+v[0]];
+      const vf=p.foto?null:VAR[cb+"|"+v[0]];
       const mini=vf?`<button type="button" class="dmini" data-big="fotos/dulce-${vf}.webp" aria-label="Ver foto de ${esc(v[0])}"><img src="fotos/dulce-${vf}-t.webp" alt="${esc(v[0])}" loading="lazy" width="128" height="128"></button>`:"";
-      const ff=FILA[c.id+"|"+p.n+"|"+v[0]];
+      const ff=FILA[cb+"|"+p.n+"|"+v[0]];
       const celda=porFila?(ff?`<button type="button" class="foto" data-big="fotos/${ff}.jpg" aria-label="Ver foto de ${esc(nombre)}"><img src="fotos/${ff}-t.jpg" alt="${esc(nombre)}" loading="lazy" width="360" height="360"></button>`:`<div class="foto vacia" aria-hidden="true">${svg}</div>`):"";
       art+=`<li>${celda}${porFila?'<span class="frow">':""}${mini}<span class="vn">${label}${minTxt}</span>${label||minTxt?`<span class="lead" aria-hidden="true"></span>`:""}<span class="vp">${fmt(unit)}${m>1?`<small> c/u</small>`:""}</span>${c.id==="desayunos"?"":`<span class="ctrl" data-k="${k}" data-l="${esc(etiqueta)}" data-p="${unit}" data-m="${m}"><button type="button" class="menos" aria-label="Quitar de ${esc(etiqueta)}">−</button><span class="q" aria-live="polite">0</span><button type="button" class="mas" aria-label="${m>1?`Agregar ${esc(etiqueta)}, mínimo ${m}`:`Agregar ${esc(etiqueta)}`}">+</button></span>`}${porFila?"</span>":""}</li>`;
     });
@@ -1544,6 +1673,8 @@ C.forEach(c=>{
 });
 document.getElementById("indice").innerHTML=idx;
 document.getElementById("catalogo").innerHTML=html;
+}
+armarCarta(C);
 /* Pantallas: inicio (portada + categorías) y una pantalla por categoría. El pedido se mantiene entre pantallas. */
 (function(){
   const raiz=document.documentElement;
@@ -1551,8 +1682,18 @@ document.getElementById("catalogo").innerHTML=html;
   const ids=vistas.map(v=>v[0]);
   const titulo=document.title;
   let yInicio=0,actual=null;
+  const fids=FIESTAS.carta.map(c=>c.id);
   function ir(){
     const h=decodeURIComponent(location.hash.slice(1));
+    if((h==="fiestas"||(modo==="fiestas"&&fids.includes(h)))&&fiestasActivas()){
+      if(actual===null)yInicio=scrollY;
+      if(modo!=="fiestas")entrarFiestas();
+      actual="fiestas";raiz.dataset.vista="carta";raiz.dataset.cat="fiestas";
+      document.querySelectorAll("section.cat").forEach(sec=>sec.hidden=false);
+      document.title="Menú de fiestas · Gusto Casero";
+      if(h==="fiestas")scrollTo({top:0,behavior:"instant"});else document.getElementById(h).scrollIntoView({behavior:"smooth"});
+      return}
+    if(modo==="fiestas")salirFiestas();
     if(ids.includes(h)){
       if(actual===null)yInicio=scrollY;
       actual=h;raiz.dataset.vista="carta";raiz.dataset.cat=h;
@@ -1592,6 +1733,9 @@ const ventanas={};
 document.getElementById("pr-abrir").addEventListener("click",()=>ventanas.eventos.salir(false));
 document.querySelector(".pie-logo").innerHTML=document.querySelector(".etiqueta .logo").innerHTML;
 document.getElementById("menu-carta").innerHTML=C.map(c=>`<a href="#${c.id}">${c.nombre}</a>`).join("");
+pintarCartel();setInterval(pintarCartel,60000);
+document.getElementById("fiestas-cartel").addEventListener("click",()=>{location.hash="fiestas"});
+document.getElementById("fiestas-cartel").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();location.hash="fiestas"}});
 document.querySelector(".menu-logo").innerHTML=document.querySelector(".etiqueta .logo").innerHTML;
 (function(){
   const m=document.getElementById("menu"),btns=document.querySelectorAll(".menu-btn");let antes=null;
@@ -1615,7 +1759,7 @@ const bar=document.getElementById("pedido");
 function render(){
   let cant=0,total=0;const lin=[];
   pedido.forEach(it=>{cant++;total+=it.q*it.p;lin.push(`${it.q} × ${it.l}`)});
-  bar.hidden=cant===0;
+  bar.hidden=cant===0;bar.querySelector(".eyebrow").textContent=modo==="fiestas"?"Tu pedido de fiestas":"Tu pedido";
   document.getElementById("p-cant").textContent=cant;document.getElementById("p-word").textContent=cant===1?"producto":"productos";
   document.getElementById("p-total").textContent=fmt(total);
   document.getElementById("p-lista").textContent=lin.join(" · ");
@@ -1665,14 +1809,13 @@ function mostrarGracias(panel,href,limpiar,titulo){
 const co=document.getElementById("checkout"),wa=document.getElementById("p-wa");
 const DIAS=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"],DC=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"],MES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
 const FR=[9,10,11,12,13,14,15,16,17,18];
-let fechaSel=null,horaSel=null,pagoSel=null,consultaSel=null;
 /* Fecha y hora actual de Montevideo, sin importar el huso horario del dispositivo del cliente */
 function ahora(){const p={};new Intl.DateTimeFormat("en-US",{timeZone:"America/Montevideo",year:"numeric",month:"numeric",day:"numeric",hour:"numeric",minute:"numeric",second:"numeric",hourCycle:"h23"}).formatToParts(new Date()).forEach(x=>p[x.type]=+x.value);return new Date(p.year,p.month-1,p.day,p.hour%24,p.minute,p.second)}
 const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 /* Sin pedidos para el mismo día: se encarga hasta las 19 h del día anterior */
 function minRetiro(){const t=ahora(),h=t.getHours();t.setHours(0,0,0,0);t.setDate(t.getDate()+(h>=19?2:1));return t}
-function fechaOk(k){const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d)>=minRetiro()}
-function franjasLibres(d){return FR}
+function fechaOk(k){const x=diaF(k);if(modo==="fiestas")return !!x&&abierta(x);if(x)return false;const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d)>=minRetiro()}
+function franjasLibres(d){if(modo==="fiestas"){const x=diaF(iso(d));return x?x.horas:[]}return FR}
 function pintarParaHoy(){const tarde=ahora().getHours()>=19;const q=tarde?"¿Lo necesitás para hoy o para mañana?":"¿Lo necesitás para hoy?";const t=encodeURIComponent(tarde?"¡Hola Gusto Casero! Quería consultar disponibilidad para un pedido para hoy o mañana.":"¡Hola Gusto Casero! Quería consultar disponibilidad para un pedido para hoy.");document.querySelectorAll("[data-parahoy]").forEach(p=>{p.innerHTML=`${q} <a href="https://wa.me/${WA}?text=${t}" target="_blank" rel="noopener">Comunicate por WhatsApp</a> para chequear disponibilidad.`})}
 pintarParaHoy();setInterval(pintarParaHoy,60000);
 /* Hoy (y mañana después de las 19 h) no se encargan por la web: el botón lleva a consultar por WhatsApp */
@@ -1682,16 +1825,22 @@ function diasConsulta(){const d=ahora(),r=[];d.setHours(12,0,0,0);
 function pintarFechas(){
   const box=document.getElementById("co-fechas");let html="",n=0;const d=ahora();d.setHours(12,0,0,0);
   if(fechaSel&&!fechaOk(fechaSel))fechaSel=null;
+  const ayuda=document.getElementById("co-fechas-ayuda");
+  if(modo==="fiestas"){ayuda.textContent="24 o 31 de diciembre";consultaSel=null;
+    box.innerHTML=diasAbiertos().map(x=>{const d2=aFecha(x.f);return `<button type="button" data-f="${x.f}" aria-pressed="${fechaSel===x.f}"><small>${x.nombre}</small>${DC[d2.getDay()]} ${d2.getDate()} ${MES[d2.getMonth()]}</button>`}).join("");return}
+  ayuda.textContent="martes a sábado · pedidos hasta las 19 h del día anterior";
   const cons=diasConsulta();if(consultaSel&&!cons.some(c=>c.k===consultaSel))consultaSel=null;
   cons.forEach(c=>{html+=`<button type="button" class="consulta" data-c="${c.k}" aria-pressed="${consultaSel===c.k}"><small>${c.t==="hoy"?"Hoy":"Mañana"}</small>${c.x.getDate()} ${MES[c.x.getMonth()]}</button>`});
-  for(let i=1;i<24&&n<10;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay();if(w<2||w>6)continue;if(!fechaOk(iso(x)))continue;
+  for(let i=1;i<24&&n<10;i++){const x=new Date(d);x.setDate(d.getDate()+i);const w=x.getDay();if(w<2||w>6)continue;
+    const xf=diaF(iso(x));if(xf){if(fiestasActivas()&&abierta(xf)&&x>=minRetiro()){html+=`<button type="button" class="fiesta" data-fiesta="${xf.f}" aria-pressed="false" aria-label="${DIAS[w]} ${x.getDate()} de diciembre: ${xf.nombre}, se pide desde el menú de fiestas"><small>${xf.nombre}</small>${x.getDate()} ${MES[x.getMonth()]}</button>`;n++}continue}
+    if(!fechaOk(iso(x)))continue;
     const k=iso(x);html+=`<button type="button" data-f="${k}" aria-pressed="${fechaSel===k}"><small>${i===0?"Hoy":i===1?"Mañana":DC[w]}</small>${x.getDate()} ${MES[x.getMonth()]}</button>`;n++}
   box.innerHTML=html}
 function pintarHoras(){
   const box=document.getElementById("co-horas");let libres=FR;
   if(fechaSel){const [y,m,dd]=fechaSel.split("-").map(Number);libres=franjasLibres(new Date(y,m-1,dd,12))}
   if(horaSel!==null&&!libres.includes(horaSel))horaSel=null;
-  box.innerHTML=FR.map(h=>`<button type="button" data-h="${h}" aria-pressed="${horaSel===h}" ${libres.includes(h)?"":"disabled"}>${h} a ${h+1} h</button>`).join("")}
+  box.innerHTML=(modo==="fiestas"&&fechaSel?libres:FR).map(h=>`<button type="button" data-h="${h}" aria-pressed="${horaSel===h}" ${libres.includes(h)?"":"disabled"}>${h} a ${h+1} h</button>`).join("")}
 function fechaTexto(){if(!fechaSel)return"";const [y,m,d]=fechaSel.split("-").map(Number);const x=new Date(y,m-1,d);return `${DIAS[x.getDay()]} ${d} de ${["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"][m-1]}`}
 function datos(){return{nombre:document.getElementById("co-nombre").value.trim(),cel:document.getElementById("co-cel").value.trim()}}
 function errores(){const {nombre,cel}=datos();return{nombre:!nombre,cel:(cel.replace(/\D/g,"").length<8),fecha:!fechaSel||!fechaOk(fechaSel),hora:horaSel===null,pago:!pagoSel}}
@@ -1703,7 +1852,8 @@ function actualizarCheckout(){
   let corto=false;
   if(fechaSel&&horaSel!==null){const [y,m,dd]=fechaSel.split("-").map(Number);corto=(new Date(y,m-1,dd,horaSel)-ahora())<=24*3600e3}
   document.getElementById("co-aviso").hidden=!corto;
-  const msg=`¡Hola Gusto Casero! Quiero hacer este pedido:\n\n${lin.join("\n")}\n\nTotal estimado: ${fmt(total)}\n\nNombre: ${nombre}\nCelular: ${cel}\nRetiro: ${fechaTexto()}${horaSel!==null?`, de ${horaSel} a ${horaSel+1} h`:""}\nForma de pago: ${pagoSel||""}${corto?"\n\n(Pedido con 24 horas de anticipación o menos: quedo a la espera de su confirmación.)":""}`;
+  const fx=modo==="fiestas"&&fechaSel&&diaF(fechaSel);
+  const msg=`¡Hola Gusto Casero! ${fx?`Quiero hacer este pedido del menú de fiestas (${fx.nombre})`:"Quiero hacer este pedido"}:\n\n${lin.join("\n")}\n\nTotal estimado: ${fmt(total)}\n\nNombre: ${nombre}\nCelular: ${cel}\nRetiro: ${fechaTexto()}${horaSel!==null?`, de ${horaSel} a ${horaSel+1} h`:""}\nForma de pago: ${pagoSel||""}${corto?"\n\n(Pedido con 24 horas de anticipación o menos: quedo a la espera de su confirmación.)":""}`;
   wa.href=`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
   const e=errores();wa.setAttribute("aria-disabled",String(Object.values(e).some(Boolean)));
   const c=consultaSel&&diasConsulta().find(x=>x.k===consultaSel),hoyBox=document.getElementById("co-hoy");
@@ -1712,6 +1862,7 @@ function actualizarCheckout(){
     document.getElementById("co-hoy-tit").textContent=`¿Lo necesitás para ${c.t}?`;document.getElementById("co-hoy-dia").textContent=c.t;
     const mc=`¡Hola Gusto Casero! Quería consultar si tienen disponibilidad para este pedido para ${c.t} (${DIAS[c.x.getDay()].toLowerCase()} ${c.x.getDate()}):\n\n${lin.join("\n")}\n\nTotal estimado: ${fmt(total)}${nombre?`\n\nNombre: ${nombre}`:""}${cel?`\nCelular: ${cel}`:""}${horaSel!==null?`\nRetiro: de ${horaSel} a ${horaSel+1} h`:""}${pagoSel?`\nForma de pago: ${pagoSel}`:""}`;
     const hc=`https://wa.me/${WA}?text=${encodeURIComponent(mc)}`;document.getElementById("co-hoy-wa").href=hc;wa.href=hc;wa.setAttribute("aria-disabled","false")}
+  fiestasPie(msg,Object.values(e).some(Boolean));
   if(!pedido.size&&!co.hidden&&!co.classList.contains("listo"))cerrarCo();
 }
 function mostrarErrores(){const e=errores();
@@ -1720,7 +1871,7 @@ function mostrarErrores(){const e=errores();
   const primero=e.nombre?"co-nombre":e.cel?"co-cel":e.fecha?"co-fechas":e.hora?"co-horas":e.pago?"co-pago":null;
   if(primero){const el=document.getElementById(primero);el.scrollIntoView({block:"center",behavior:"smooth"});if(el.tagName==="INPUT")el.focus()}
   return !primero}
-function abrirCo(){pintarFechas();pintarHoras();actualizarCheckout();co.hidden=false;document.body.style.overflow="hidden";setTimeout(()=>document.getElementById("co-nombre").focus(),50)}
+function abrirCo(){pintarPago();fiestasAbrir();pintarFechas();pintarHoras();actualizarCheckout();co.hidden=false;document.body.style.overflow="hidden";setTimeout(()=>document.getElementById("co-nombre").focus(),50)}
 function cerrarCo(){co.hidden=true;co.classList.remove("listo");document.body.style.overflow=""}
 co.addEventListener("cerrar-gracias",cerrarCo);
 document.getElementById("p-seguir").addEventListener("click",abrirCo);
@@ -1728,10 +1879,14 @@ document.getElementById("co-cerrar").addEventListener("click",cerrarCo);
 co.addEventListener("click",e=>{if(e.target===co)cerrarCo()});
 addEventListener("keydown",e=>{if(e.key==="Escape"&&!co.hidden)cerrarCo()});
 document.getElementById("co-fechas").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+  if(b.dataset.fiesta){cerrarCo();if(location.hash==="#fiestas")entrarFiestas(b.dataset.fiesta);else{location.hash="fiestas";entrarFiestas(b.dataset.fiesta)}return}
   if(b.dataset.c){consultaSel=b.dataset.c;fechaSel=null;pintarFechas();document.getElementById("e-fecha").hidden=true;actualizarCheckout();const h=document.getElementById("co-hoy");h.scrollIntoView({block:"nearest",behavior:"smooth"});return}
   consultaSel=null;fechaSel=b.dataset.f;pintarFechas();pintarHoras();document.getElementById("e-fecha").hidden=true;actualizarCheckout()});
 document.getElementById("co-horas").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.disabled)return;horaSel=+b.dataset.h;pintarHoras();document.getElementById("e-hora").hidden=true;actualizarCheckout()});
-function pintarPago(){document.querySelectorAll("#co-pago button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.p===pagoSel)))}
+const PAGOS={carta:["Transferencia","Efectivo al retirar","Tarjeta al retirar"],fiestas:["Transferencia","Pago en el local por adelantado"]};
+function pintarPago(){const ops=PAGOS[modo];if(pagoSel&&!ops.includes(pagoSel))pagoSel=null;const box=document.getElementById("co-pago");if((box.dataset.modo||"carta")!==modo){box.dataset.modo=modo;box.innerHTML=ops.map(o=>`<button type="button" data-p="${o}" aria-pressed="false">${o}</button>`).join("")}
+  document.getElementById("co-pago-nota").hidden=modo!=="fiestas";
+  document.querySelectorAll("#co-pago button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.p===pagoSel)))}
 document.getElementById("co-pago").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;pagoSel=b.dataset.p;pintarPago();document.getElementById("e-pago").hidden=true;actualizarCheckout()});
 document.getElementById("co-form").addEventListener("input",e=>{const k=e.target.id==="co-nombre"?"nombre":"cel";if(e.target.getAttribute("aria-invalid")==="true"&&!errores()[k]){e.target.setAttribute("aria-invalid","false");document.getElementById("e-"+k).hidden=true}actualizarCheckout()});
 document.getElementById("co-form").addEventListener("submit",e=>e.preventDefault());
@@ -1743,6 +1898,60 @@ wa.addEventListener("click",e=>{if(fechaSel&&!fechaOk(fechaSel)){pintarFechas();
   const hrefT=wa.href;
   mostrarGracias(co.querySelector(".co-panel"),hrefT,()=>{pedido.clear();fechaSel=null;horaSel=null;pagoSel=null;consultaSel=null;pintarPago();idTienda=null;render()});
 });
+
+/* ── Fiestas: confirmar pedido → pagar (transferencia + comprobante, o en el local) → WhatsApp ── */
+let fConf=null,fExtra="",fMsg="";
+const coWa2=document.getElementById("co-wa2"),coConf=document.getElementById("co-confirmar");
+function firmaPedido(){return [...pedido].map(([k,v])=>k+":"+v.q).join(",")+"|"+fechaSel+"|"+horaSel+"|"+pagoSel+"|"+datos().nombre+"|"+datos().cel}
+function fiestasPaso(on){const body=co.querySelector(".co-body:not(#co-pagar):not(.gracias)");body.hidden=on;document.getElementById("co-pagar").hidden=!on;coConf.hidden=on||modo!=="fiestas";coWa2.hidden=!on;wa.hidden=modo==="fiestas";
+  document.getElementById("co-foot-nota").hidden=on;document.getElementById("co-tit").textContent=on?"Pagá para confirmar":"Datos para tu pedido";co.querySelector(".co-head .eyebrow").textContent=modo==="fiestas"?"Menú de fiestas":"Último paso"}
+function fiestasAbrir(){if(fConf&&(fConf.firma!==firmaPedido()||modo!=="fiestas"))fiestasReset();fiestasPaso(!!fConf);
+  document.getElementById("co-foot-nota").textContent=modo==="fiestas"?"Al confirmar te mostramos cómo pagar. El pedido queda confirmado cuando está pago.":"Se abre WhatsApp con tu pedido armado. Te respondemos por ahí."}
+function fiestasReset(){fConf=null;fExtra="";const l=document.getElementById("co-comp-lbl");l.classList.remove("ok");l.textContent="Subir foto o PDF del comprobante";fCompEst("");document.getElementById("co-comp-sin").hidden=true;fiestasPaso(false)}
+function fiestasPie(msg,hayErr){fMsg=msg;coConf.setAttribute("aria-disabled",String(hayErr));if(!fConf)fiestasPaso(false);
+  coWa2.href=`https://wa.me/${WA}?text=${encodeURIComponent(msg.replace("Quiero hacer este pedido","Confirmo mi pedido")+fExtra)}`}
+function fCompEst(t,mal){const e=document.getElementById("co-comp-est");e.textContent=t;e.hidden=!t;e.classList.toggle("mal",!!mal)}
+function fCompListo(ok){coWa2.setAttribute("aria-disabled",String(!ok))}
+coConf.addEventListener("click",()=>{if(fechaSel&&!fechaOk(fechaSel)){pintarFechas();pintarHoras()}actualizarCheckout();if(!mostrarErrores())return;
+  let total=0;const lin=[];pedido.forEach(it=>{total+=it.q*it.p;lin.push(`${it.q} × ${it.l}`)});
+  if(!idTienda)idTienda=nuevoId("w");const {nombre,cel}=datos(),fx=diaF(fechaSel),tr=pagoSel==="Transferencia";
+  registrar({id:idTienda,tipo:"Retiro en el local",fecha:fechaSel,hora:`${horaSel} a ${horaSel+1} h`,cliente:nombre,celular:cel,pedido:lin.join("\n"),total,notas:[`Menú de fiestas (${fx.nombre})`,`Pago elegido: ${pagoSel}`,"Pago: pendiente (todavía no confirmado)"].join("\n"),mensaje:fMsg});
+  fConf={firma:firmaPedido()};
+  document.getElementById("co-pg-tit").textContent=tr?`Transferí ${fmt(total)} para confirmar tu pedido`:"Pasá por el local a pagarlo";
+  document.getElementById("co-pg-res").textContent=`${fx.nombre} · retiro el ${fechaTexto().toLowerCase()}, de ${horaSel} a ${horaSel+1} h`;
+  document.getElementById("co-cuenta").hidden=!tr;document.getElementById("co-comp").hidden=!tr;document.getElementById("co-local").hidden=tr;
+  fCompListo(!tr);
+  document.getElementById("co-pg-aviso").textContent=tr?"Hacé la transferencia, subí el comprobante y envianos el mensaje por WhatsApp. Con eso tu pedido queda confirmado.":`Tu pedido queda confirmado cuando pases por el local a pagarlo (antes del ${txtCierre(fx).replace(/ a las.*/,"")}). Tocá el botón de abajo para avisarnos por WhatsApp.`;
+  coWa2.textContent=tr?"Ya transferí · Enviar por WhatsApp":"Enviar pedido por WhatsApp";
+  actualizarCheckout();fiestasPaso(true);document.getElementById("co-pagar").scrollTop=0});
+document.getElementById("co-cuenta").addEventListener("click",e=>{const b=e.target.closest(".copiar");if(!b)return;const ok=()=>{b.textContent="Copiado";setTimeout(()=>b.textContent="Copiar",1600)};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(b.dataset.c).then(ok,ok);else ok()});
+function fAchicar(file){return new Promise(res=>{const u=URL.createObjectURL(file),im=new Image();
+  im.onload=()=>{const k=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res({tipo:"image/jpeg",datos:c.toDataURL("image/jpeg",.82).split(",")[1]})};
+  im.onerror=()=>{URL.revokeObjectURL(u);res(null)};im.src=u})}
+function fBase64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(file)})}
+document.getElementById("co-comp-file").addEventListener("change",async e=>{const file=e.target.files[0];e.target.value="";if(!file)return;
+  const lbl=document.getElementById("co-comp-lbl"),pdf=file.type==="application/pdf";
+  if(!pdf&&!/^image\//.test(file.type)){fCompEst("Subí una foto o un PDF del comprobante.",true);return}
+  if(file.size>15*1024*1024){fCompEst("El archivo es muy pesado. Probá con una captura de pantalla del comprobante.",true);return}
+  lbl.classList.add("cargando");lbl.textContent="Subiendo…";fCompEst("");
+  try{
+    let d=pdf?{tipo:"application/pdf",datos:await fBase64(file)}:await fAchicar(file);
+    if(!d){if(!/^image\/(jpeg|png|webp|heic|heif)$/.test(file.type))throw new Error("formato");d={tipo:file.type,datos:await fBase64(file)}}
+    if(d.datos.length>11*1024*1024)throw new Error("tamaño");
+    const body=JSON.stringify({accion:"comprobante",id:idTienda,tipo:d.tipo,datos:d.datos});
+    let ok=false;
+    try{const r=await fetch(REGISTRO,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body});ok=!!(await r.json()).ok}
+    catch(err){await fetch(REGISTRO,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body});ok=true}
+    if(!ok)throw new Error("servidor");
+    lbl.classList.add("ok");lbl.textContent="Cambiar comprobante";fCompEst(`✓ Recibimos tu comprobante (${file.name}).`);
+    fExtra="\n\nYa hice la transferencia. El comprobante quedó subido en la web.";actualizarCheckout();fCompListo(true);document.getElementById("co-comp-sin").hidden=true;
+  }catch(err){fCompEst("No pudimos subir el comprobante. Probá de nuevo o, si no podés, mandalo por WhatsApp.",true);document.getElementById("co-comp-sin").hidden=false;if(!lbl.classList.contains("ok"))lbl.textContent="Subir foto o PDF del comprobante"}
+  finally{lbl.classList.remove("cargando")}});
+document.getElementById("co-comp-sin").addEventListener("click",()=>{fExtra="\n\nYa hice la transferencia. Les mando el comprobante por acá.";actualizarCheckout();fCompListo(true);fCompEst("Mandanos el comprobante en el chat de WhatsApp junto con el mensaje.");document.getElementById("co-comp-sin").hidden=true});
+coWa2.addEventListener("click",e=>{if(coWa2.getAttribute("aria-disabled")==="true"){e.preventDefault();fCompEst("Primero subí el comprobante de la transferencia.",true);return}
+  const tr=pagoSel==="Transferencia";
+  mostrarGracias(co.querySelector(".co-panel"),coWa2.href,()=>{pedido.clear();fechaSel=null;horaSel=null;pagoSel=null;pintarPago();idTienda=null;fiestasReset();render()},tr?"¡Gracias! Tu pedido de fiestas quedó confirmado :)":"¡Gracias! Tu pedido queda confirmado cuando pases a pagarlo por el local.")});
 
 /* ── Desayunos a domicilio ── */
 (function(){
@@ -1916,11 +2125,13 @@ wa.addEventListener("click",e=>{if(fechaSel&&!fechaOk(fechaSel)){pintarFechas();
 })();
 
 document.getElementById("p-vaciar").addEventListener("click",()=>{pedido.clear();render()});
+iniciado=true;
 render();
 
-const links=[...document.querySelectorAll("nav.indice a")];
+let links=[...document.querySelectorAll("nav.indice a")];
 const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){links.forEach(a=>a.classList.toggle("activa",a.getAttribute("href")==="#"+en.target.id));const a=links.find(a=>a.classList.contains("activa"));if(a&&a.scrollIntoView){const ul=a.closest("ul");ul.scrollTo({left:a.offsetLeft-ul.offsetLeft-16,behavior:"smooth"})}}})},{rootMargin:"-45% 0px -50% 0px"});
 document.querySelectorAll("section.cat").forEach(s=>io.observe(s));
+window.reobservar=()=>{io.disconnect();links=[...document.querySelectorAll("nav.indice a")];document.querySelectorAll("section.cat").forEach(s=>io.observe(s))};
 
 (function(){
   const hero=document.querySelector(".portada"),baj=document.getElementById("bajada");
